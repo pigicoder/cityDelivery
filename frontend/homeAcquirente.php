@@ -25,7 +25,7 @@ $restaurants=getRestaurantsByZone ($cid,$zona);
 	    	<div class="background">
 				<h1>Buyer's homepage</h1>
 				<br>Welcome back, <?=$email?></br>
-				<h4>Restaurants in zona	<?= $zona; ?><?= $current_day=idate('w', time());?>:</h4> 
+				<h4>Restaurants in zona	<?= $zona; ?>:</h4> 
 					<div class="container">
 					<div class="row">
 						<div class="col-md-6 offset-md-3">
