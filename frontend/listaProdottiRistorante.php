@@ -19,30 +19,48 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 		<link rel="stylesheet" href="../css/styles.css">
 	</head>
 	<body>
-	    	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         		<div class="container">
                 		<a class="navbar-brand" href="../index.html">Home</a>
+						<form class="d-flex" role="search">
+        					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
+      					</form>
+
             		</div>
         	</nav>
-	    	<div class="background">
-			<h1><?=  $r_sociale; ?> products:</h1>
-            <?php
-				while($row = $result->fetch_row())
-				{
-				?>
-					<div class="card" style="width: 18rem;">
-  					<img src=<?=$row[3]?> class="card-img-top" alt="...">
-  					<div class="card-body">
-    				<h5 class="card-title"><?=$row[0]?></h5>
-    			<p class="card-text"><?=$row[2]?></p>
-    					<a href="#" class="btn btn-primary">Aggiungi all'ordine</a>
-  </div>
-</div>
-							<h5></h5>
-			<?php
-			}
-			?>
+	    	<div class="background container">
+    <h1>
+        <?=  $r_sociale; ?> products:
+    </h1>
+    <div class="row">
+        <?php
+		while($row = $result->fetch_row())
+		{
+		?>
+        <div class="col-md-6">
+            <div class="card mb-3">
+                <div class="row g-0">
+                    <div class="col-md-8">
+                        <div class="card-body">
+                            <h5 class="card-title">
+                                <?=$row[0]?>
+                            </h5>
+                            <p class="card-text">
+                                <?=$row[2]?>
+                            </p>
+                            <a href="#" class="btn btn-primary">Aggiungi all'ordine</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="data:image/jpg;base64,<?=base64_encode($row[4])?>" class=card-img-top alt="...">
+                    </div>
+                </div>
             </div>
-        </body>
+        </div>
+        <?php
+		}
+		?>
+    </div>
+</div>
 
-</html>
+	</body>
