@@ -27,10 +27,18 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 	    	<div class="background">
 			<h1><?=  $r_sociale; ?> products:</h1>
             <?php
-						while($row = $result->fetch_row())
-						{
-						?>
-							<h5><?=$row[0]?></h5>
+				while($row = $result->fetch_row())
+				{
+				?>
+					<div class="card" style="width: 18rem;">
+  					<img src=<?=$row[3]?> class="card-img-top" alt="...">
+  					<div class="card-body">
+    				<h5 class="card-title"><?=$row[0]?></h5>
+    			<p class="card-text"><?=$row[2]?></p>
+    					<a href="#" class="btn btn-primary">Aggiungi all'ordine</a>
+  </div>
+</div>
+							<h5></h5>
 			<?php
 			}
 			?>
