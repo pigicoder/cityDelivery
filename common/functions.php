@@ -123,9 +123,9 @@ function getRestaurantsByZone ($cid,$zona)
     } else if (($current_hour == 15 && $current_minute >= 30) || ($current_hour >= 15)) {
         $daySlot = 'Pomeriggio';
     }
-    $result = $cid->query("select ristorante.r_sociale, ristorante.ind_completo, apertura.ristorante, ristorante.email "
-    . "from ristorante left outer join apertura on (ristorante.email=apertura.ristorante "
-    . "and apertura.giorno=\"" . $current_day . "\" and apertura.orario=\"" . $daySlot . "\" ) "
+    $result = $cid->query("select Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
+    . "from Ristorante left outer join Apertura on (Ristorante.email=Apertura.ristorante "
+    . "and Apertura.giorno=\"" . $current_day . "\" and Apertura.orario=\"" . $daySlot . "\" ) "
     . "WHERE zona = '".$zona."'");
     while($row = $result->fetch_row())
     {

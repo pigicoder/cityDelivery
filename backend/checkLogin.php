@@ -32,7 +32,8 @@ if (isset($_POST["email"]) && isset($_POST["pwd"]) && $result["status"]=="ok")
 			//$parameter = "Location: ../backend/query_example.php?email=$email";
 			
 			$_SESSION["user"] = $_POST["email"];
-			header('location: ../frontend/homeAcquirente.php?email=$email');
+			$parameter = "Location: ../frontend/homeAcquirente.php?email=$email";
+			//echo "<html><body><br><br>Welcome back, ",$email,"</body></html>";
 			
 		}
 		else $parameter = "Location: ../frontend/login.php?errore=password&email=$email";
@@ -49,7 +50,7 @@ if (isset($_POST["email"]) && isset($_POST["pwd"]) && $result["status"]=="ok")
 				//$parameter = "Location: ../backend/query_example.php?email=$email";
 
 				$_SESSION["user"] = $_POST["email"];
-				header('location: ../frontend/homeRistorante.php?email=$email');
+				$parameter = "Location: ../frontend/homeRistorante.php?email=$email";
 				//echo "<html><body><br><br>Welcome back, ",$email,"</body></html>";
 			}
 			else $parameter = "Location: ../frontend/login.php?errore=password&email=$email";
@@ -66,7 +67,7 @@ if (isset($_POST["email"]) && isset($_POST["pwd"]) && $result["status"]=="ok")
 					//$parameter = "Location: ../backend/query_example.php?email=$email";
 
 					$_SESSION["user"] = $_POST["email"];
-					header('location: ../frontend/homeFattorino.php?email=$email');
+					$parameter = "Location: ../frontend/homeFattorino.php?email=$email";
 					
 				}
 				else $parameter = "Location: ../frontend/login.php?errore=password&email=$email";
