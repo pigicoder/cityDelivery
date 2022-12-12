@@ -10,7 +10,7 @@ $cid = $result["value"];
 $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
 $rows = $result->fetch_row();
 $r_sociale=$rows[0];
-$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE prodotto.ristorante = '".$email_ristorante."'");
+$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
 
 ?>
 <html>

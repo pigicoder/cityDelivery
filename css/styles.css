@@ -17,7 +17,7 @@
   --bs-pink: #d63384;
   --bs-red: #dc3545;
   --bs-orange: #fd7e14;
-  --bs-yellow: #ffc107;
+  --bs-yellow: #ffc107c0;
   --bs-green: #198754;
   --bs-teal: #20c997;
   --bs-cyan: #0dcaf0;
@@ -61,7 +61,7 @@
   --bs-body-font-weight: 400;
   --bs-body-line-height: 1.5;
   --bs-body-color: #000000;
-  --bs-body-bg: #ffc821;
+  --bs-body-bg: #ffc107c0;
   --bs-body-text-align: center;
 }
 
@@ -78,17 +78,18 @@ form {
   margin-bottom:0px;
   padding:50px;
   background:var(--bs-body-bg);
-  opacity:75%;
+  opacity:100%;
   border-radius:50px;
   position:relative;
   /*font-family: 'Libre Franklin', sans-serif;*/
   font-family:var(--bs-font-sans-serif);
-  z-index: 1000;
+  z-index: 1;
 }
 
 form > div {
   float:left;
   margin-bottom:30px;
+  z-index: 1;
 }
 form > div > p{
   font-size: 12px;
@@ -4140,7 +4141,6 @@ textarea.form-control-lg {
 }
 
 .navbar {
-  opacity:75%;
   position: relative;
   display: flex;
   flex-wrap: wrap;
@@ -4156,6 +4156,7 @@ a.nav-link {
 
 a.navbar-brand {
   font-size: 2.00rem;
+  z-index: 1;
 }
 
 .navbar > .container,
@@ -7966,7 +7967,7 @@ a.navbar-brand {
 
 .bg-dark {
   --bs-bg-opacity: 1;
-  background-color: #ffc107!important;
+  background-color: #ffc107c0!important;
 }
 
 .bg-black {
