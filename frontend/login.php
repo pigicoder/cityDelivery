@@ -28,7 +28,7 @@
 					<div class="container" style="display:flex;width:50%;"><input type= "submit" value= "OK"/></div>
 					<div class="container" style="display:flex;width:50%;"><input type = "reset" value = "Cancella"/></div>	
 				    <!--</table>-->
-                	<err class="errore"><?php checkErrorLogin();?></err>
+                	<err class="errore"><?php checkErrorLogin(); ?></err>
 			    </form>
             </div> 
 	    </div>
@@ -37,6 +37,12 @@
 
 <?php
 
+require "../common/db_connection.php";
+require "../backend/db_config.php";
+
+$result = dbConnection();
+$cid = $result["value"];
+
 session_start();
 //$_SESSION["user"];
 
@@ -44,10 +50,26 @@ $parameter = "";
 
 if (isset($_SESSION["user"]))
 {
-	//$parameter = "Location: ../backend/checkLogin.php?email=$email";
-	echo "<br><a>Session is already open.<br>Welcome back, ",$_SESSION["user"],"</a>";
-	//header($parameter);
+	$email = $_SESSION["user"];
+	$selectEmail = mysqli_query($cid, "SELECT * FROM Acquirente WHERE email = '".$email."'");
+	if (mysqli_num_rows($selectEmail) == 1)
+		$parameter = "Location: homeAcquirente.php?email=$email";
+
+	$selectEmail = mysqli_query($cid, "SELECT * FROM Ristorante WHERE email = '".$email."'");
+	if (mysqli_num_rows($selectEmail) == 1)
+		$parameter = "Location: homeRistorante.php?email=$email";
+	
+	$selectEmail = mysqli_query($cid, "SELECT * FROM Fattorino WHERE email = '".$email."'");
+	if (mysqli_num_rows($selectEmail) == 1)
+		$parameter = "Location: homeFattorino.php?email=$email";
+
+	//echo "<br><a>Session is already open.<br>Welcome back, ",$_SESSION["user"],"</a>";
+	header($parameter);
 }
+
+?>
+
+<?php
 
 function checkErrorLogin()
 {
