@@ -4732,6 +4732,7 @@ a.navbar-brand {
 .card-img-top,
 .card-img-bottom {
   width: 100%;
+
 }
 
 .card-img,
@@ -6863,6 +6864,7 @@ a.navbar-brand {
 .d-flex {
   display: flex !important;
   background: transparent;
+  padding:0%;
 }
 
 .d-inline-flex {
@@ -7494,6 +7496,8 @@ a.navbar-brand {
 
 .mb-3 {
   margin-bottom: 1rem !important;
+  background-color: #ffc107c0;
+  border-radius: 50px;
 }
 
 .mb-4 {
