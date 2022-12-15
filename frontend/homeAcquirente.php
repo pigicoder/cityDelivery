@@ -25,7 +25,7 @@ $restaurants=getRestaurantsByZone ($cid,$zona);
         					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 							<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
       					</form>
-
+                        <button class="btn btn-outline-success my-2 my-sm-0" style="float:right" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
             		</div>
         	</nav>
 	    	<div class="background">
