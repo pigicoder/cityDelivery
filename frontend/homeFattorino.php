@@ -19,7 +19,7 @@ $email = $_SESSION["user"];
         		<div class="container">
                 		<a class="navbar-brand" href="../index.html">Home</a>
             		</div>
-			<button class="btn btn-outline-success my-2 my-sm-0" style="float:right" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
+			<button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
         	</nav>
 	    	<div class="background">
 				<h1>Runner's homepage</h1>
