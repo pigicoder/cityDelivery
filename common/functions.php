@@ -114,28 +114,36 @@ function getRestaurantsByZone ($cid,$zona)
         'Sabato',
     ];
     $now = time();
-    $restaurants=[];
-    $current_day=$days[idate('l', $now)];
-    $current_hour=idate('H', $now);
-    $current_minute=idate('i', $now);
-    $daySlot = 'Mattina';
+    $restaurants = [];
+    $current_day = $days[idate('w', $now)];
+    $current_hour = idate('H', $now);
+    $current_minute = idate('i', $now);
+    $current_daySlot = 'Mattina';
     if (($current_hour == 19 && $current_minute >= 30) || ($current_hour >= 19)) 
     {
-        $daySlot = 'Sera';
+        $current_daySlot = 'Sera';
     } else if (($current_hour == 15 && $current_minute >= 30) || ($current_hour >= 15)) 
     {
-        $daySlot = 'Pomeriggio';
+        $current_daySlot = 'Pomeriggio';
     }
-    $result = $cid->query("SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
-                        . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "
-                        . "AND Apertura.giorno = \"" . $current_day . "\" AND Apertura.orario = \"" . $daySlot . "\" ) "
-                        . "WHERE zona = '".$zona."'");
+    echo $current_day;
+    echo $current_hour;
+    echo $current_minute;
+    echo $current_daySlot;
+
+    $result = $cid->query
+    (
+        "SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
+      . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "
+      . "AND Apertura.giorno = \"" . $current_day . "\" AND Apertura.orario = \"" . $current_daySlot . "\" ) "
+      . "WHERE zona = '".$zona."'"
+    );
     while($row = $result->fetch_row())
     {
-        $restaurant=["r_sociale"=>$row[0],
-                    "indirizzo"=>$row[1],
-                    "stato"=>$row[2]==null ? "Chiuso" : "Aperto",
-                    "email"=>$row[3]];
+        $restaurant = ["r_sociale"=>$row[0],
+                       "indirizzo"=>$row[1],
+                       "stato"=>$row[2]==null ? "Chiuso" : "Aperto",
+                       "email"=>$row[3]];
         array_push($restaurants,$restaurant);
     }
     return $restaurants;
