@@ -131,18 +131,18 @@ function getRestaurantsByZone ($cid,$zona)
     {
         $current_daySlot = 'Mattina';
     }
-    echo $current_day;
-    echo $current_hour;
-    echo $current_minute;
-    echo $current_daySlot;
+    else
+    {
+        $current_daySlot = 'Notte';
+    }
 
-    $result = $cid->query
-    (
+    $result = $cid->query(
         "SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
       . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "
-      . "AND Apertura.giorno = '" . $current_day . "' AND Apertura.orario = '" . $current_daySlot . "' ) "
-      . "WHERE zona = '".$zona."'"
-    );
+      . "AND Apertura.giorno = '" . $current_day . "' "
+      . "AND Apertura.orario = '" . $current_daySlot . "' ) "
+      . "WHERE zona = '" . $zona . "' ");
+
     while($row = $result->fetch_row())
     {
         $restaurant = ["r_sociale"=>$row[0],
