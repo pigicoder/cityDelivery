@@ -31,7 +31,7 @@ else
 		$dati["email"] = $email;
 }
 
-if (empty($password))
+if (empty($password) || strlen($password) < 8 || strlen($password) > 50)
 {
 	$errore["password"] = "2";
 	$dati["password"] = "";
@@ -41,7 +41,7 @@ else
 	$dati["password"] = $password;
 }
 
-if (empty($iva))
+if (empty($iva) || strlen($iva) != 16)
 {
 	$errore["iva"] = "10";
 	$dati["iva"] = "";

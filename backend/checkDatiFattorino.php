@@ -29,7 +29,7 @@ else
 		$dati["email"] = $email;
 }
 
-if (empty($password))
+if (empty($password) || strlen($password) < 8 || strlen($password) > 50)
 {
 	$errore["password"] = "2";
 	$dati["password"] = "";

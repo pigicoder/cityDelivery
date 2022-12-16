@@ -28,8 +28,8 @@ if (empty($email))
 }
 else
 {
-    	// check if e-mail address is well-formed
-    	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+    	if (!filter_var($email, FILTER_VALIDATE_EMAIL))		// check if e-mail address is well-formed
+	{
       		$errore["email"] = "1";
 		$dati["email"] = "";
     	}
@@ -37,7 +37,7 @@ else
 		$dati["email"] = $email;
 }
 
-if (empty($password))
+if (empty($password) || strlen($password) < 8 || strlen($password) > 50)
 {
 	$errore["password"] = "2";
 	$dati["password"] = "";
