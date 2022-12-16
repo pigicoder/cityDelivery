@@ -9,13 +9,14 @@ session_start();
 $cid = $result["value"];
 $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
 $rows = $result->fetch_row();
-$r_sociale=$rows[0];
+$r_sociale = $rows[0];
 $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
 
 ?>
 <html>
 	<head>
-		<title>Login</title>
+		<title>Products</title>
+        <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
 		<link rel="stylesheet" href="../css/styles.css">
 	</head>
 	<body>

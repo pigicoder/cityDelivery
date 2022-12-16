@@ -5,16 +5,17 @@ require "../backend/db_config.php";
 
 session_start();
 $email = $_SESSION["user"];
-$zona=getBuyerZone($cid,$email);
-$restaurants=getRestaurantsByZone ($cid,$zona);
+$zona = getBuyerZone($cid,$email);
+$restaurants = getRestaurantsByZone($cid,$zona);
 
 
 ?>
 
 <html>
 	<head>
-		<title>Login</title>
+		<title>Homepage buyer</title>
 		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
 	</head>
 	<body>
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">

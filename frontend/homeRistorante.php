@@ -11,8 +11,9 @@ $email = $_SESSION["user"];
 
 <html>
 	<head>
-		<title>Login</title>
+		<title>Homepage restaurant</title>
 		<link rel="stylesheet" href="../css/styles.css">
+		<link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
 	</head>
 	<body>
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">

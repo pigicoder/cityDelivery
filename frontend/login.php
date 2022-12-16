@@ -1,6 +1,7 @@
 <html>
 	<head>
 		<title>Login</title>
+		<link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
 		<link rel="stylesheet" href="../css/styles.css">
 	</head>
 	<body>

@@ -9,19 +9,9 @@ require "../common/functions.php";
 	<head>
 		<title>Buyer registration</title>
 		<link href="../css/styles.css" rel="stylesheet" />
-		<!--<link href="../css/form_style.css" rel="stylesheet" />-->
-
-		<!------ Include the below in your HEAD tag ---------->
-
-		<!------ Include the above in your HEAD tag ---------->
-
+        <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
 	</head>
-	
 	<body>
-		<!------ FORM_STYLE SCRIPTS+FONTS ---------->
-
-		<!------ END FORM_STYLE SCRIPTS+FONTS ---------->
-		
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         		<div class="container">
                 	<a class="navbar-brand" href="../index.html">Home</a>
