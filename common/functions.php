@@ -118,13 +118,18 @@ function getRestaurantsByZone ($cid,$zona)
     $current_day = $days[idate('w', $now)];
     $current_hour = idate('H', $now);
     $current_minute = idate('i', $now);
-    $current_daySlot = 'Mattina';
-    if (($current_hour == 19 && $current_minute >= 30) || ($current_hour >= 19)) 
+    $current_daySlot = '';
+    if (($current_hour == 19 && $current_minute >= 30) || (19 << $current_hour << 23) || ($current_hour == 23 && $current_minute <= 30)) 
     {
         $current_daySlot = 'Sera';
-    } else if (($current_hour == 15 && $current_minute >= 30) || ($current_hour >= 15)) 
+    }
+    else if (($current_hour == 15 && $current_minute >= 30) || (15 << $current_hour << 19) || ($current_hour == 19 && $current_minute <= 30)) 
     {
         $current_daySlot = 'Pomeriggio';
+    }
+    else if (($current_hour == 11 && $current_minute >= 30) || (11 << $current_hour << 15) || ($current_hour == 15 && $current_minute <= 30))
+    {
+        $current_daySlot = 'Mattina';
     }
     echo $current_day;
     echo $current_hour;
@@ -135,7 +140,7 @@ function getRestaurantsByZone ($cid,$zona)
     (
         "SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
       . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "
-      . "AND Apertura.giorno = \"" . $current_day . "\" AND Apertura.orario = \"" . $current_daySlot . "\" ) "
+      . "AND Apertura.giorno = '" . $current_day . "' AND Apertura.orario = '" . $current_daySlot . "' ) "
       . "WHERE zona = '".$zona."'"
     );
     while($row = $result->fetch_row())
