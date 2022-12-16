@@ -101,6 +101,7 @@ function getBuyerZone ($cid, $email)
     $zona = $row[0];
     return $zona;
 }
+
 function getRestaurantsByZone ($cid,$zona)
 {
     $days = [
@@ -114,19 +115,21 @@ function getRestaurantsByZone ($cid,$zona)
     ];
     $now = time();
     $restaurants=[];
-    $current_day=$days[idate('w', $now)];
+    $current_day=$days[idate('l', $now)];
     $current_hour=idate('H', $now);
     $current_minute=idate('i', $now);
     $daySlot = 'Mattina';
-    if (($current_hour == 19 && $current_minute >= 30) || ($current_hour >= 19)) {
+    if (($current_hour == 19 && $current_minute >= 30) || ($current_hour >= 19)) 
+    {
         $daySlot = 'Sera';
-    } else if (($current_hour == 15 && $current_minute >= 30) || ($current_hour >= 15)) {
+    } else if (($current_hour == 15 && $current_minute >= 30) || ($current_hour >= 15)) 
+    {
         $daySlot = 'Pomeriggio';
     }
-    $result = $cid->query("select Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
-    . "from Ristorante left outer join Apertura on (Ristorante.email=Apertura.ristorante "
-    . "and Apertura.giorno=\"" . $current_day . "\" and Apertura.orario=\"" . $daySlot . "\" ) "
-    . "WHERE zona = '".$zona."'");
+    $result = $cid->query("SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
+                        . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "
+                        . "AND Apertura.giorno = \"" . $current_day . "\" AND Apertura.orario = \"" . $daySlot . "\" ) "
+                        . "WHERE zona = '".$zona."'");
     while($row = $result->fetch_row())
     {
         $restaurant=["r_sociale"=>$row[0],
