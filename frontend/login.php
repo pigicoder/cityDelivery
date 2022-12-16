@@ -45,7 +45,6 @@ $result = dbConnection();
 $cid = $result["value"];
 
 session_start();
-//$_SESSION["user"];
 
 $parameter = "";
 

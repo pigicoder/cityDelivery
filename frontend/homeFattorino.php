@@ -27,5 +27,4 @@ $email = $_SESSION["user"];
             	<br>Welcome back, <?=$email?></br>  
             </div>
         </body>
-
 </html>

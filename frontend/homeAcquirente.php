@@ -64,7 +64,6 @@ $restaurants = getRestaurantsByZone($cid,$zona);
             </div>
 				
         </body>
-
 </html>
 
 

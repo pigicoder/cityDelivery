@@ -19,7 +19,6 @@ include "../common/functions.php";
         </nav>
         <br>
 	    <div class="background">
-
 		<div class="container" style="display:flex;width:100%;">
     		<form method="POST" action="../backend/checkDatiFattorino.php">
                 <?php
