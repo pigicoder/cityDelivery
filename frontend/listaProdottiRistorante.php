@@ -26,7 +26,6 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 				<form class="d-flex" role="search">
     				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
     				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
 				</form>
                 <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
     		</div>
