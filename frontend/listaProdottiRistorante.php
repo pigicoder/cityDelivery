@@ -28,6 +28,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
     				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
 				</form>
+                <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
     		</div>
         </nav>
 		<div class="background container">

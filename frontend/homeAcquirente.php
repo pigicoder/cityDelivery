@@ -1,7 +1,7 @@
 <?php
 
 require "../common/functions.php";
-require "../backend/db_config.php";
+//require "../backend/db_config.php";
 
 session_start();
 $email = $_SESSION["user"];
@@ -26,6 +26,7 @@ $restaurants = getRestaurantsByZone($cid,$zona);
         					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
 							<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
       					</form>
+						<button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
                         <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
             		</div>
         	</nav>
