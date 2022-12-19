@@ -29,10 +29,12 @@ $dati = array();
 if (isset($_GET["status"]))
 {
 	if ($_GET["status"] == "ko")
+    {
         $errore = unserialize($_GET["errore"]);
 	    $dati = unserialize($_GET["dati"]);
         //print_r($dati);
         //print_r($errore);
+    }
 }
 else
 {
@@ -119,15 +121,15 @@ function getRestaurantsByZone ($cid,$zona)
     $current_hour = idate('H', $now);
     $current_minute = idate('i', $now);
     $current_daySlot = '';
-    if (($current_hour == 19 && $current_minute >= 30) || (19 << $current_hour << 23) || ($current_hour == 23 && $current_minute <= 30)) 
+    if (($current_hour == 19 && $current_minute >= 30) || ($current_hour > 19 && $current_hour < 23) || ($current_hour == 23 && $current_minute <= 30)) 
     {
         $current_daySlot = 'Sera';
     }
-    else if (($current_hour == 15 && $current_minute >= 30) || (15 << $current_hour << 19) || ($current_hour == 19 && $current_minute <= 30)) 
+    else if (($current_hour == 15 && $current_minute >= 30) || ($current_hour > 15 && $current_hour < 19) || ($current_hour == 19 && $current_minute <= 30)) 
     {
         $current_daySlot = 'Pomeriggio';
     }
-    else if (($current_hour == 11 && $current_minute >= 30) || (11 << $current_hour << 15) || ($current_hour == 15 && $current_minute <= 30))
+    else if (($current_hour == 11 && $current_minute >= 30) || ($current_hour > 11 && $current_hour < 15) || ($current_hour == 15 && $current_minute <= 30))
     {
         $current_daySlot = 'Mattina';
     }
@@ -135,7 +137,7 @@ function getRestaurantsByZone ($cid,$zona)
     {
         $current_daySlot = 'Notte';
     }
-
+    echo $current_day . $current_hour . $current_minute . $current_daySlot;
     $result = $cid->query(
         "SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
       . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "
