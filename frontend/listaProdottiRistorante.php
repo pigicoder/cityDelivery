@@ -31,7 +31,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
     		</div>
         </nav>
 		<div class="background container">
-            <h1><?=  $r_sociale; ?> products:</h1>
+            <h1><?=  $r_sociale; ?> products:</h1> 
             <div class="row">
             <?php
 		    while($row = $result->fetch_row())
