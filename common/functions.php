@@ -137,7 +137,6 @@ function getRestaurantsByZone ($cid,$zona)
     {
         $current_daySlot = 'Notte';
     }
-    echo $current_day . $current_hour . $current_minute . $current_daySlot;
     $result = $cid->query(
         "SELECT Ristorante.r_sociale, Ristorante.ind_completo, Apertura.ristorante, Ristorante.email "
       . "FROM Ristorante LEFT OUTER JOIN Apertura ON (Ristorante.email = Apertura.ristorante "

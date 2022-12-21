@@ -83,7 +83,7 @@ require "../common/functions.php";
                     <div style="width:100%;" align="left">
                         <td>Delivery instructions: </td><td><input type = "text" name = "istruzioniConsegna" placeholder="Insert delivery instructions (optional)"></input></td>
                     </div>
-                    <div class="container" style="display:flex;width:50%;"><input type= "submit" value= "OK"/></div>
+                    <div class="container" style="display:flex;width:50%;"><input type = "submit" value = "OK"/></div>
 				    <div class="container" style="display:flex;width:50%;"><input type = "reset" value = "Delete"/></div>
                     </div>
                 </form>

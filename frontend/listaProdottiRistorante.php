@@ -34,6 +34,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
             <h1><?=  $r_sociale; ?> products:</h1> 
             <div class="row">
             <?php
+            $ordered = ["restaurant","product","quantity"];
 		    while($row = $result->fetch_row())
 		    {
 		    ?>
@@ -44,7 +45,12 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                                 <div class="card-body">
                                     <h5 class="card-title"><?=$row[0]?></h5>
                                     <p class="card-text"><?=$row[2]?></p>
-                                    <a href="#" class="btn btn-primary">Aggiungi all'ordine</a>
+                                    <button onclick="showHide('<?php echo $row[0]?>_form')" name="add" class="btn btn-primary">Aggiungi all'ordine</button>
+                                    <form name="addQty" id="<?php echo $row[0]?>_form" style="visibility: hidden" action="../backend/insertProductIntoBasket.php">
+                                        <div>Insert quantity: </div>
+                                        <input type="number"/>
+                                        <input type="submit" value = "add"/>
+                                    </form>
                                 </div>
                             </div>
                             <div class="col-md-4">
@@ -53,10 +59,49 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                         </div>
                     </div>
                 </div>
-                <?php
-		        }
-		        ?>
+            <?php
+		    }
+	        ?>
             </div>
         </div>
 	</body>
+    <script>
+        function showHide(id)
+        {
+            var x = document.getElementById(id);
+            if (x.style.visibility === "hidden")
+                {
+                    x.style.visibility = "visible";
+                }
+                else
+                {
+                    x.style.visibility = "hidden";
+                }
+        }
+
+
+
+        /*const addButton = document.getElementsByName("add");
+        const form = document.getElementsByName("addQty");
+        console.log();
+
+        for (var i=0; i<form.length; i++)
+        {
+            console.log(form[i].style.visibility);
+            addButton.forEach(function(addBtn)
+            {
+                addBtn.addEventListener("click", () =>
+                {
+                    if (form[i].style.visibility === "hidden")
+                    {
+                        form[i].style.visibility = "visible";
+                    }
+                    else
+                    {
+                        form[i].style.visibility = "hidden";
+                    }
+                });
+            });
+        }*/
+    </script>
 </html>

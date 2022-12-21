@@ -25,11 +25,7 @@ $restaurants = getRestaurantsByZone($cid,$zona);
         					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       					</form>
-<<<<<<< HEAD
 						<button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
-=======
-						  <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
->>>>>>> 5608a0bd689adb0163c50ac3f25030a223d5bcc3
                         <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
             		</div>
         	</nav>
