@@ -1,7 +1,9 @@
+<!DOCTYPE html>
 <?php
 
-require "../common/db_connection.php";
-require "../backend/db_config.php";
+/*require "../common/db_connection.php";
+require "../backend/db_config.php";*/
+require "../common/functions.php";
 
 $result = dbConnection();
 $email_ristorante=$_GET["email_ristorante"];
@@ -16,8 +18,9 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 <html>
 	<head>
 		<title>Products</title>
-        <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+        <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
 		<link rel="stylesheet" href="../css/styles.css">
+        <script src="../js/scripts.js" async></script>
 	</head>
 	<body>
 	    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
@@ -30,11 +33,10 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                 <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
     		</div>
         </nav>
-		<div class="background container">
+		<div class="background">
             <h1><?=  $r_sociale; ?> products:</h1> 
-            <div class="row">
+            <section class="row">
             <?php
-            $ordered = ["restaurant","product","quantity"];
 		    while($row = $result->fetch_row())
 		    {
 		    ?>
@@ -44,17 +46,17 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                             <div class="col-md-8">
                                 <div class="card-body">
                                     <h5 class="card-title"><?=$row[0]?></h5>
-                                    <p class="card-text"><?=$row[2]?></p>
-                                    <button onclick="showHide('<?php echo $row[0]?>_form')" name="add" class="btn btn-primary">Aggiungi all'ordine</button>
-                                    <form name="addQty" id="<?php echo $row[0]?>_form" style="visibility: hidden" action="../backend/insertProductIntoBasket.php">
-                                        <div>Insert quantity: </div>
-                                        <input type="number"/>
-                                        <input type="submit" value = "add"/>
+                                    <p class="card-text" style="text-align: left"><?=$row[2]?></p>
+                                    <p class="card-price">€<?=$row[3]?></p>
+                                    <button onclick="showHide('<?php echo $row[0]?>_form')" class="btn btn-primary">Add to cart</button>
+                                    <form id="<?php echo $row[0]?>_form" style="visibility: hidden;">Insert quantity: 
+                                        <input class="card-quantity-input" type="number" name="quantity" value="1" />
+                                        <button onclick="showHide('<?php echo $row[0]?>_form')" class="btn btn-primary add-to-cart" type="button">Add</button>
                                     </form>
                                 </div>
                             </div>
                             <div class="col-md-4">
-                                <img src="data:image/jpg;base64,<?=base64_encode($row[4])?>" class=card-img-top alt="..."></img>
+                                <img src="data:image/jpg;base64,<?=base64_encode($row[4])?>" class="card-img-top" alt="..."></img>
                             </div>
                         </div>
                     </div>
@@ -62,46 +64,23 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
             <?php
 		    }
 	        ?>
-            </div>
+            </section>
+            <section class="row-2">
+                <h2 class="section-header">CART</h2>
+                <div class="cart">
+                    <div class="cart-header">
+                        <span class="cart-item cart-header cart-column">PRODUCT</span>
+                        <span class="cart-price cart-header cart-column">PRICE</span>
+                        <span class="cart-quantity cart-header cart-column">QUANTITY</span>
+                    </div>    
+                    <div class="cart-items"></div>
+                    <div class="cart-total">
+                        <strong class="cart-total-title">Total</strong>
+                        <span class="cart-total-price">€0</span>
+                    </div>
+                    <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
+                </div>
+            </section>
         </div>
 	</body>
-    <script>
-        function showHide(id)
-        {
-            var x = document.getElementById(id);
-            if (x.style.visibility === "hidden")
-                {
-                    x.style.visibility = "visible";
-                }
-                else
-                {
-                    x.style.visibility = "hidden";
-                }
-        }
-
-
-
-        /*const addButton = document.getElementsByName("add");
-        const form = document.getElementsByName("addQty");
-        console.log();
-
-        for (var i=0; i<form.length; i++)
-        {
-            console.log(form[i].style.visibility);
-            addButton.forEach(function(addBtn)
-            {
-                addBtn.addEventListener("click", () =>
-                {
-                    if (form[i].style.visibility === "hidden")
-                    {
-                        form[i].style.visibility = "visible";
-                    }
-                    else
-                    {
-                        form[i].style.visibility = "hidden";
-                    }
-                });
-            });
-        }*/
-    </script>
 </html>
