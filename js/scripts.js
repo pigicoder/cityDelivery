@@ -149,9 +149,13 @@ function addToCartClicked(event)
 {
     var button = event.target
     var shopItem = button.parentElement.parentElement.parentElement
+    var quantityInput = shopItem.getElementsByClassName('card-quantity-input')[0]
     var title = shopItem.getElementsByClassName('card-title')[0].innerText
     var price = shopItem.getElementsByClassName('card-price')[0].innerHTML.replace('€', '')
-    var quantity = shopItem.getElementsByClassName('card-quantity-input')[0].value
+    var quantity = quantityInput.value
+    if (isNaN(quantity) || quantity <= 0) {
+        quantity = 1
+    }
     console.log(quantity)
     addItemToCart(title, price, quantity)
     updateCartTotal()
@@ -165,7 +169,7 @@ function addItemToCart(title, price, quantity)
     var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
     for (var i = 0; i < cartItemNames.length; i++)
     {
-        if (cartItemNames[i].innerText == title)
+        if (cartItemNames[i].textContent == title)
         {
             alert('This item is already added to the cart')
             return
@@ -178,7 +182,9 @@ function addItemToCart(title, price, quantity)
         <span class="cart-price-el cart-column">€${price}</span>
         <div class="cart-quantity cart-column">
             <input class="cart-quantity-input" type="number" value="${quantity}">
-            <button class="btn-remove" type="button">REMOVE</button>
+        </div>
+        <div class="cart-action cart-column">
+            <button class="btn-remove btn btn-danger" type="button">X</button>
         </div>`
     cartRow.innerHTML = cartRowContents
     cartItems.append(cartRow)
@@ -191,17 +197,31 @@ function updateCartTotal()
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')
     var total = 0
+    var totalQuantity = 0;
     for (var i = 0; i < cartRows.length; i++)
     {
         var cartRow = cartRows[i]
         var priceElement = cartRow.getElementsByClassName('cart-price-el')[0]
         var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
-        var price = parseFloat(priceElement.innerText.replace('€', ''))
+        var price = parseFloat(priceElement.textContent.replace('€', ''))
         var quantity = quantityElement.value
         total = total + (price * quantity)
+        totalQuantity = totalQuantity + parseFloat(quantity)
     }
     total = Math.round(total * 100) / 100
-    document.getElementsByClassName('cart-total-price')[0].innerText = '€' + total
+    var totalBoxes = document.getElementsByClassName('cart-total-price');
+    for (let i = 0; i < totalBoxes.length; i++) {
+        totalBoxes[i].textContent = '€' + total
+    }
+    let minicartTotalCountBoxes = document.getElementsByClassName('minicart-count');
+    for (let i = 0; i < minicartTotalCountBoxes.length; i++) {
+        if (totalQuantity > 0) {
+            minicartTotalCountBoxes[i].classList.remove('d-none')
+        } else {
+            minicartTotalCountBoxes[i].classList.add('d-none')
+        }
+        minicartTotalCountBoxes[i].textContent = totalQuantity
+    }
 }
 
 // ---END CART SCRIPTS--- //

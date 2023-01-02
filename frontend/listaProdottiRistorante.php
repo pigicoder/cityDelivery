@@ -16,63 +16,43 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 
 ?>
 <html>
-	<head>
-		<title>Products</title>
-        <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
-		<link rel="stylesheet" href="../css/styles.css">
-        <script src="../js/scripts.js" async></script>
-	</head>
-	<body>
-	    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        	<div class="container">
-        		<a class="navbar-brand" href="../index.html">Home</a>
-				<form class="d-flex" role="search">
-    				<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-    				<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-				</form>
-                <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
-    		</div>
-        </nav>
-		<div class="background">
-            <h1><?=  $r_sociale; ?> products:</h1> 
-            <section class="row">
-            <?php
-		    while($row = $result->fetch_row())
-		    {
-		    ?>
-                <div class="col-md-6">
-                    <div class="card mb-3">
-                        <div class="row g-0">
-                            <div class="col-md-8">
-                                <div class="card-body">
-                                    <h5 class="card-title"><?=$row[0]?></h5>
-                                    <p class="card-text" style="text-align: left"><?=$row[2]?></p>
-                                    <p class="card-price">€<?=$row[3]?></p>
-                                    <button onclick="showHide('<?php echo $row[0]?>_form')" class="btn btn-primary">Add to cart</button>
-                                    <form id="<?php echo $row[0]?>_form" style="visibility: hidden;">Insert quantity: 
-                                        <input class="card-quantity-input" type="number" name="quantity" value="1" />
-                                        <button onclick="showHide('<?php echo $row[0]?>_form')" class="btn btn-primary add-to-cart" type="button">Add</button>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-md-4">
-                                <img src="data:image/jpg;base64,<?=base64_encode($row[4])?>" class="card-img-top" alt="..."></img>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            <?php
-		    }
-	        ?>
-            </section>
+
+<head>
+    <title>Products</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="../js/scripts.js" async></script>
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html">Home</a>
+            <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
+                data-bs-toggle="offcanvas" data-bs-target="#miniCartLayer">
+                <span class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+                </span>
+                <i class="bi bi-basket2-fill"></i>
+                <span class="cart-total-price"></span>
+            </button>
+        </div>
+    </nav>
+    <div class="offcanvas offcanvas-end" tabindex="-1" id="miniCartLayer">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title">Cart</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas"></button>
+        </div>
+        <div class="offcanvas-body">
             <section class="row-2">
-                <h2 class="section-header">CART</h2>
                 <div class="cart">
-                    <div class="cart-header">
-                        <span class="cart-item cart-header cart-column">PRODUCT</span>
-                        <span class="cart-price cart-header cart-column">PRICE</span>
-                        <span class="cart-quantity cart-header cart-column">QUANTITY</span>
-                    </div>    
+                    <div class="cart-header d-flex justify-content-between">
+                        <div class="cart-item cart-header cart-column">PRODUCT</div>
+                        <div class="cart-price cart-header cart-column">PRICE</div>
+                        <div class="cart-quantity cart-header cart-column">QUANTITY</div>
+                        <div class="cart-actions cart-column"> </div>
+                    </div>
                     <div class="cart-items"></div>
                     <div class="cart-total">
                         <strong class="cart-total-title">Total</strong>
@@ -82,5 +62,46 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                 </div>
             </section>
         </div>
-	</body>
+    </div>
+    <div class="background">
+        <h1><?=  $r_sociale; ?> products:</h1>
+        <section class="row">
+            <?php
+		    while($row = $result->fetch_row())
+		    {
+		    ?>
+            <div class="col-md-6">
+                <div class="card mb-3">
+                    <div class="row g-0">
+                        <div class="col-md-8">
+                            <div class="card-body">
+                                <h5 class="card-title"><?=$row[0]?></h5>
+                                <p class="card-text" style="text-align: left"><?=$row[2]?></p>
+                                <p class="card-price">€<?=$row[3]?></p>
+                                <button onclick="showHide('<?php echo $row[0]?>_form')" class="btn btn-primary">Add to
+                                    cart</button>
+                                <form id="<?php echo $row[0]?>_form" style="visibility: hidden;">Insert quantity:
+                                    <input class="card-quantity-input" type="number" name="quantity" value="1"
+                                        min="1" />
+                                    <button onclick="showHide('<?php echo $row[0]?>_form')"
+                                        class="btn btn-primary add-to-cart" type="button">Add</button>
+                                </form>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <img src="data:image/jpg;base64,<?=base64_encode($row[4])?>" class="card-img-top"
+                                alt="..."></img>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <?php
+		    }
+	        ?>
+        </section>
+    </div>
+    <!-- Bootstrap core JS-->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+
 </html>
