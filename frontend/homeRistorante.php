@@ -25,6 +25,9 @@ $email = $_SESSION["user"];
 	    	<div class="background">
 				<h1>Restaurant's homepage</h1>
 				<br>Welcome back, <?=$email?></br>
+				<br>
+				<a href="datiProdotto.php" class="btn btn-primary">Add new product</a>
+				<br>
 			</div>
         </body>
 </html>
