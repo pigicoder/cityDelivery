@@ -22,7 +22,11 @@ $tipoErrore = array("1" => "invalid email address",
                     "8" => "invalid intercom",
                     "9" => "invalid phone number",
                     "10" => "invalid VAT number",
-                    "11" => "invalid activity name");
+                    "11" => "invalid activity name",
+                    "12" =>"invalid description",
+                    "13" =>"invalid price",
+                    "14" =>"invalid type",
+                    "15" =>"invalid imagine");
 $errore = array();
 $dati = array();
 
@@ -52,6 +56,10 @@ else
     $dati["istruzioni"] = "";
     $dati["iva"] = "";
     $dati["attività"] = "";
+    $dati["tipo"] = "";
+    $dati["descrizione"] = "";
+    $dati["prezzo"] = "";
+    $dati["immagine"] = "";
 }
 
 function insertAcquirente($cid, $email, $password, $nome, $cognome, $carta, $via, $civico, $cap, $citofono, $istruzioni, $telefono, $zona)
@@ -95,7 +103,19 @@ function insertFattorino($cid, $email, $password, $nome, $cognome, $zona)
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
-
+function insertProdotto($cid, $email, $nome, $tipo, $descrizione, $prezzo, $immagine)
+{
+    $insert_stmt = "INSERT INTO Prodotto (ristorante, nome, tipo, descrizione, prezzo, immagine)
+                    VALUES ('".$email. "','" .$nome. "', '" .$tipo. "', '" .$descrizione. "', '" .$prezzo. "',  '" .$immagine. "')";
+    if ($cid->query($insert_stmt) == TRUE)
+    {
+        echo "Registration successful";
+    }
+    else
+    {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
 function getBuyerZone ($cid, $email)
 {
     $result = $cid->query("SELECT zona FROM Acquirente WHERE email = '".$email."'");
@@ -154,5 +174,45 @@ function getRestaurantsByZone ($cid,$zona)
     }
     return $restaurants;
 }
-
+function updateAcquirente($cid, $email, $nome, $cognome, $carta, $via, $civico, $cap, $citofono, $istruzioni, $telefono, $zona)
+{
+	$update_stmt = "UPDATE Acquirente SET nome='" .$nome. "', cognome='" .$cognome. "',
+    carta_credito= '" .$carta. "',via='" .$via. "',civico='" .$civico. "', cap='" .$cap. "', citofono='" .$citofono. "',
+    istruzioni_consegna='" .$istruzioni. "',telefono='" .$telefono. "', zona= '" .$zona. "' WHERE email='" .$email. "'";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Update successful";
+    }
+    else
+    {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+function updateRistorante($cid, $email, $iva, $attività, $zona, $sede, $indirizzo)
+{
+	$update_stmt = "UPDATE Ristorante
+    SET    p_iva='" .$iva. "', r_sociale='" .$attività. "', zona='" .$zona. "', sede_legale='" .$sede. "', ind_completo='" .$indirizzo. "'
+     WHERE email='" .$email. "'";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Update successful";
+    }
+    else
+    {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
+function updateFattorino($cid, $email, $nome, $cognome, $zona)
+{
+	$update_stmt = "UPDATE Fattorino SET nome='" .$nome. "', cognome='" .$cognome. "',
+    zona_operata= '" .$zona. "' WHERE email='" .$email. "'";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Update successful";
+    }
+    else
+    {
+        echo "Error: " . $sql . "<br>" . $conn->error;
+    }
+}
 ?>
