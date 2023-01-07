@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+
 <?php
 
 
@@ -12,42 +12,48 @@ $result = $cid->query("SELECT * FROM Ristorante WHERE email = '".$email."'");
 $rows = $result->fetch_row();
 
 ?>
+<!DOCTYPE html>
 <html>
 
 <head>
-    <title>Profile</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-</head>
+		<title>Restaurant's profile</title>
+		<link href="../css/styles.css" rel="stylesheet" />
+        <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+	</head>
 
-<body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
-            <section class="row">
-</nav>
-            <div class="background">
-            <h1>Profile</h1>
-            <div class="container">
-           
+    <body>
+		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        		<div class="container">
+                		<a class="navbar-brand" href="../index.html">Home</a>
+            	</div>
+        </nav>
+        <br>
+	    <div class="background">
+            <h3>Profile</h3>
+		<div class="container" style="display:flex;width:100%;">
+    		<form>
+            <div style="width:100%;" align="left">
             <h5 class="card-title">Email: <?=$rows[0]?></h5>
+            </div>
+            <div style="width:100%;" align="left">
             <h5 class="card-title">P_iva: <?=$rows[2]?></h5>
+            </div>
+            <div style="width:100%;" align="left">
             <h5 class="card-title">R_sociale: <?=$rows[3]?></h5>
+            </div>
+            <div style="width:100%;" align="left">
             <h5 class="card-title">Zona: <?=$rows[4]?></h5>
+            </div>
+            <div style="width:100%;" align="left">
             <h5 class="card-title">Sede Legale: <?=$rows[5]?></h5>
+            </div>
+            <div style="width:100%;" align="left">
             <h5 class="card-title">Indirizzo completo: <?=$rows[6]?></h5>
-          
-                              
-                            </div>
-                        </div>
-                     <!-- UPDATE ISNT DONE!!!!--> 
-            <a href="datiProdotto.php" class="btn btn-primary">Update profile</a>
-        </section>
+            </div>
+            </div>
+            <br>
+            <a href="updateRistorante.php" class="btn btn-primary">Update profile</a>
     
-    <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
