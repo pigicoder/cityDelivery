@@ -1,16 +1,32 @@
 <?php
 
 require "../common/functions.php";
-
+session_start();
 $dati = array();
 $errore = array();
 
+$email = $_POST["email"];
 $nome = $_POST["nome"];
-$descrizzione = $_POST["descrizzione"];
-$price =$_POST["price"];
 $tipo =$_POST["tipo"];
-$imagine =$_POST["imagine"];
+$descrizione = $_POST["descrizione"];
+$prezzo =$_POST["prezzo"];
 
+$immagine =$_POST["immagine"];
+if (empty($email))
+{
+	$errore["email"] = "1";            // assegno un numero al tipo di errore
+	$dati["email"] = "";
+}
+else
+{
+    	// check if e-mail address is well-formed
+    	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+      		$errore["email"] = "1";
+		$dati["email"] = "";
+    	}
+	else
+		$dati["email"] = $email;
+}
 if (empty($nome))
 {
 	$errore["nome"] = "3";            // assegno un numero al tipo di errore
@@ -20,7 +36,8 @@ else
 {
 		$dati["nome"] = $nome;
 }
-if (empty($tipo))
+
+if (empty("tipo"))
 {
 	$errore["tipo"] = "14";
 	$dati["tipo"] = "";
@@ -29,35 +46,35 @@ else
 {
 	$dati["tipo"] = $tipo;
 }
-if (empty($descrizzione))
+if (empty($descrizione))
 {
-	$errore["descrizzione"] = "12";
-	$dati["descrizzione"] = "";
+	$errore["descrizione"] = "12";
+	$dati["descrizione"] = "";
 }
 else
 {
-	$dati["descrizzione"] = $descrizzione;
+	$dati["descrizione"] = $descrizione;
 }
 
 
-if (empty($price))
+if (empty($prezzo))
 {
-	$errore["price"] = "13";
-	$dati["price"] = "";
+	$errore["prezzo"] = "13";
+	$dati["prezzo"] = "";
 }
 else
 {
-	$dati["price"] = $price;
+	$dati["prezzo"] = $prezzo;
 }
 
-if (empty($imagine))
+if (empty($immagine))
 {
-	$errore["imagine"] = "15";
-	$dati["imagine"] = "";
+	$errore["immagine"] = "15";
+	$dati["immagine"] = "";
 }
 else
 {
-	$dati["imagine"] = $imagine;
+	$dati["immagine"] = $immagine;
 }
 
 if (count($errore) > 0)
@@ -68,9 +85,9 @@ else
 {
 	// ---INSERT QUERY--- //
 	
-	insertProdotto($cid,$email,$nome,$tipo,$descrizzione,$price,$imagine);
+	insertProdotto($cid,$email,$nome,$tipo,$descrizione,$prezzo,$immagine);
 	$_SESSION["user"] = $email;
-	header('location: ../frontend/datiProdotto.php?status=ok&dati=' . serialize($dati));
+	header('location: ../frontend/homeRistorante.php?status=ok&dati=' . serialize($dati));
 	
 }
 
