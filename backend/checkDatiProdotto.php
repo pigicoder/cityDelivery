@@ -5,28 +5,14 @@ session_start();
 $dati = array();
 $errore = array();
 
-$email = $_POST["email"];
+
 $nome = $_POST["nome"];
 $tipo =$_POST["tipo"];
 $descrizione = $_POST["descrizione"];
 $prezzo =$_POST["prezzo"];
 
 $immagine =$_POST["immagine"];
-if (empty($email))
-{
-	$errore["email"] = "1";            // assegno un numero al tipo di errore
-	$dati["email"] = "";
-}
-else
-{
-    	// check if e-mail address is well-formed
-    	if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-      		$errore["email"] = "1";
-		$dati["email"] = "";
-    	}
-	else
-		$dati["email"] = $email;
-}
+
 if (empty($nome))
 {
 	$errore["nome"] = "3";            // assegno un numero al tipo di errore
@@ -84,9 +70,9 @@ if (count($errore) > 0)
 else
 {
 	// ---INSERT QUERY--- //
-	
+		$email=$_SESSION["user"];
 	insertProdotto($cid,$email,$nome,$tipo,$descrizione,$prezzo,$immagine);
-	$_SESSION["user"] = $email;
+	
 	header('location: ../frontend/homeRistorante.php?status=ok&dati=' . serialize($dati));
 	
 }

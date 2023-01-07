@@ -36,12 +36,12 @@ include "../common/functions.php";
             <br><br>
 
                 <div class="container" style="display:flex;width:120%;">
-            
-              
-                <form method="GET" action="../backend/checkDatiProdotto.php">
-                <div style="width:100%;" align="left">
+                <form method="POST" action="../backend/checkDatiProdotto.php">
+              <div style="width:100%;" align="left">
               
 </div>
+                <form method="GET" action="../backend/checkDatiProdotto.php">
+                
                     <div style="width:100%;" align="left">
                                 <td>Name: </td>
                                 <td><input type="text" name= "nome" 
@@ -66,25 +66,25 @@ include "../common/functions.php";
                        
                         <div style="width:100%;" align="left">
                                 <td>Description: </td>
-                                <td><input type = "text" name = "descrizzione"
+                                <td><input type = "text" name = "descrizione"
                                  placeholder="Insert description" 
                                 ></input></td>
-                                <?php visualizzaErrore("descrizzione"); ?>
+                                <?php visualizzaErrore("descrizione"); ?>
                         </div >
                         <div style="width:100%;margin-left:0%;" align="left">
                                     <td>Price: </td>
-                                    <td><input type = "float" name = "price" 
+                                    <td><input type = "float" name = "prezzo" 
                                     placeholder="Insert price of prodotto" 
                                    ></input></td>
-                                    <?php visualizzaErrore("price"); ?>
+                                    <?php visualizzaErrore("prezzo"); ?>
                         </div>
                         <div style="width:100%;margin-left:0%;" align="left">
                         <!--<form name="MiForm" id="MiForm" method="post" action="cargar.php" enctype="multipart/form-data">
                        <div class="form-group"><div class="col-sm-8"> -->
-                        <td>Imagine: </td>
-                       <td><input type="file" class="form" id="image" name="image"></td>
+                        <td>Immagine: </td>
+                       <td><input type="file" class="form" id="immagine" name="immagine"></td>
                     </input></td>
-                                    <?php visualizzaErrore("imagine"); ?>
+                                    <?php visualizzaErrore("immagine"); ?>
                         </div>
                                
 
