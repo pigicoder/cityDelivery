@@ -19,6 +19,7 @@ $email = $_SESSION["user"];
 	<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         		<div class="container">
                 		<a class="navbar-brand" href="../index.html">Home</a>
+						<a class="navbar-brand" href="seeProfileRistorante.php">Profile</a>
             		</div>
 			<button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
         	</nav>
