@@ -225,7 +225,7 @@ function insertOrdine($cid,$acquirente, $ora_ordine)
 
 function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, $nome_prodotto, $prezzo, $qnt)
 {
-	$insert_stmt = $cid->prepare("INSERT INTO rigaordine (n_riga, acquirente, ora_ordine, ristorante, nome_prodotto, prezzo, quantità)
+	$insert_stmt = $cid->prepare("INSERT INTO RigaOrdine (n_riga, acquirente, ora_ordine, ristorante, nome_prodotto, prezzo, quantità)
                     VALUES (?,?,?,?,?,?,?)");
     $insert_stmt->bind_param('issssdi', $n_riga, $acquirente, $ora_ordine, $ristorante, $nome_prodotto, $prezzo, $qnt);
     $insert_stmt->execute();
@@ -233,11 +233,28 @@ function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, 
 
 function getLineOrderOpened($cid,$email)
 {
-    /*$result = $cid->query(
-        "SELECT rigaordine.nome_prodotto, rigaordine.prezzo, rigaordine.quantità"
-      . "FROM rigaordine "
-      . "AND rigaordine.acquirente = '" . $email . "' "
-      . "AND rigaordine.ora_ordine = '" . time()+86400s. "' ) "
-     ; */
+    $result = $cid->query(
+    "SELECT Ristorante.r_sociale, RigaOrdine.nome_prodotto, RigaOrdine.prezzo, RigaOrdine.quantità, RigaOrdine.ristorante " .   
+    "FROM RigaOrdine join Ristorante on RigaOrdine.ristorante = Ristorante.email join Ordine on Ordine.acquirente=RigaOrdine.acquirente and Ordine.ora_ordine=rigaOrdine.ora_ordine ".
+    "WHERE RigaOrdine.acquirente='".$email."' and ordine.stato='In composizione' ".
+    "ORDER BY RigaOrdine.ora_ordine DESC");
+    $RestaurantOrder=[];
+    while($row = $result->fetch_row())
+    {
+        $email_ristorante=$row[4];
+        if (!array_key_exists($email_ristorante,$RestaurantOrder)) 
+        {
+            $RestaurantOrder[$email_ristorante]=[
+                'nome'=>$row[0],
+                'rigaordine'=>[]
+            ];
+        }
+        $rigaordine=["nome_prodotto"=>$row[1],
+        "prezzo"=>$row[2],
+        "quantità"=>$row[3],
+        ];
+        array_push($RestaurantOrder[$email_ristorante]['rigaordine'],$rigaordine);
+    }
+    return $RestaurantOrder;
 }
 ?>
