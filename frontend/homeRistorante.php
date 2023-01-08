@@ -28,6 +28,8 @@ $email = $_SESSION["user"];
 				<br>Welcome back, <?=$email?></br>
 				<br>
 				<a href="datiProdotto.php" class="btn btn-primary">Add new product</a>
+				<a href="vissualiceProdotti.php" class="btn btn-primary">See all products</a>
+				
 				<br>
 			</div>
         </body>
