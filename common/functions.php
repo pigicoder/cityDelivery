@@ -257,4 +257,16 @@ function getLineOrderOpened($cid,$email)
     }
     return $RestaurantOrder;
 }
+function deleteProdotto($cid, $email,$nome)
+{
+    $delete_stmt= "DELETE FROM Prodotto WHERE ristorante='".$email. "'&& nome='" .$nome. "'";
+if ($cid->query($delete_stmt) == TRUE)
+{
+    echo "Delete  successful";
+}
+else
+{
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+}
 ?>
