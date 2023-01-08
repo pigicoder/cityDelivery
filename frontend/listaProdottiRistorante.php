@@ -32,7 +32,8 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
             <a class="navbar-brand" href="../index.html">Home</a>
             <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
                 data-bs-toggle="offcanvas" data-bs-target="#miniCartLayer">
-                <span class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+                <span
+                    class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
                 </span>
                 <i class="bi bi-basket2-fill"></i>
                 <span class="cart-total-price"></span>
@@ -46,20 +47,23 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
         </div>
         <div class="offcanvas-body">
             <section class="row-2">
-                <div class="cart">
-                    <div class="cart-header d-flex justify-content-between">
-                        <div class="cart-item cart-header cart-column">PRODUCT</div>
-                        <div class="cart-price cart-header cart-column">PRICE</div>
-                        <div class="cart-quantity cart-header cart-column">QUANTITY</div>
-                        <div class="cart-actions cart-column"> </div>
+                <form method="POST" action="../backend/createOrder.php">
+                    <div class="cart">
+                        <div class="cart-header d-flex justify-content-between">
+                            <div class="cart-item cart-header cart-column">PRODUCT</div>
+                            <div class="cart-price cart-header cart-column">PRICE</div>
+                            <div class="cart-quantity cart-header cart-column">QUANTITY</div>
+                            <div class="cart-actions cart-column"> </div>
+                        </div>
+                        <div class="cart-items"></div>
+                        <div class="cart-total">
+                            <strong class="cart-total-title">Total</strong>
+                            <span class="cart-total-price">€0</span>
+                        </div>
+                        <input type="hidden" name="ristorante" value="<?= $email_ristorante; ?>"/>
+                        <button class="btn btn-primary btn-purchase" type="submit">PURCHASE</button>
                     </div>
-                    <div class="cart-items"></div>
-                    <div class="cart-total">
-                        <strong class="cart-total-title">Total</strong>
-                        <span class="cart-total-price">€0</span>
-                    </div>
-                    <button class="btn btn-primary btn-purchase" type="button">PURCHASE</button>
-                </div>
+                </form>
             </section>
         </div>
     </div>

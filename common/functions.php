@@ -215,4 +215,29 @@ function updateFattorino($cid, $email, $nome, $cognome, $zona)
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+function insertOrdine($cid,$acquirente, $ora_ordine)
+{
+	$insert_stmt = $cid->prepare("INSERT INTO Ordine (acquirente, ora_ordine)
+                    VALUES (?,?)");
+    $insert_stmt->bind_param('ss', $acquirente, $ora_ordine);
+    $insert_stmt->execute();
+}
+
+function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, $nome_prodotto, $prezzo, $qnt)
+{
+	$insert_stmt = $cid->prepare("INSERT INTO rigaordine (n_riga, acquirente, ora_ordine, ristorante, nome_prodotto, prezzo, quantità)
+                    VALUES (?,?,?,?,?,?,?)");
+    $insert_stmt->bind_param('issssdi', $n_riga, $acquirente, $ora_ordine, $ristorante, $nome_prodotto, $prezzo, $qnt);
+    $insert_stmt->execute();
+}
+
+function getLineOrderOpened($cid,$email)
+{
+    /*$result = $cid->query(
+        "SELECT rigaordine.nome_prodotto, rigaordine.prezzo, rigaordine.quantità"
+      . "FROM rigaordine "
+      . "AND rigaordine.acquirente = '" . $email . "' "
+      . "AND rigaordine.ora_ordine = '" . time()+86400s. "' ) "
+     ; */
+}
 ?>

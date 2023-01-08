@@ -28,7 +28,7 @@ if (isset($_POST["email"]) && isset($_POST["pwd"]) && $result["status"]=="ok")
 		if (mysqli_num_rows($selectPwd) == 1) 
 		{			
 			$_SESSION["user"] = $_POST["email"];
-			$parameter = "Location: ../frontend/homeAcquirente.php?email=$email";
+			$parameter = "Location: ../frontend/homeAcquirente.php";
 			//echo "<html><body><br><br>Welcome back, ",$email,"</body></html>";
 		}
 		else $parameter = "Location: ../frontend/login.php?errore=password&email=$email";
@@ -42,7 +42,7 @@ if (isset($_POST["email"]) && isset($_POST["pwd"]) && $result["status"]=="ok")
 			if (mysqli_num_rows($selectPwd) == 1) 
 			{
 				$_SESSION["user"] = $_POST["email"];
-				$parameter = "Location: ../frontend/homeRistorante.php?email=$email";
+				$parameter = "Location: ../frontend/homeRistorante.php";
 				//echo "<html><body><br><br>Welcome back, ",$email,"</body></html>";
 			}
 			else $parameter = "Location: ../frontend/login.php?errore=password&email=$email";
@@ -56,7 +56,7 @@ if (isset($_POST["email"]) && isset($_POST["pwd"]) && $result["status"]=="ok")
 				if (mysqli_num_rows($selectPwd) == 1) 
 				{
 					$_SESSION["user"] = $_POST["email"];
-					$parameter = "Location: ../frontend/homeFattorino.php?email=$email";	
+					$parameter = "Location: ../frontend/homeFattorino.php";	
 				}
 				else $parameter = "Location: ../frontend/login.php?errore=password&email=$email";
 			}

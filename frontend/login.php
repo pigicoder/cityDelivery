@@ -53,15 +53,15 @@ if (isset($_SESSION["user"]))
 	$email = $_SESSION["user"];
 	$selectEmail = mysqli_query($cid, "SELECT * FROM Acquirente WHERE email = '".$email."'");
 	if (mysqli_num_rows($selectEmail) == 1)
-		$parameter = "Location: homeAcquirente.php?email=$email";
+		$parameter = "Location: homeAcquirente.php";
 
 	$selectEmail = mysqli_query($cid, "SELECT * FROM Ristorante WHERE email = '".$email."'");
 	if (mysqli_num_rows($selectEmail) == 1)
-		$parameter = "Location: homeRistorante.php?email=$email";
+		$parameter = "Location: homeRistorante.php";
 	
 	$selectEmail = mysqli_query($cid, "SELECT * FROM Fattorino WHERE email = '".$email."'");
 	if (mysqli_num_rows($selectEmail) == 1)
-		$parameter = "Location: homeFattorino.php?email=$email";
+		$parameter = "Location: homeFattorino.php";
 
 	//echo "<br><a>Session is already open.<br>Welcome back, ",$_SESSION["user"],"</a>";
 	header($parameter);

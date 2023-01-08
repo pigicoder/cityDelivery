@@ -114,7 +114,7 @@ function ready()
         button.addEventListener('click', addToCartClicked)
     }
 
-    document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+    //document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
 function purchaseClicked()
@@ -167,6 +167,7 @@ function addItemToCart(title, price, quantity)
     cartRow.classList.add('cart-row')
     var cartItems = document.getElementsByClassName('cart-items')[0]
     var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
+    var totalItems = cartItemNames.length;
     for (var i = 0; i < cartItemNames.length; i++)
     {
         if (cartItemNames[i].textContent == title)
@@ -178,10 +179,12 @@ function addItemToCart(title, price, quantity)
     var cartRowContents = `
         <div class="cart-item cart-column">
             <span class="cart-item-title">${title}</span>
+            <input type="hidden" name="riga_ordine[${totalItems}][title]" value="${title}">
         </div>
         <span class="cart-price-el cart-column">€${price}</span>
+        <input type="hidden" name="riga_ordine[${totalItems}][price]" value="${price}">
         <div class="cart-quantity cart-column">
-            <input class="cart-quantity-input" type="number" value="${quantity}">
+            <input class="cart-quantity-input" type="number" name="riga_ordine[${totalItems}][quantity]" value="${quantity}">
         </div>
         <div class="cart-action cart-column">
             <button class="btn-remove btn btn-danger" type="button">X</button>
