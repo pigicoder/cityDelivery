@@ -234,6 +234,7 @@ function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, 
 function getLineOrderOpened($cid,$email)
 {
     $result = $cid->query(
+<<<<<<< HEAD
         "SELECT Ristorante.r_sociale, RigaOrdine.nome_prodotto, RigaOrdine.prezzo, RigaOrdine.quantità, RigaOrdine.ristorante "   
     .   "FROM RigaOrdine JOIN Ristorante ON RigaOrdine.ristorante = Ristorante.email JOIN Ordine ON Ordine.acquirente=RigaOrdine.acquirente and Ordine.ora_ordine=RigaOrdine.ora_ordine "
     .   "WHERE RigaOrdine.acquirente='".$email."' and Ordine.stato='In composizione' "
@@ -245,23 +246,48 @@ function getLineOrderOpened($cid,$email)
         if (!array_key_exists($email_ristorante,$RestaurantOrder)) 
         {
             $RestaurantOrder[$email_ristorante] = [
+=======
+    "SELECT Ristorante.r_sociale, RigaOrdine.nome_prodotto, RigaOrdine.prezzo, RigaOrdine.quantità, RigaOrdine.ristorante " .   
+    "FROM RigaOrdine join Ristorante on RigaOrdine.ristorante = Ristorante.email join Ordine on Ordine.acquirente=RigaOrdine.acquirente and Ordine.ora_ordine=rigaOrdine.ora_ordine ".
+    "WHERE RigaOrdine.acquirente='".$email."' and ordine.stato='In composizione' ".
+    "ORDER BY RigaOrdine.ora_ordine DESC");
+    $RestaurantOrder=[];
+    while($row = $result->fetch_row())
+    {
+        $email_ristorante=$row[4];
+        if (!array_key_exists($email_ristorante,$RestaurantOrder)) 
+        {
+            $RestaurantOrder[$email_ristorante]=[
+>>>>>>> 74468e29181f52fe2fe1ff2de2f8a5786ec52e90
                 'nome'=>$row[0],
                 'rigaordine'=>[]
             ];
         }
+<<<<<<< HEAD
         $rigaordine = [
             "nome_prodotto" => $row[1],
             "prezzo" => $row[2],
             "quantità" => $row[3]
+=======
+        $rigaordine=["nome_prodotto"=>$row[1],
+        "prezzo"=>$row[2],
+        "quantità"=>$row[3],
+>>>>>>> 74468e29181f52fe2fe1ff2de2f8a5786ec52e90
         ];
         array_push($RestaurantOrder[$email_ristorante]['rigaordine'],$rigaordine);
     }
     return $RestaurantOrder;
 }
+<<<<<<< HEAD
 function deleteProdotto($cid,$email,$nome)
 {
     $delete_stmt = "DELETE FROM Prodotto WHERE ristorante='".$email. "' "
                 .  "AND nome='" .$nome. "'";
+=======
+function deleteProdotto($cid, $email,$nome)
+{
+    $delete_stmt= "DELETE FROM Prodotto WHERE ristorante='".$email. "'&& nome='" .$nome. "'";
+>>>>>>> 74468e29181f52fe2fe1ff2de2f8a5786ec52e90
 if ($cid->query($delete_stmt) == TRUE)
 {
     echo "Delete  successful";
