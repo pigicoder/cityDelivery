@@ -26,8 +26,8 @@ $restaurants = getRestaurantsByZone($cid,$zona);
         					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
         					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
       					</form>
-						<button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>
-                        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
+                          <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>        
+                          <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
             		</div>
         	</nav>
 	    	<div class="background">
@@ -41,31 +41,32 @@ $restaurants = getRestaurantsByZone($cid,$zona);
 						foreach ($restaurants as $restaurant) 
 						{
 						?>
-						<div class="card mb-3 bg-dark card-restaurant position-relative">
-							<div class="row g-0">
-								<div class="col">
-									<div class="card-body">
-										<a href="listaProdottiRistorante.php?email_ristorante=<?=$restaurant["email"]?>" class="stretched-link">
-											<h5 class="card-title">
-												<?= $restaurant["r_sociale"]; ?>
-											</h5>
-										</a>
-										<p class="card-text"><?= $restaurant["indirizzo"];?></p>
-										<p class="card-text"><small class="text-<?= $restaurant["stato"]=="Chiuso" ? "danger" : "success" ?>"><?=$restaurant["stato"] ?></small></p>
-									</div>
-								</div>
-							</div>
-						</div>
-						<?php
+                    <div class="card mb-3 bg-dark card-restaurant position-relative">
+                        <div class="row g-0">
+                            <div class="col">
+                                <div class="card-body">
+                                    <a href="listaProdottiRistorante.php?email_ristorante=<?=$restaurant["email"]?>"
+                                        class="stretched-link">
+                                        <h5 class="card-title">
+                                            <?= $restaurant["r_sociale"]; ?>
+                                        </h5>
+                                    </a>
+                                    <p class="card-text"><?= $restaurant["indirizzo"];?></p>
+                                    <p class="card-text"><small
+                                            class="text-<?= $restaurant["stato"]=="Chiuso" ? "danger" : "success" ?>"><?=$restaurant["stato"] ?></small>
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <?php
 						}
 						?>
-						</div>
-					</div>
-				</div>	
+                </div>
             </div>
-				
-        </body>
+        </div>
+    </div>
+
+</body>
+
 </html>
-
-
-

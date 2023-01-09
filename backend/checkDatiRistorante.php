@@ -41,7 +41,7 @@ else
 	$dati["password"] = $password;
 }
 
-if (empty($iva) || strlen($iva) != 16)
+if (empty($iva) || (strlen($iva) != 16 && strlen($iva) != 11))
 {
 	$errore["iva"] = "10";
 	$dati["iva"] = "";

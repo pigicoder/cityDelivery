@@ -215,4 +215,60 @@ function updateFattorino($cid, $email, $nome, $cognome, $zona)
         echo "Error: " . $sql . "<br>" . $conn->error;
     }
 }
+function insertOrdine($cid,$acquirente, $ora_ordine)
+{
+	$insert_stmt = $cid->prepare("INSERT INTO Ordine (acquirente, ora_ordine)
+                    VALUES (?,?)");
+    $insert_stmt->bind_param('ss', $acquirente, $ora_ordine);
+    $insert_stmt->execute();
+}
+
+function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, $nome_prodotto, $prezzo, $qnt)
+{
+	$insert_stmt = $cid->prepare("INSERT INTO RigaOrdine (n_riga, acquirente, ora_ordine, ristorante, nome_prodotto, prezzo, quantità)
+                    VALUES (?,?,?,?,?,?,?)");
+    $insert_stmt->bind_param('issssdi', $n_riga, $acquirente, $ora_ordine, $ristorante, $nome_prodotto, $prezzo, $qnt);
+    $insert_stmt->execute();
+}
+
+function getLineOrderOpened($cid,$email)
+{
+    $result = $cid->query(
+        "SELECT Ristorante.r_sociale, RigaOrdine.nome_prodotto, RigaOrdine.prezzo, RigaOrdine.quantità, RigaOrdine.ristorante "   
+    .   "FROM RigaOrdine JOIN Ristorante ON RigaOrdine.ristorante = Ristorante.email JOIN Ordine ON Ordine.acquirente=RigaOrdine.acquirente and Ordine.ora_ordine=RigaOrdine.ora_ordine "
+    .   "WHERE RigaOrdine.acquirente='".$email."' and Ordine.stato='In composizione' "
+    .   "ORDER BY RigaOrdine.ora_ordine DESC");
+    $RestaurantOrder=[];
+    while($row = $result->fetch_row())
+    {
+        $email_ristorante = $row[4];
+        if (!array_key_exists($email_ristorante,$RestaurantOrder)) 
+        {
+            $RestaurantOrder[$email_ristorante] = [
+                'nome'=>$row[0],
+                'rigaordine'=>[]
+            ];
+        }
+        $rigaordine = [
+            "nome_prodotto" => $row[1],
+            "prezzo" => $row[2],
+            "quantità" => $row[3]
+        ];
+        array_push($RestaurantOrder[$email_ristorante]['rigaordine'],$rigaordine);
+    }
+    return $RestaurantOrder;
+}
+function deleteProdotto($cid,$email,$nome)
+{
+    $delete_stmt = "DELETE FROM Prodotto WHERE ristorante='".$email. "' "
+                .  "AND nome='" .$nome. "'";
+if ($cid->query($delete_stmt) == TRUE)
+{
+    echo "Delete  successful";
+}
+else
+{
+    echo "Error: " . $sql . "<br>" . $conn->error;
+}
+}
 ?>
