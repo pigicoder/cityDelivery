@@ -20,15 +20,11 @@ $restaurants = getRestaurantsByZone($cid,$zona);
 	<body>
 			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         		<div class="container">
-                		<a class="navbar-brand" href="../index.html">Home</a>
-						<a class="navbar-brand" href="seeProfileAcquirente.php">Profile</a>
-						<form class="d-flex" role="search">
-        					<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        					<button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-      					</form>
-                          <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>        
-                          <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
-            		</div>
+					<a class="navbar-brand" href="../index.html">Home</a>
+					<a class="navbar-brand" href="seeProfileAcquirente.php">Profile</a>
+					<button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0" type="submit">Order</button>        
+					<button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button" onclick="window.location.href='../backend/logout.php';">Logout</button>
+				</div>
         	</nav>
 	    	<div class="background">
 				<h1>Buyer's homepage</h1>

@@ -22,12 +22,6 @@ $RestaurantOrder = getLineOrderOpened($cid,$email);
         <div class="container">
             <a class="navbar-brand" href="../index.html">Home</a>
             <a class="navbar-brand" href="seeProfileAcquirente.php">Profile</a>
-            <form class="d-flex" role="search">
-                <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
-            <button onclick="location.href='basket.php'" class="btn btn-outline-success my-2 my-sm-0"
-                type="submit">Order</button>
             <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button"
                 onclick="window.location.href='../backend/logout.php';">Logout</button>
         </div>
@@ -35,7 +29,8 @@ $RestaurantOrder = getLineOrderOpened($cid,$email);
     <div class="background">
         <div class="container">
             <?php
-    foreach ($RestaurantOrder as $CurrentOrder)
+             
+foreach ($RestaurantOrder as $CurrentOrder)
 	{
     ?>
             <div class="card mb-3 bg-dark card-ordine position-relative">
@@ -58,10 +53,12 @@ $RestaurantOrder = getLineOrderOpened($cid,$email);
                                                 </tr>
                                             </thead>
                                             <tbody>
-                                                <?php                         
+                                                <?php
+                                                    
                             foreach ($CurrentOrder['rigaordine'] as $rigaordine)
                             {
-                            ?>
+                                
+                                ?>
                                                 <tr>
                                                     <td>
                                                         <?=$rigaordine['nome_prodotto']?>
@@ -75,22 +72,34 @@ $RestaurantOrder = getLineOrderOpened($cid,$email);
 
                                                 </tr>
                                                 <?php
-                            }
+                                }
                             
                             ?>
+
                                             </tbody>
                                         </table>
                                     </div>
                                     <div class="text-end">
-                                        <button class="btn btn-danger" type="button">Delete Order
+                                        <?php $ora_ordine=$rigaordine['ora_ordine'];?>
+                                        <a href="../backend/deleteOrder.php?ora_ordine=<?=$ora_ordine?>"
+                                            class="btn btn-danger">Delete Order</a>
+                                        </button>
+                                        <?php $email_ristorante=$rigaordine['ristorante'];?>
+                                        <a href="../frontend/listaProdottiRistorante.php?email_ristorante=<?=$email_ristorante?>"
+                                            class="btn btn-primary">Add to Order</a>
+
                                         </button>
                                         <button class="btn btn-primary dropdown-toggle" type="button"
                                             id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                                             Buy
                                         </button>
                                         <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                                            <li><a class="dropdown-item" href="#">Pay by credit card</a></li>
-                                            <li><a class="dropdown-item" href="#">Pay in cash</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="../backend/updateOrder.php?metodo_pagamento='Carta di credito'&ora_ordine=<?=$ora_ordine?>">Pay
+                                                    by credit card</a></li>
+                                            <li><a class="dropdown-item"
+                                                    href="../backend/updateOrder.php?metodo_pagamento='Contanti'&ora_ordine=<?=$ora_ordine?>">Pay
+                                                    in cash</a></li>
                                         </ul>
                                     </div>
                                 </div>

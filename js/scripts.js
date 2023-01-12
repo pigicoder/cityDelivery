@@ -179,12 +179,12 @@ function addItemToCart(title, price, quantity)
     var cartRowContents = `
         <div class="cart-item cart-column">
             <span class="cart-item-title">${title}</span>
-            <input type="hidden" name="riga_ordine[${totalItems}][title]" value="${title}">
+            <input type="hidden" name="riga_ordine['${title}'][title]" value="${title}">
         </div>
         <span class="cart-price-el cart-column">€${price}</span>
-        <input type="hidden" name="riga_ordine[${totalItems}][price]" value="${price}">
+        <input type="hidden" name="riga_ordine['${title}'][price]" value="${price}">
         <div class="cart-quantity cart-column">
-            <input class="cart-quantity-input" type="number" name="riga_ordine[${totalItems}][quantity]" value="${quantity}">
+            <input class="cart-quantity-input" type="number" name="riga_ordine['${title}'][quantity]" value="${quantity}">
         </div>
         <div class="cart-action cart-column">
             <button class="btn-remove btn btn-danger" type="button">X</button>

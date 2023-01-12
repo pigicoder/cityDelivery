@@ -6,14 +6,21 @@ require "../backend/db_config.php";*/
 require "../common/functions.php";
 
 $result = dbConnection();
-$email_ristorante=$_GET["email_ristorante"];
 session_start();
+$email_acquirente = $_SESSION["user"];
+$email_ristorante=$_GET["email_ristorante"];
 $cid = $result["value"];
 $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
 $rows = $result->fetch_row();
 $r_sociale = $rows[0];
 $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
-
+$line_orders_opened = getLineOrderOpened($cid, $email_acquirente);
+$restaurant_line_orders_opened = [];
+$tot = 0;
+if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_opened)) {
+    $restaurant_line_orders_opened = $line_orders_opened[$email_ristorante]['rigaordine'];
+    $tot = $line_orders_opened[$email_ristorante]['prezzo_tot'];
+}
 ?>
 <html>
 
@@ -22,6 +29,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
     <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/minicart.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="../js/scripts.js" async></script>
 </head>
@@ -33,10 +41,11 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
             <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
                 data-bs-toggle="offcanvas" data-bs-target="#miniCartLayer">
                 <span
-                    class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none">
+                    class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger <?= count($restaurant_line_orders_opened) == 0 ? 'd-none' : ''?>">
+                    <?= count($restaurant_line_orders_opened);  ?>
                 </span>
                 <i class="bi bi-basket2-fill"></i>
-                <span class="cart-total-price"></span>
+                <span class="cart-total-price"><?=$tot > 0 ? '€'.$tot : ''?></span>
             </button>
         </div>
     </nav>
@@ -47,7 +56,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
         </div>
         <div class="offcanvas-body">
             <section class="row-2">
-                <form method="POST" action="../backend/createOrder.php">
+                <form method="POST" action="../backend/createOrder.php" class="minicart-form">
                     <div class="cart">
                         <div class="cart-header d-flex justify-content-between">
                             <div class="cart-item cart-header cart-column">PRODUCT</div>
@@ -55,12 +64,38 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                             <div class="cart-quantity cart-header cart-column">QUANTITY</div>
                             <div class="cart-actions cart-column"> </div>
                         </div>
-                        <div class="cart-items"></div>
+                        <div class="cart-items">
+                            <?php
+                                foreach($restaurant_line_orders_opened as $index => $line_order)
+                                {
+                            ?>
+                            <div class="cart-row">
+                                <div class="cart-item cart-column">
+                                    <span class="cart-item-title"><?= $line_order['nome_prodotto'] ?></span>
+                                    <input type="hidden" name="riga_ordine['<?= $line_order['nome_prodotto'] ?>'][title]"
+                                        value="<?= $line_order['nome_prodotto'] ?>">
+                                </div>
+                                <span class="cart-price-el cart-column">€<?= $line_order['prezzo'] ?></span>
+                                <input type="hidden" name="riga_ordine['<?= $line_order['nome_prodotto'] ?>'][price]"
+                                    value="<?= $line_order['prezzo'] ?>">
+                                <div class="cart-quantity cart-column">
+                                    <input class="cart-quantity-input" type="number"
+                                        name="riga_ordine['<?= $line_order['nome_prodotto'] ?>'][quantity]"
+                                        value="<?= $line_order['quantità'] ?>">
+                                </div>
+                                <div class="cart-action cart-column">
+                                    <button class="btn-remove btn btn-danger" type="button">X</button>
+                                </div>
+                            </div>
+                            <?php
+                                }
+                            ?>
+                        </div>
                         <div class="cart-total">
                             <strong class="cart-total-title">Total</strong>
-                            <span class="cart-total-price">€0</span>
+                            <span class="cart-total-price">€<?=$tot ?></span>
                         </div>
-                        <input type="hidden" name="ristorante" value="<?= $email_ristorante; ?>"/>
+                        <input type="hidden" name="ristorante" value="<?= $email_ristorante; ?>" />
                         <button class="btn btn-primary btn-purchase" type="submit">PURCHASE</button>
                     </div>
                 </form>
@@ -105,7 +140,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
         </section>
     </div>
     <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../assets/bundlebasket.js"></script>
 </body>
 
 </html>

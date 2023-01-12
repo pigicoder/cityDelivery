@@ -72,7 +72,7 @@ function insertAcquirente($cid, $email, $password, $nome, $cognome, $carta, $via
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $insert_stmt . "<br>" . $cid->error;
     }
 }
 
@@ -86,7 +86,7 @@ function insertRistorante($cid, $email, $password, $iva, $attività, $zona, $sed
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $insert_stmt. "<br>" . $cid->error;
     }
 }
 
@@ -100,7 +100,7 @@ function insertFattorino($cid, $email, $password, $nome, $cognome, $zona)
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $insert_stmt . "<br>" . $cid->error;
     }
 }
 function insertProdotto($cid, $email, $nome, $tipo, $descrizione, $prezzo, $immagine)
@@ -113,7 +113,7 @@ function insertProdotto($cid, $email, $nome, $tipo, $descrizione, $prezzo, $imma
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $insert_stmt . "<br>" . $cid->error;
     }
 }
 function getBuyerZone ($cid, $email)
@@ -185,7 +185,7 @@ function updateAcquirente($cid, $email, $nome, $cognome, $carta, $via, $civico, 
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $update_stmt. "<br>" . $cid->error;
     }
 }
 function updateRistorante($cid, $email, $iva, $attività, $zona, $sede, $indirizzo)
@@ -199,7 +199,7 @@ function updateRistorante($cid, $email, $iva, $attività, $zona, $sede, $indiriz
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
     }
 }
 function updateFattorino($cid, $email, $nome, $cognome, $zona)
@@ -212,7 +212,7 @@ function updateFattorino($cid, $email, $nome, $cognome, $zona)
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
     }
 }
 function insertOrdine($cid,$acquirente, $ora_ordine)
@@ -234,10 +234,10 @@ function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, 
 function getLineOrderOpened($cid,$email)
 {
     $result = $cid->query(
-        "SELECT Ristorante.r_sociale, RigaOrdine.nome_prodotto, RigaOrdine.prezzo, RigaOrdine.quantità, RigaOrdine.ristorante "   
-    .   "FROM RigaOrdine JOIN Ristorante ON RigaOrdine.ristorante = Ristorante.email JOIN Ordine ON Ordine.acquirente=RigaOrdine.acquirente and Ordine.ora_ordine=RigaOrdine.ora_ordine "
-    .   "WHERE RigaOrdine.acquirente='".$email."' and Ordine.stato='In composizione' "
-    .   "ORDER BY RigaOrdine.ora_ordine DESC");
+        "SELECT Ristorante.r_sociale, Rigaordine.nome_prodotto, Rigaordine.prezzo, Rigaordine.quantità, Rigaordine.ristorante, Ordine.prezzo_tot,Rigaordine.ora_ordine "   
+    .   "FROM Rigaordine JOIN Ristorante ON Rigaordine.ristorante = Ristorante.email JOIN Ordine ON Ordine.acquirente=Rigaordine.acquirente and Ordine.ora_ordine=Rigaordine.ora_ordine "
+    .   "WHERE Rigaordine.acquirente='".$email."' and Ordine.stato='In composizione' "
+    .   "ORDER BY Rigaordine.ora_ordine DESC");
     $RestaurantOrder=[];
     while($row = $result->fetch_row())
     {
@@ -246,13 +246,16 @@ function getLineOrderOpened($cid,$email)
         {
             $RestaurantOrder[$email_ristorante] = [
                 'nome'=>$row[0],
+                'prezzo_tot'=>$row[5],
                 'rigaordine'=>[]
             ];
         }
         $rigaordine = [
             "nome_prodotto" => $row[1],
             "prezzo" => $row[2],
-            "quantità" => $row[3]
+            "quantità" => $row[3],
+            "ristorante" => $row[4],
+            "ora_ordine" => $row[6]
         ];
         array_push($RestaurantOrder[$email_ristorante]['rigaordine'],$rigaordine);
     }
@@ -269,7 +272,52 @@ function deleteProdotto($cid,$email,$nome)
     }
     else
     {
-        echo "Error: " . $sql . "<br>" . $conn->error;
+        echo "Error: " . $delete_stmt . "<br>" . $conn->error;
+    }
+}
+
+function payment($cid,$email,$ora_ordine,$stato,$metodo_pagamento)
+{
+	$update_stmt = "UPDATE Ordine SET stato='In attesa di accettazione' "
+    ."AND metodo_pagamento='".$metodo_pagamento."' "
+    ."WHERE acquirente='" .$email. "', ora_ordine='" .$ora_ordine. "' ";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Order successful";
+    }
+    else
+    {
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
+    }
+}
+
+function deleteOrdine($cid,$email,$ora_ordine)
+{
+    $delete_stmt = "DELETE FROM Ordine WHERE acquirente='".$email. "' "
+                .  "AND ora_ordine='" .$ora_ordine. "'";
+    if ($cid->query($delete_stmt) == TRUE)
+    {
+        echo "Delete  successful";
+    }
+    else
+    {
+        echo "Error: " . $delete_stmt . "<br>" . $cid->error;
+    }
+}
+
+function deleteOpenOrders($cid,$email_acquirente,$email_ristorante)
+{
+    $delete_stmt = "DELETE Ordine FROM Ordine join Rigaordine ON Ordine.acquirente=Rigaordine.acquirente "
+                .  "AND Rigaordine.ora_ordine=Ordine.ora_ordine "
+                .  "WHERE Rigaordine.ristorante='".$email_ristorante."' "
+                .  "AND Ordine.acquirente='".$email_acquirente."' ";
+    if ($cid->query($delete_stmt) == TRUE)
+    {
+        echo "Delete  successful";
+    }
+    else
+    {
+        echo "Error: " . $delete_stmt . "<br>" . $cid->error;
     }
 }
 ?>

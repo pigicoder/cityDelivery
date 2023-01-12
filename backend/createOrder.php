@@ -14,9 +14,12 @@ $riga_ordine=$_POST["riga_ordine"];
 
 $current_date = date ('Y-m-d H:i:s', time());
 
+deleteOpenOrders($cid,$email,$ristorante);
 insertOrdine($cid, $email, $current_date);
-foreach($riga_ordine as $index => $r) {
-    insertRigaOrdine($cid, $index, $email, $current_date, $ristorante, $r['title'], $r['price'], $r['quantity']);
+$i = 0;
+foreach($riga_ordine as $r) {
+    insertRigaOrdine($cid, $i, $email, $current_date, $ristorante, $r['title'], $r['price'], $r['quantity']);
+    $i++;
 }
 
 header('location: ../frontend/basket.php');
