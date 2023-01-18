@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <?php
 
-/*require "../common/db_connection.php";
-require "../backend/db_config.php";*/
 require "../common/functions.php";
 
 $result = dbConnection();
 session_start();
+$email = $_SESSION["user"];
+
+if (empty($email))
+    header("Location: login.php");
+
 $email_acquirente = $_SESSION["user"];
 $email_ristorante=$_GET["email_ristorante"];
 $cid = $result["value"];
@@ -14,13 +17,17 @@ $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_
 $rows = $result->fetch_row();
 $r_sociale = $rows[0];
 $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
-$line_orders_opened = getLineOrderOpened($cid, $email_acquirente);
+$line_orders_opened = getLineOrderByStatus($cid, $email_acquirente, ['In composizione']);
 $restaurant_line_orders_opened = [];
 $tot = 0;
-if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_opened)) {
+$qty_tot = 0;
+
+if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_opened) && $line_orders_opened[$email_ristorante]['stato']=='In composizione' ) {
     $restaurant_line_orders_opened = $line_orders_opened[$email_ristorante]['rigaordine'];
     $tot = $line_orders_opened[$email_ristorante]['prezzo_tot'];
+    $qty_tot = $line_orders_opened[$email_ristorante]['quantita_tot'];
 }
+
 ?>
 <html>
 
@@ -37,12 +44,13 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
+            <a class="navbar-brand" href="../frontend/homeAcquirente.php">Home</a>
+
             <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
                 data-bs-toggle="offcanvas" data-bs-target="#miniCartLayer">
                 <span
                     class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger <?= count($restaurant_line_orders_opened) == 0 ? 'd-none' : ''?>">
-                    <?= count($restaurant_line_orders_opened);  ?>
+                    <?= $qty_tot ?>
                 </span>
                 <i class="bi bi-basket2-fill"></i>
                 <span class="cart-total-price"><?=$tot > 0 ? '€'.$tot : ''?></span>
@@ -72,7 +80,8 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
                             <div class="cart-row">
                                 <div class="cart-item cart-column">
                                     <span class="cart-item-title"><?= $line_order['nome_prodotto'] ?></span>
-                                    <input type="hidden" name="riga_ordine['<?= $line_order['nome_prodotto'] ?>'][title]"
+                                    <input type="hidden"
+                                        name="riga_ordine['<?= $line_order['nome_prodotto'] ?>'][title]"
                                         value="<?= $line_order['nome_prodotto'] ?>">
                                 </div>
                                 <span class="cart-price-el cart-column">€<?= $line_order['prezzo'] ?></span>
@@ -96,7 +105,7 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
                             <span class="cart-total-price">€<?=$tot ?></span>
                         </div>
                         <input type="hidden" name="ristorante" value="<?= $email_ristorante; ?>" />
-                        <button class="btn btn-primary btn-purchase" type="submit">PURCHASE</button>
+                        <button class="btn btn-primary btn-purchase" type="submit">GO TO PAYMENT</button>
                     </div>
                 </form>
             </section>
@@ -106,8 +115,10 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
         <h1><?=  $r_sociale; ?> products:</h1>
         <section class="row">
             <?php
+            $i = 0;
 		    while($row = $result->fetch_row())
 		    {
+                $i++;
 		    ?>
             <div class="col-md-6">
                 <div class="card mb-3">
@@ -117,14 +128,40 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
                                 <h5 class="card-title"><?=$row[0]?></h5>
                                 <p class="card-text" style="text-align: left"><?=$row[2]?></p>
                                 <p class="card-price">€<?=$row[3]?></p>
-                                <button onclick="showHide('<?php echo $row[0]?>_form')" class="btn btn-primary">Add to
-                                    cart</button>
-                                <form id="<?php echo $row[0]?>_form" style="visibility: hidden;">Insert quantity:
-                                    <input class="card-quantity-input" type="number" name="quantity" value="1"
-                                        min="1" />
-                                    <button onclick="showHide('<?php echo $row[0]?>_form')"
-                                        class="btn btn-primary add-to-cart" type="button">Add</button>
-                                </form>
+                                <!-- Button trigger modal -->
+                                <button type="button" class="btn btn-primary" data-bs-toggle="modal"
+                                    data-bs-target="#modal_<?php echo $i ?>">
+                                    Add to cart
+                                </button>
+                                <div class="modal fade" id="modal_<?php echo $i?>" tabindex="-1" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title"><?php echo $row[0]?></h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                                    aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <form id="form_<?php echo $i?>" class="form_add">Insert
+                                                    quantity:
+                                                    <input class="card-quantity-input" type="number" name="quantity"
+                                                        value="1" min="1" />
+                                                    <input class="card-title-input" type="hidden"
+                                                        value="<?=$row[0] ?>" />
+                                                    <input class="card-price-input" type="hidden"
+                                                        value="<?= $row[3]?>" />
+                                                </form>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary"
+                                                    data-bs-dismiss="modal">Close</button>
+                                                <button type="button" class="btn btn-primary add-to-cart"
+                                                    data-form="form_<?php echo $i?>"
+                                                    data-modal="modal_<?php echo $i?>">Add</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <div class="col-md-4">
@@ -136,9 +173,10 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
             </div>
             <?php
 		    }
-	        ?>
+            ?>
         </section>
     </div>
+
     <!-- Bootstrap core JS-->
     <script src="../assets/bundlebasket.js"></script>
 </body>

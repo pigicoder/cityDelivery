@@ -2,6 +2,12 @@
 
 require "../common/functions.php";
 
+session_start();
+$email=$_SESSION["user"] ;
+
+if (empty($email))
+    header("Location: login.php");
+
 ?>
 
 <!DOCTYPE html>

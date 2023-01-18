@@ -1,12 +1,13 @@
-
 <?php
-
 
 require "../common/functions.php";
 
-$result = dbConnection();
 session_start();
 $email=$_SESSION["user"] ;
+
+if (empty($email))
+    header("Location: login.php");
+    
 $cid = $result["value"];
 $result = $cid->query("SELECT * FROM Fattorino WHERE email = '".$email."'");
 $rows = $result->fetch_row();

@@ -1,12 +1,13 @@
-
 <?php
-
 
 require "../common/functions.php";
 
-$result = dbConnection();
 session_start();
-$email=$_SESSION["user"] ;
+$email = $_SESSION["user"];
+
+if (empty($email))
+    header("Location: login.php");
+
 $cid = $result["value"];
 $result = $cid->query("SELECT * FROM Acquirente WHERE email = '".$email."'");
 $rows = $result->fetch_row();
@@ -20,10 +21,11 @@ $rows = $result->fetch_row();
     <link href="../css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
 </head>
+
 <body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         		<div class="container">
-                		<a class="navbar-brand" href="../index.html">Home</a>
+                		<a class="navbar-brand" href="../frontend/homeAcquirente.php">Home</a>
             	</div>
         </nav>
         <br>
@@ -66,8 +68,7 @@ $rows = $result->fetch_row();
           </div>     
             </div>
             <br>
-               
-            <a href="updateAcquirente.php" class="btn btn-primary">Update profile</a>
+          <a href="updateAcquirente.php" class="btn btn-primary">Update profile</a>
        
 </body>
 

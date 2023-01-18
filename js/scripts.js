@@ -67,7 +67,7 @@ $(document).ready(function(){
 */
 // ---END FORM_STYLE SCRIPTS--- //
 
-// ---START CART SCRIPTS--- //
+// ---START CART SCRIPTS--- // 
 
 function showHide(id)
 {
@@ -133,6 +133,7 @@ function removeCartItem(event)
     var buttonClicked = event.target
     buttonClicked.parentElement.parentElement.remove()
     updateCartTotal()
+    CallAjaxAddItemToCart() 
 }
 
 function quantityChanged(event)
@@ -143,15 +144,17 @@ function quantityChanged(event)
         input.value = 1
     }
     updateCartTotal()
+    CallAjaxAddItemToCart() 
 }
 
 function addToCartClicked(event)
 {
     var button = event.target
-    var shopItem = button.parentElement.parentElement.parentElement
+    var shopItem = document.getElementById(button.dataset.form)
+    var modalEl = document.getElementById(button.dataset.modal)
     var quantityInput = shopItem.getElementsByClassName('card-quantity-input')[0]
-    var title = shopItem.getElementsByClassName('card-title')[0].innerText
-    var price = shopItem.getElementsByClassName('card-price')[0].innerHTML.replace('€', '')
+    var title = shopItem.getElementsByClassName('card-title-input')[0].value
+    var price = shopItem.getElementsByClassName('card-price-input')[0].value.replace('€', '')
     var quantity = quantityInput.value
     if (isNaN(quantity) || quantity <= 0) {
         quantity = 1
@@ -159,6 +162,9 @@ function addToCartClicked(event)
     console.log(quantity)
     addItemToCart(title, price, quantity)
     updateCartTotal()
+    CallAjaxAddItemToCart()
+    var modal = bootstrap.Modal.getOrCreateInstance(modalEl)
+    modal.hide()
 }
 
 function addItemToCart(title, price, quantity)
@@ -227,4 +233,172 @@ function updateCartTotal()
     }
 }
 
+function CallAjaxAddItemToCart() {
+    const form = document.querySelector(".minicart-form");
+    const formData = new FormData(form);
+
+        // Send the form data to the server-side script using fetch()
+    fetch(form.action, {
+        method: "POST",
+        body: formData
+    })
+    .then(response => response.text())
+    .then(result => {
+        console.log(result); // Log the response from the server
+    })
+    .catch(error => {
+        console.error(error); // Log any errors
+    });
+}
+
 // ---END CART SCRIPTS--- //
+
+// ---START RIDER SCRIPTS--- //
+
+$(document).ready(function () {
+    updatePendingOrders();
+});
+
+function updatePendingOrders() {
+    $.ajax({
+        type: 'POST',
+        url: '../backend/getPendingOrders.php',
+        data: {
+            // Optional data to send to the server
+        },
+        success: function (response) {   // Update the page with the response
+            // Parse the response
+            var orders = JSON.parse(response);
+
+            // Clear the existing orders
+            $('#pending-orders').empty();
+
+            // Loop through the orders and add them to the page
+            for (var i = 0; i < orders.length; i++) {
+                var order = orders[i];
+                $('#pending-orders').append(
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="padding:1.5rem">' +
+                    '<p class="card-text">BUYER: ' + order["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + order["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + order["stato"] + '</p>' +
+                    '<p class="card-text">TOTAL PRICE: €' + order["prezzo_tot"] + '</p>' +
+                    '<p class="card-text">RESTAURANT: ' + order["ristorante"] + '</p>' +
+                    '<p class="card-text">RESTAURANT ADDRESS: ' + order["indirizzo_ristorante"] + '</p>' +
+                    '<p class="card-text">BUYER ADDRESS: ' + order["via_acquirente"] + ', ' + order["civico_acquirente"] + '</p>' +
+                    '<p class="card-text">BUYER INTERPHONE: ' + order["citofono"] + '</p>' +
+                    '<p class="card-text">DELIVERY INSTRUCTIONS: ' + order["istruzioni_consegna"] + '</p>' +
+                    '<form method="POST" action="../backend/acceptOrder.php" style="background-color:transparent;">' + 
+                        '<input type="hidden" name="acquirente" value="' + order["acquirente"] + '">' +
+                        '<input type="hidden" name="ora_ordine" value="' + order["ora_ordine"] + '">' +
+                        '<label for="delivery_timing">Choose a time for your delivery: </label>' +
+                        '<input type="time" id="delivery_timing" name="tempistica_consegna"/>' +
+                        '<button class="btn btn-success accept" type="submit">ACCEPT ORDER</button>' + '</form>'
+                )
+            }
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    });
+}
+
+$(document).ready(function () {
+    updateConfirmedOrders();
+});
+
+function updateConfirmedOrders() {
+    $.ajax({
+        type: 'POST',
+        url: '../backend/getConfirmedOrders.php',
+        data: {
+            // Optional data to send to the server
+        },
+        success: function (response) {   // Update the page with the response
+            // Parse the response
+            var orders = JSON.parse(response);
+            //console.log(orders);
+
+            // Clear the existing orders
+            $('#confirmed-orders').empty();
+
+            // Loop through the orders and add them to the page
+            for (var i = 0; i < orders.length; i++) {
+                var order = orders[i];
+                $('#confirmed-orders').append(
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-success) !important;  padding:1.5rem">' +
+                    '<p class="card-text">BUYER: ' + order["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + order["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + order["stato"] + '</p>' +
+                    '<p class="card-text">TO DELIVER BEFORE: ' + order["tempistica_consegna"] + '</p>' +
+                    '<p class="card-text">TOTAL PRICE: €' + order["prezzo_tot"] + '</p>' +
+                    '<p class="card-text">PAYMENT METHOD: ' + order["metodo_pagamento"] + '</p>' +
+                    '<p class="card-text">RESTAURANT: ' + order["ristorante"] + '</p>' +
+                    '<p class="card-text">RESTAURANT ADDRESS: ' + order["indirizzo_ristorante"] + '</p>' +
+                    '<p class="card-text">BUYER ADDRESS: ' + order["via_acquirente"] + ', ' + order["civico_acquirente"] + '</p>' +
+                    '<p class="card-text">BUYER INTERPHONE: ' + order["citofono"] + '</p>' +
+                    '<p class="card-text">DELIVERY INSTRUCTIONS: ' + order["istruzioni_consegna"] + '</p>'
+                )
+            }
+        },
+        error: function (error) {
+            console.log(error)
+        }
+    });
+}
+
+var prev_state = "In attesa di conferma";
+function checkConfirm() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var response = JSON.parse(xhttp.responseText);
+
+            if (response[0] == "not_changed") {
+                prev_state = response[1];
+            }
+            if (response[0] == "changed" && response[1] == "In consegna") {
+                prev_state = response[1];
+                alert("The order has been confirmed");
+            }
+            if (response[0] == "changed" && response[1] == "Annullato") {
+                prev_state = response[1];
+                alert("The order has been aborted");
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/checkConfirm.php?prev_state=" + prev_state, true);
+    xhttp.send();
+};
+setInterval(checkConfirm, 2000);
+
+function updatePastOrders() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var pastOrders = JSON.parse(xhttp.responseText);
+
+            $('#past-orders').empty();
+
+            for (var i = 0; i < pastOrders.length; i++) {
+                var pastOrder = pastOrders[i];
+                $('#past-orders').append(
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-danger) !important; padding:1.5rem; width: fit-content;">' +
+                    '<p class="card-text">BUYER: ' + pastOrder["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + pastOrder["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + pastOrder["stato"] + '</p>' +
+                    '<p class="card-text">TO DELIVER BEFORE: ' + pastOrder["tempistica_consegna"] + '</p>' +
+                    '<p class="card-text">TOTAL PRICE: €' + pastOrder["prezzo_tot"] + '</p>' +
+                    '<p class="card-text">PAYMENT METHOD: ' + pastOrder["metodo_pagamento"] + '</p>' +
+                    '<p class="card-text">RESTAURANT: ' + pastOrder["ristorante"] + '</p>' +
+                    '<p class="card-text">RESTAURANT ADDRESS: ' + pastOrder["indirizzo_ristorante"] + '</p>' +
+                    '<p class="card-text">BUYER ADDRESS: ' + pastOrder["via_acquirente"] + ', ' + pastOrder["civico_acquirente"] + '</p>'
+                )
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/getPastOrders.php", true);
+    xhttp.send();
+}
+setInterval(updatePastOrders, 2000);
+
+// ---END RIDER SCRIPTS--- //

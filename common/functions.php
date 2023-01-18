@@ -26,7 +26,7 @@ $tipoErrore = array("1" => "invalid email address",
                     "12" =>"invalid description",
                     "13" =>"invalid price",
                     "14" =>"invalid type",
-                    "15" =>"invalid imagine");
+                    "15" =>"invalid image");
 $errore = array();
 $dati = array();
 
@@ -185,7 +185,7 @@ function updateAcquirente($cid, $email, $nome, $cognome, $carta, $via, $civico, 
     }
     else
     {
-        echo "Error: " . $update_stmt. "<br>" . $cid->error;
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
     }
 }
 function updateRistorante($cid, $email, $iva, $attività, $zona, $sede, $indirizzo)
@@ -231,13 +231,18 @@ function insertRigaOrdine($cid, $n_riga, $acquirente, $ora_ordine, $ristorante, 
     $insert_stmt->execute();
 }
 
-function getLineOrderOpened($cid,$email)
+function getLineOrderByStatus($cid,$email, $statuses)
 {
-    $result = $cid->query(
-        "SELECT Ristorante.r_sociale, Rigaordine.nome_prodotto, Rigaordine.prezzo, Rigaordine.quantità, Rigaordine.ristorante, Ordine.prezzo_tot,Rigaordine.ora_ordine "   
-    .   "FROM Rigaordine JOIN Ristorante ON Rigaordine.ristorante = Ristorante.email JOIN Ordine ON Ordine.acquirente=Rigaordine.acquirente and Ordine.ora_ordine=Rigaordine.ora_ordine "
-    .   "WHERE Rigaordine.acquirente='".$email."' and Ordine.stato='In composizione' "
-    .   "ORDER BY Rigaordine.ora_ordine DESC");
+    $query = "SELECT Ristorante.r_sociale, RigaOrdine.nome_prodotto, RigaOrdine.prezzo, RigaOrdine.quantità, RigaOrdine.ristorante, Ordine.prezzo_tot,RigaOrdine.ora_ordine, Ordine.metodo_pagamento, Ordine.tempistica_consegna, Ordine.stato "   
+    .   "FROM RigaOrdine JOIN Ristorante ON RigaOrdine.ristorante = Ristorante.email JOIN Ordine ON Ordine.acquirente=RigaOrdine.acquirente and Ordine.ora_ordine=RigaOrdine.ora_ordine "
+    .   "WHERE RigaOrdine.acquirente='".$email."' AND (Ordine.stato = '" . $statuses[0] . "'";
+        
+    for($i = 1; $i < count($statuses); $i++) {
+        $query .= " OR Ordine.stato = '" . $statuses[$i] . "'";
+    }
+    $query .= ') ';
+    $query .= "ORDER BY RigaOrdine.ora_ordine DESC";
+    $result = $cid->query($query);
     $RestaurantOrder=[];
     while($row = $result->fetch_row())
     {
@@ -247,17 +252,27 @@ function getLineOrderOpened($cid,$email)
             $RestaurantOrder[$email_ristorante] = [
                 'nome'=>$row[0],
                 'prezzo_tot'=>$row[5],
-                'rigaordine'=>[]
+                'rigaordine'=>[],
+                'quantita_tot'=>0,
+                'metodo_pagamento'=>$row[7],
+                'tempistica_consegna'=>$row[8],
+                "stato" => $row[9]
             ];
+        
         }
         $rigaordine = [
             "nome_prodotto" => $row[1],
             "prezzo" => $row[2],
             "quantità" => $row[3],
             "ristorante" => $row[4],
-            "ora_ordine" => $row[6]
+            "ora_ordine" => $row[6],
         ];
         array_push($RestaurantOrder[$email_ristorante]['rigaordine'],$rigaordine);
+        $RestaurantOrder[$email_ristorante]['quantita_tot'] = $RestaurantOrder[$email_ristorante]['quantita_tot'] + $row[3];
+        $prezzo_tot = $RestaurantOrder[$email_ristorante]['prezzo_tot'];
+        $metodo_pagamento = $RestaurantOrder[$email_ristorante]['metodo_pagamento'];
+        $tempistica_consegna = $RestaurantOrder[$email_ristorante]['tempistica_consegna'];
+        $stato = $RestaurantOrder[$email_ristorante]['stato'];
     }
     return $RestaurantOrder;
 }
@@ -278,9 +293,10 @@ function deleteProdotto($cid,$email,$nome)
 
 function payment($cid,$email,$ora_ordine,$stato,$metodo_pagamento)
 {
-	$update_stmt = "UPDATE Ordine SET stato='In attesa di accettazione' "
-    ."AND metodo_pagamento='".$metodo_pagamento."' "
-    ."WHERE acquirente='" .$email. "', ora_ordine='" .$ora_ordine. "' ";
+	$update_stmt = "UPDATE Ordine SET stato='In attesa di accettazione', "
+    ."metodo_pagamento='".$metodo_pagamento."' "
+    ."WHERE acquirente='" .$email. "' "
+    ."AND ora_ordine='" .$ora_ordine. "' ";
     if ($cid->query($update_stmt) == TRUE)
     {
         echo "Order successful";
@@ -289,6 +305,215 @@ function payment($cid,$email,$ora_ordine,$stato,$metodo_pagamento)
     {
         echo "Error: " . $update_stmt . "<br>" . $cid->error;
     }
+}
+
+function getRiderZone($cid,$email)
+{
+    $result = $cid->query("SELECT zona_operata FROM Fattorino WHERE email = '".$email."'");
+    $row = $result->fetch_row();
+    $zona = $row[0];
+    return $zona;
+}
+
+function getPendingOrdersByZone($cid,$zona)
+{
+    $result = $cid->query(
+        "SELECT DISTINCT Ordine.acquirente, Ordine.ora_ordine, stato, metodo_pagamento, prezzo_tot, Ristorante.r_sociale, Ristorante.ind_completo, Acquirente.via, Acquirente.civico, Acquirente.citofono, Acquirente.istruzioni_consegna
+        FROM Ordine 
+        JOIN Acquirente ON Acquirente.email = Ordine.acquirente 
+        JOIN RigaOrdine ON Acquirente.email = RigaOrdine.acquirente
+        JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome
+        JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
+        WHERE stato = 'In attesa di accettazione'
+        AND Acquirente.zona = '".$zona."'
+        ORDER BY Ordine.ora_ordine DESC "
+        );
+    $orders = [];
+    while($row = $result->fetch_row())
+    {
+        $order = [
+            "acquirente" => $row[0],
+            "ora_ordine" => $row[1],
+            "stato" => $row[2],
+            "metodo_pagamento" => $row[3],
+            "prezzo_tot" => $row[4],
+            "ristorante" => $row[5],
+            "indirizzo_ristorante" => $row[6],
+            "via_acquirente" => $row[7],
+            "civico_acquirente" => $row[8],
+            "citofono" => $row[9],
+            "istruzioni_consegna" => $row[10]
+        ];
+        array_push($orders,$order);
+    }
+    return $orders;
+}
+
+function acceptOrder($cid,$email,$acquirente,$ora_ordine,$current_time,$tempistica_consegna)
+{
+    $update_stmt = "UPDATE Ordine SET fattorino='" . $email . "', stato='In attesa di conferma',
+        ora_accettazione='" . $current_time . "', tempistica_consegna='" . $tempistica_consegna . "'
+        WHERE acquirente='" . $acquirente . "' AND ora_ordine='" . $ora_ordine . "' ";
+    if ($cid->query($update_stmt) == true)  {
+        echo "Order accepted";
+    }
+    else    {
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
+    }
+}
+
+function getConfirmedOrders($cid, $email)
+{
+    $result = $cid->query(
+        "SELECT DISTINCT Ordine.acquirente, Ordine.ora_ordine, stato, metodo_pagamento, prezzo_tot, Ristorante.r_sociale,
+        Ristorante.ind_completo, Acquirente.via, Acquirente.civico, Acquirente.citofono, Acquirente.istruzioni_consegna, Ordine.tempistica_consegna 
+        FROM Ordine
+        JOIN Acquirente ON Acquirente.email = Ordine.acquirente 
+        JOIN RigaOrdine ON Acquirente.email = RigaOrdine.acquirente
+        JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome
+        JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
+        WHERE stato = 'In consegna' AND Ordine.fattorino = '".$email."'"
+    );
+    $orders = [];
+    while($row = $result->fetch_row())
+    {
+        $order = [
+            "acquirente" => $row[0],
+            "ora_ordine" => $row[1],
+            "stato" => $row[2],
+            "metodo_pagamento" => $row[3],
+            "prezzo_tot" => $row[4],
+            "ristorante" => $row[5],
+            "indirizzo_ristorante" => $row[6],
+            "via_acquirente" => $row[7],
+            "civico_acquirente" => $row[8],
+            "citofono" => $row[9],
+            "istruzioni_consegna" => $row[10],
+            "tempistica_consegna" => $row[11]
+        ];
+        array_push($orders,$order);
+    }
+    return $orders;
+}
+
+function getDisponibility($cid, $email)
+{
+    $result = $cid->query("SELECT giorno,orario FROM Disponibilità WHERE fattorino='".$email."' ");
+    $disponibilità = [];
+    while($row = $result->fetch_row())
+    {
+        $slot = [
+            "giorno" => $row[0],
+            "orario" => $row[1],
+        ];
+        array_push($disponibilità,$slot);
+    }
+    return $disponibilità;
+}
+
+function checkDisponibility($cid,$email,$day,$slot)
+{
+    $result = $cid->query("SELECT * FROM Disponibilità WHERE fattorino='".$email."' AND giorno='".$day."' AND orario='".$slot."' ");
+    $num_rows = mysqli_num_rows($result);
+    return $num_rows;
+}
+
+function addDisponibility($cid,$email,$day,$slot)
+{
+    $insert_stmt = $cid->prepare("INSERT INTO Disponibilità (fattorino, giorno, orario)
+                    VALUES (?,?,?)");
+    $insert_stmt->bind_param('sss', $email,$day,$slot);
+    $insert_stmt->execute();
+}
+
+function removeDisponibility($cid,$email,$day,$slot)
+{
+    $insert_stmt = $cid->prepare("DELETE FROM Disponibilità WHERE fattorino='".$email."' AND giorno='".$day."' AND orario='".$slot."' ");
+    $insert_stmt->execute();
+}
+
+function getAvailability($cid, $email)
+{
+    $result = $cid->query("SELECT giorno,orario FROM Apertura WHERE ristorante='".$email."' ");
+    $apertura = [];
+    while($row = $result->fetch_row())
+    {
+        $slot = [
+            "giorno" => $row[0],
+            "orario" => $row[1],
+        ];
+        array_push($apertura,$slot);
+    }
+    return $apertura;
+}
+
+function checkAvailability($cid,$email,$day,$slot)
+{
+    $result = $cid->query("SELECT * FROM Apertura WHERE ristorante='".$email."' AND giorno='".$day."' AND orario='".$slot."' ");
+    $num_rows = mysqli_num_rows($result);
+    return $num_rows;
+}
+
+function addAvailability($cid,$email,$day,$slot)
+{
+    $insert_stmt = $cid->prepare("INSERT INTO Apertura (ristorante, giorno, orario)
+                    VALUES (?,?,?)");
+    $insert_stmt->bind_param('sss', $email,$day,$slot);
+    $insert_stmt->execute();
+}
+
+function removeAvailability($cid,$email,$day,$slot)
+{
+    $insert_stmt = $cid->prepare("DELETE FROM Apertura WHERE ristorante='".$email."' AND giorno='".$day."' AND orario='".$slot."' ");
+    $insert_stmt->execute();
+}
+
+function getOrderStateByRider($cid,$email)
+{
+    $result = $cid->query("SELECT stato FROM Ordine WHERE fattorino='".$email."' ORDER BY ora_accettazione DESC");
+    if (!$result) {
+        return "Error: " . $cid->error;
+    }
+    if (mysqli_num_rows($result) == 0) {
+        return "No order found";
+    } else {
+        $row = mysqli_fetch_assoc($result);
+        return $row["stato"];
+    }
+}
+
+function getPastOrdersByRider($cid,$email)
+{
+    $result = $cid->query(
+        "SELECT DISTINCT Ordine.acquirente, Ordine.ora_ordine, Ordine.tempistica_consegna,
+        stato, metodo_pagamento, prezzo_tot, Ristorante.r_sociale,
+        Ristorante.ind_completo, Acquirente.via, Acquirente.civico 
+        FROM Ordine
+        JOIN Acquirente ON Acquirente.email = Ordine.acquirente 
+        JOIN RigaOrdine ON Acquirente.email = RigaOrdine.acquirente
+        JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome
+        JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
+        WHERE stato = 'Consegnato' OR stato = 'Annullato' 
+        AND Ordine.fattorino = '".$email."' "
+    );
+    $pastOrders = [];
+    while($row = $result->fetch_row())
+    {
+        $pastOrder = [
+            "acquirente" => $row[0],
+            "ora_ordine" => $row[1],
+            "tempistica_consegna" => $row[2],
+            "stato" => $row[3],
+            "metodo_pagamento" => $row[4],
+            "prezzo_tot" => $row[5],
+            "ristorante" => $row[6],
+            "indirizzo_ristorante" => $row[7],
+            "via_acquirente" => $row[8],
+            "civico_acquirente" => $row[9]
+        ];
+        array_push($pastOrders,$pastOrder);
+    }
+    return $pastOrders;
 }
 
 function deleteOrdine($cid,$email,$ora_ordine)
@@ -307,10 +532,11 @@ function deleteOrdine($cid,$email,$ora_ordine)
 
 function deleteOpenOrders($cid,$email_acquirente,$email_ristorante)
 {
-    $delete_stmt = "DELETE Ordine FROM Ordine join Rigaordine ON Ordine.acquirente=Rigaordine.acquirente "
-                .  "AND Rigaordine.ora_ordine=Ordine.ora_ordine "
-                .  "WHERE Rigaordine.ristorante='".$email_ristorante."' "
-                .  "AND Ordine.acquirente='".$email_acquirente."' ";
+    $delete_stmt = "DELETE Ordine FROM Ordine join Rigaordine ON Ordine.acquirente=RigaOrdine.acquirente "
+                .  "AND RigaOrdine.ora_ordine=Ordine.ora_ordine "
+                .  "WHERE RigaOrdine.ristorante='".$email_ristorante."' "
+                .  "AND Ordine.acquirente='".$email_acquirente."' "
+                . " AND Ordine.stato='In composizione'";
     if ($cid->query($delete_stmt) == TRUE)
     {
         echo "Delete  successful";
@@ -320,4 +546,35 @@ function deleteOpenOrders($cid,$email_acquirente,$email_ristorante)
         echo "Error: " . $delete_stmt . "<br>" . $cid->error;
     }
 }
+
+function confirmOrders($cid,$email,$ora_ordine)
+{
+    $update_stmt = "UPDATE Ordine SET stato='In consegna' "
+    ."WHERE acquirente='" .$email. "' "
+    ."AND ora_ordine='" .$ora_ordine. "' ";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Order successful";
+    }
+    else
+    {
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
+    }
+}
+
+function abortOrders($cid,$email,$ora_ordine)
+{
+    $update_stmt = "UPDATE Ordine SET stato='Annullato' "
+    ."WHERE acquirente='" .$email. "' "
+    ."AND ora_ordine='" .$ora_ordine. "' ";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Order aborted successful";
+    }
+    else
+    {
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
+    }
+}
+
 ?>

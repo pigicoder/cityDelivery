@@ -3,16 +3,17 @@
 
 require "../common/functions.php";
 
-$result = dbConnection();
-
 session_start();
 $email=$_SESSION["user"] ;
+
+if (empty($email))
+    header("Location: login.php");
+
 $cid = $result["value"];
 $result = $cid->query("SELECT * FROM Ristorante WHERE email = '".$email."'");
 $rows = $result->fetch_row();
 $ristorante=$rows[0];
 $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email."'");
-
 
 ?>
 <html>
