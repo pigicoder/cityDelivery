@@ -3,132 +3,100 @@
 
 require "../common/functions.php";
 
-$result = dbConnection();
-
 session_start();
-$email=$_SESSION["user"] ;
-$cid = $result["value"];
-$result = $cid->query("SELECT * FROM Ristorante WHERE email = '".$email."'");
-$rows = $result->fetch_row();
-$ristorante=$rows[0];
-$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email."'");
+$email = $_SESSION["user"];
 
+if (empty($email))
+    header("Location: login.php");
+
+//$cid = $result["value"];
 
 ?>
 <html>
 
 <head>
     <title>Products</title>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-    <script src="../js/scripts.js" async></script>
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
             <a class="navbar-brand" href="../index.html">Home</a>
 
         </div>
     </nav>
-   
+
     <div class="background">
-    <h4>Products in restaurant	<?= $ristorante; ?>:</h4> 
-        <section class="row">
-            <?php         
-          
-              
-while($row = $result->fetch_row())
-		    {
-                $productos[]=$row[0];
-		    ?>
-           <?php
-		    }
-	        ?>
-           	<form method="POST" action="../backend/insertProdottoInMenu.php">
-             <table>
-                <tr>
-                    <td>
-                <select multiple id="source1" size="10"  style="width:200px" name="prod">
-                      <?php  $number=count(array_unique($productos));
-                          for($i=0;$i<$number;$i++){?>
-                            <option><?php echo  $productos[$i]?></option>
-                            <?php }?>   
-                </select>
-            </td>
-            <td>
-                <div style="display:inline;vertical-align:top;">
-                    <button id="shift1" onclick="move(source1,target1);">>></button> <br /><br />
-                    <button id="rshift1" onclick="move(target1,source1);"><<</button>
-                 
+        <div class="container form" style="float:left; width:50%; margin-top:5%;">
+            <form method="GET" action="../backend/addMenu.php">
+                <h4>
+                    <?= htmlentities("create new menù") ?>
+                </h4>
+                <?php
+                $query = "SELECT nome,immagine FROM Prodotto WHERE ristorante='" . $email . "' AND tipo='Piatto' ";
+                $result = mysqli_query($cid, $query);
+                $max_num_inserted = 0;
+                $i = 0;
+                while ($row = $result->fetch_row()) {
+                    $product = [
+                        "name" => $row[0],
+                        "img" => $row[1]
+                    ];
+                    ?>
+                    <div class="col-md-6">
+                        <img src="data:image/jpg;base64,<?= base64_encode($product["img"]) ?>" class="card-img-top"
+                            style="width:100px; height:100px;" alt="..."></img>
+                        <label><input type="checkbox" name="<?= $i ?>" value="<?= $product["name"] ?>">add <?= $product["name"] ?></label><br>
+                    </div>
+                    <?php
+                    $max_num_inserted++;
+                    $i++;
+                }
+                ?>
+                <br>
+                <input type="hidden" name="num_products" value="<?= $max_num_inserted ?>">
+                <input type="text" name="menu_name" placeholder="Insert a menù name"><br>
+                <input type="text" name="menu_description" placeholder="Insert a menù description"><br>
+                <label>€<input type="number" id="menu_price" name="menu_price"
+                        placeholder="Insert a price"></label><br>
+                <label>Insert an image <input type="file" id="image" name="image"></label>
+                <input class="btn btn-primary" type="submit" value="ADD">
+            </form>
+        </div>
+        <div class="container menues" style="background-color: #ffc107c0; float:right; width:50%; margin-top:5%;">
+            <h4>your menues</h4>
+            <?php
+            $query1 = "SELECT nome,immagine FROM Prodotto WHERE ristorante='" . $email . "' AND tipo='Menù' ";
+            $result1 = mysqli_query($cid, $query1);
+            while ($row = $result1->fetch_row()) {
+                $menu = [
+                    "name" => $row[0],
+                    "img" => $row[1]
+                ];
+                ?>
+                <div class="container menu" style="background-color: #ffc107; display: flex;">
+                    <p><?= $menu["name"] ?></p>
+                    <img src="data:image/jpg;base64,<?= base64_encode($menu["img"]) ?>" class="card-img-top"
+                        style="width:100px; height:100px;" alt="..."></img>
+                    <?php
+                    $query2 = "SELECT piatto FROM Compone WHERE piatto_ristorante='" . $email . "' AND menù_ristorante='" . $email . "' AND menù='" . $menu["name"] . "' ";
+                    $result2 = mysqli_query($cid, $query2);
+                    while ($row = $result2->fetch_row()) {
+                        ?>
+                        <p> <?= $row[0] ?> </p>
+                        <?php
+                    }
+                    ?>
                 </div>
-            </td>
-            <td><select multiple id="target1" size="10"  style="width:200px;"></select></td>
-        </tr>
-        <div style="width:100%;" align="left">
-                        <td>Nome menu: </td><td><input type = "text" name = "nome" placeholder="Insert delivery instructions (optional)"></input></td>
-                    </div>
-                          </form>
-    </table>
-                           
-        <button onclick="submit(target1);">Submit</button>
-
-    <div id="submitted"></div>                     
-         
-        
-                                    </div>
-                        </div>
-                                                
-                    </div>
-                    <script>
-          function move (source, target)
-          {
-            var selectedItems = getSelectOptions(source);
-            if (selectedItems) {
-                    for (var i = 0; i < selectedItems.length; i++) {
-                        var option = new Option(selectedItems[i].text, selectedItems[i].text);
-                        target.appendChild(option);
-                        selectedItems[i].remove();
-                    }
-                }
-          }
-
-          function getSelectOptions(select) {
-                var result = [];
-                var options = select.options;
-                var opt;
-
-                for (var i = 0, iLen = options.length; i < iLen; i++) {
-                    opt = options[i];
-
-                    if (opt.selected) {
-                        result.push(opt);
-                    }
-                }
-                return result;
+                <?php
             }
-
-        function submit(target) {
-            var options = target.options;
-            var out = document.getElementById("submitted");
-                out.innerHTML="Il menù è formato per ";
-      for (var i = 0; i < options.length; i++) {
-                    opt = options[i].value + " ";
-                    out.innerHTML += opt;
-                
-                }
-             
-            return false;
-        }
-    </script>
-   
-    
-    <div class="container" style="display:flex;width:50%;"><input type = "submit" value = "OK"/></div>
-				  
-        </section>
+            ?>
+        </div>
     </div>
     <!-- Bootstrap core JS-->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>

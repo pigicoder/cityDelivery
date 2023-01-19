@@ -86,7 +86,7 @@ function insertRistorante($cid, $email, $password, $iva, $attività, $zona, $sed
     }
     else
     {
-        echo "Error: " . $insert_stmt. "<br>" . $cid->error;
+        echo "Error: " . $insert_stmt . "<br>" . $cid->error;
     }
 }
 
@@ -109,13 +109,14 @@ function insertProdotto($cid, $email, $nome, $tipo, $descrizione, $prezzo, $imma
                     VALUES ('".$email. "','" .$nome. "', '" .$tipo. "', '" .$descrizione. "', '" .$prezzo. "',  '" .$immagine. "')";
     if ($cid->query($insert_stmt) == TRUE)
     {
-        echo "Registration successful";
+        echo "Insert successful";
     }
     else
     {
         echo "Error: " . $insert_stmt . "<br>" . $cid->error;
     }
 }
+
 function getBuyerZone ($cid, $email)
 {
     $result = $cid->query("SELECT zona FROM Acquirente WHERE email = '".$email."'");
@@ -287,7 +288,7 @@ function deleteProdotto($cid,$email,$nome)
     }
     else
     {
-        echo "Error: " . $delete_stmt . "<br>" . $conn->error;
+        echo "Error: " . $delete_stmt . "<br>" . $cid->error;
     }
 }
 
@@ -532,7 +533,7 @@ function deleteOrdine($cid,$email,$ora_ordine)
 
 function deleteOpenOrders($cid,$email_acquirente,$email_ristorante)
 {
-    $delete_stmt = "DELETE Ordine FROM Ordine join Rigaordine ON Ordine.acquirente=RigaOrdine.acquirente "
+    $delete_stmt = "DELETE Ordine FROM Ordine join RigaOrdine ON Ordine.acquirente=RigaOrdine.acquirente "
                 .  "AND RigaOrdine.ora_ordine=Ordine.ora_ordine "
                 .  "WHERE RigaOrdine.ristorante='".$email_ristorante."' "
                 .  "AND Ordine.acquirente='".$email_acquirente."' "
@@ -575,6 +576,14 @@ function abortOrders($cid,$email,$ora_ordine)
     {
         echo "Error: " . $update_stmt . "<br>" . $cid->error;
     }
+}
+
+function addProductToMenu($cid,$email,$product,$menu)
+{
+    $insert_stmt = $cid->prepare("INSERT INTO Compone
+                    VALUES (?,?,?,?)");
+    $insert_stmt->bind_param('ssss', $product,$email,$menu,$email);
+    $insert_stmt->execute();
 }
 
 ?>
