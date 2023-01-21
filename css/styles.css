@@ -160,12 +160,15 @@ body {
   line-height: var(--bs-body-line-height);
   color: var(--bs-body-color);
   text-align: var(--bs-body-text-align);
-  background-color: /*var(--bs-body-bg)*/rgba(192, 192, 192, 0.922);
+  /*background-color: /*var(--bs-body-bg)*//*rgba(192, 192, 192, 0.922);*/
   -webkit-text-size-adjust: 100%;
   -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  background-repeat: repeat-y;
+  background-image: url("../images/home.jpg");
+  background-size: 100%;
 }
 
-.background {
+/*.background {
   position:relative;
   width: 100%;
   height: 100%;
@@ -190,7 +193,7 @@ body {
 img,
 svg {
   image-rendering:optimizeQuality;
-}
+}*/
 
 err {
   margin: 0;

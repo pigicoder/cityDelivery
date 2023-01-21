@@ -69,47 +69,38 @@ $(document).ready(function(){
 
 // ---START CART SCRIPTS--- // 
 
-function showHide(id)
-{
+function showHide(id) {
     var x = document.getElementById(id)
-    if (x.style.visibility === "hidden")
-    {
+    if (x.style.visibility === "hidden") {
         x.style.visibility = "visible"
     }
-    else
-    {
+    else {
         x.style.visibility = "hidden"
     }
 }
 
-if (document.readyState == 'loading')
-{
+if (document.readyState == 'loading') {
     document.addEventListener('DOMContentLoaded', ready)
 }
-else
-{
+else {
     ready()
 }
 
-function ready()
-{
+function ready() {
     var removeCartItemButtons = document.getElementsByClassName('btn-remove')
-    for (var i = 0; i < removeCartItemButtons.length; i++)
-    {
+    for (var i = 0; i < removeCartItemButtons.length; i++) {
         var button = removeCartItemButtons[i]
         button.addEventListener('click', removeCartItem)
     }
 
     var quantityInputs = document.getElementsByClassName('cart-quantity-input')
-    for (var i = 0; i < quantityInputs.length; i++)
-    {
+    for (var i = 0; i < quantityInputs.length; i++) {
         var input = quantityInputs[i]
         input.addEventListener('change', quantityChanged)
     }
 
     var addToCartButtons = document.getElementsByClassName('add-to-cart')
-    for (var i = 0; i < addToCartButtons.length; i++)
-    {
+    for (var i = 0; i < addToCartButtons.length; i++) {
         var button = addToCartButtons[i]
         button.addEventListener('click', addToCartClicked)
     }
@@ -117,38 +108,32 @@ function ready()
     //document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
-function purchaseClicked()
-{
+function purchaseClicked() {
     alert('Thank you for your order')
     var cartItems = document.getElementsByClassName('cart-items')[0]
-    while (cartItems.hasChildNodes())
-    {
+    while (cartItems.hasChildNodes()) {
         cartItems.removeChild(cartItems.firstChild)
     }
     updateCartTotal()
 }
 
-function removeCartItem(event)
-{
+function removeCartItem(event) {
     var buttonClicked = event.target
     buttonClicked.parentElement.parentElement.remove()
     updateCartTotal()
-    CallAjaxAddItemToCart() 
+    CallAjaxAddItemToCart()
 }
 
-function quantityChanged(event)
-{
+function quantityChanged(event) {
     var input = event.target
-    if (isNaN(input.value) || input.value <= 0)
-    {
+    if (isNaN(input.value) || input.value <= 0) {
         input.value = 1
     }
     updateCartTotal()
-    CallAjaxAddItemToCart() 
+    CallAjaxAddItemToCart()
 }
 
-function addToCartClicked(event)
-{
+function addToCartClicked(event) {
     var button = event.target
     var shopItem = document.getElementById(button.dataset.form)
     var modalEl = document.getElementById(button.dataset.modal)
@@ -167,17 +152,14 @@ function addToCartClicked(event)
     modal.hide()
 }
 
-function addItemToCart(title, price, quantity)
-{
+function addItemToCart(title, price, quantity) {
     var cartRow = document.createElement('div')
     cartRow.classList.add('cart-row')
     var cartItems = document.getElementsByClassName('cart-items')[0]
     var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
     var totalItems = cartItemNames.length;
-    for (var i = 0; i < cartItemNames.length; i++)
-    {
-        if (cartItemNames[i].textContent == title)
-        {
+    for (var i = 0; i < cartItemNames.length; i++) {
+        if (cartItemNames[i].textContent == title) {
             alert('This item is already added to the cart')
             return
         }
@@ -201,14 +183,12 @@ function addItemToCart(title, price, quantity)
     cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
 }
 
-function updateCartTotal()
-{
+function updateCartTotal() {
     var cartItemContainer = document.getElementsByClassName('cart-items')[0]
     var cartRows = cartItemContainer.getElementsByClassName('cart-row')
     var total = 0
     var totalQuantity = 0;
-    for (var i = 0; i < cartRows.length; i++)
-    {
+    for (var i = 0; i < cartRows.length; i++) {
         var cartRow = cartRows[i]
         var priceElement = cartRow.getElementsByClassName('cart-price-el')[0]
         var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
@@ -237,18 +217,18 @@ function CallAjaxAddItemToCart() {
     const form = document.querySelector(".minicart-form");
     const formData = new FormData(form);
 
-        // Send the form data to the server-side script using fetch()
+    // Send the form data to the server-side script using fetch()
     fetch(form.action, {
         method: "POST",
         body: formData
     })
-    .then(response => response.text())
-    .then(result => {
-        console.log(result); // Log the response from the server
-    })
-    .catch(error => {
-        console.error(error); // Log any errors
-    });
+        .then(response => response.text())
+        .then(result => {
+            console.log(result); // Log the response from the server
+        })
+        .catch(error => {
+            console.error(error); // Log any errors
+        });
 }
 
 // ---END CART SCRIPTS--- //
@@ -257,6 +237,8 @@ function CallAjaxAddItemToCart() {
 
 $(document).ready(function () {
     updatePendingOrders();
+    updateConfirmedOrders();
+    checkAcceptedOrders();
 });
 
 function updatePendingOrders() {
@@ -267,6 +249,7 @@ function updatePendingOrders() {
             // Optional data to send to the server
         },
         success: function (response) {   // Update the page with the response
+            checkAcceptedOrders();
             // Parse the response
             var orders = JSON.parse(response);
 
@@ -287,12 +270,12 @@ function updatePendingOrders() {
                     '<p class="card-text">BUYER ADDRESS: ' + order["via_acquirente"] + ', ' + order["civico_acquirente"] + '</p>' +
                     '<p class="card-text">BUYER INTERPHONE: ' + order["citofono"] + '</p>' +
                     '<p class="card-text">DELIVERY INSTRUCTIONS: ' + order["istruzioni_consegna"] + '</p>' +
-                    '<form method="POST" action="../backend/acceptOrder.php" style="background-color:transparent;">' + 
-                        '<input type="hidden" name="acquirente" value="' + order["acquirente"] + '">' +
-                        '<input type="hidden" name="ora_ordine" value="' + order["ora_ordine"] + '">' +
-                        '<label for="delivery_timing">Choose a time for your delivery: </label>' +
-                        '<input type="time" id="delivery_timing" name="tempistica_consegna"/>' +
-                        '<button class="btn btn-success accept" type="submit">ACCEPT ORDER</button>' + '</form>'
+                    '<form method="POST" action="../backend/acceptOrder.php" style="background-color:transparent;">' +
+                    '<input type="hidden" name="acquirente" value="' + order["acquirente"] + '">' +
+                    '<input type="hidden" name="ora_ordine" value="' + order["ora_ordine"] + '">' +
+                    '<label for="delivery_timing">Choose a time for your delivery: </label>' +
+                    '<input type="time" id="delivery_timing" name="tempistica_consegna"/>' +
+                    '<button class="btn btn-success accept" id="accept-button" name="accept-order" type="submit">ACCEPT ORDER</button>' + '</form>'
                 )
             }
         },
@@ -301,10 +284,6 @@ function updatePendingOrders() {
         }
     });
 }
-
-$(document).ready(function () {
-    updateConfirmedOrders();
-});
 
 function updateConfirmedOrders() {
     $.ajax({
@@ -356,11 +335,11 @@ function checkConfirm() {
             if (response[0] == "not_changed") {
                 prev_state = response[1];
             }
-            if (response[0] == "changed" && response[1] == "In consegna") {
+            if (response[0] == "changed" && response[1] == "In consegna" && window.location.href.indexOf("homeFattorino.php") == -1) {
                 prev_state = response[1];
                 alert("The order has been confirmed");
             }
-            if (response[0] == "changed" && response[1] == "Annullato") {
+            if (response[0] == "changed" && response[1] == "Annullato" && window.location.href.indexOf("homeFattorino.php") == -1) {
                 prev_state = response[1];
                 alert("The order has been aborted");
             }
@@ -386,12 +365,9 @@ function updatePastOrders() {
                     '<p class="card-text">BUYER: ' + pastOrder["acquirente"] + '</p>' +
                     '<p class="card-text">TIME: ' + pastOrder["ora_ordine"] + '</p>' +
                     '<p class="card-text">STATE OF ORDER: ' + pastOrder["stato"] + '</p>' +
-                    '<p class="card-text">TO DELIVER BEFORE: ' + pastOrder["tempistica_consegna"] + '</p>' +
                     '<p class="card-text">TOTAL PRICE: €' + pastOrder["prezzo_tot"] + '</p>' +
                     '<p class="card-text">PAYMENT METHOD: ' + pastOrder["metodo_pagamento"] + '</p>' +
-                    '<p class="card-text">RESTAURANT: ' + pastOrder["ristorante"] + '</p>' +
-                    '<p class="card-text">RESTAURANT ADDRESS: ' + pastOrder["indirizzo_ristorante"] + '</p>' +
-                    '<p class="card-text">BUYER ADDRESS: ' + pastOrder["via_acquirente"] + ', ' + pastOrder["civico_acquirente"] + '</p>'
+                    '<p class="card-text">RESTAURANT: ' + pastOrder["ristorante"] + '</p>'
                 )
             }
         }
@@ -400,5 +376,27 @@ function updatePastOrders() {
     xhttp.send();
 }
 setInterval(updatePastOrders, 2000);
+
+function checkAcceptedOrders() {
+    const acceptOrderButtons = document.getElementsByName('accept-order');
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var acceptedOrders = JSON.parse(xhttp.responseText);
+
+            if (acceptedOrders.length >> 0) {
+                acceptOrderButtons.forEach(function (element) {
+                    element.disabled = true;
+                });
+            } else {
+                acceptOrderButtons.forEach(function (element) {
+                    element.disabled = false;
+                });
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/checkAccepted.php", true);
+    xhttp.send();
+}
 
 // ---END RIDER SCRIPTS--- //

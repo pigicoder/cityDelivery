@@ -586,4 +586,24 @@ function addProductToMenu($cid,$email,$product,$menu)
     $insert_stmt->execute();
 }
 
+function getAcceptedOrders($cid, $email)
+{
+    $result = $cid->query(
+        "SELECT Ordine.acquirente, Ordine.ora_ordine 
+        FROM Ordine
+        WHERE stato = 'In attesa di conferma' OR stato = 'In consegna'
+        AND Ordine.fattorino = '".$email."'"
+    );
+    $orders = [];
+    while($row = $result->fetch_row())
+    {
+        $order = [
+            "acquirente" => $row[0],
+            "ora_ordine" => $row[1]
+        ];
+        array_push($orders,$order);
+    }
+    return $orders;
+}
+
 ?>

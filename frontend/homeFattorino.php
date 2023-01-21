@@ -19,23 +19,47 @@ $orders = getPendingOrdersByZone($cid, $zona);
     <title>Rider's homepage</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="../js/scripts.js"></script>
+    <script src="../js/scripts.js" async></script>
+    <script src="../js/bundlebasket.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
-            <a class="navbar-brand" href="seeProfileFattorino.php">Profile</a>
-            <a class="navbar-brand" href="calendarRider.php">Calendar</a>
-            <a class="navbar-brand" href="historyRider.php">History</a>
+            <a class="navbar-brand" href="homeFattorino.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center">
+                            <?= $email ?>
+                        </span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="calendarRider.php">Schedule</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="historyRider.php">History</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="seeProfileFattorino.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px;" type="button"
-            onclick="window.location.href='../backend/logout.php';">Logout</button>
     </nav>
     <div class="background">
-        <h1>Rider's homepage</h1>
         <br>Welcome back, <?= $email ?></br>
         <div class="container" style="float:left; width:50%;">
             <div class="col-md-6 offset-md-3" style="width:75%; margin-right: 15px;">
@@ -46,16 +70,16 @@ $orders = getPendingOrdersByZone($cid, $zona);
                 <div id="pending-orders" style="text-align:left">
                 </div>
                 <err>
-                    
+
                 </err>
             </div>
         </div>
         <div class="container" style="float:right; width:50%;">
             <div class="col-md-6 offset-md-3" style="width:75%; margin-left: 15px;">
-                <h4>Confirmed orders:</h4>
+                <h4>Confirmed order:</h4>
                 <label for="update-button">click to refresh</label>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
-                    onclick="updateConfirmedOrders()">Get confirmed orders</button>
+                    onclick="updateConfirmedOrders()">Get confirmed order</button>
                 <div id="confirmed-orders" style="text-align:left">
                 </div>
             </div>
@@ -94,13 +118,13 @@ $orders = getPendingOrdersByZone($cid, $zona);
 <?php
 function checkErrorInput()
 {
-	if (isset($GET["errore"])) { 
-    	$error = $_GET["error"];
-    	if ($error == "input") {
-        	unset($_GET["error"]);
-        	$error = "";
-        	echo "Select a delivery timing";
-		}
+    if (isset($GET["errore"])) {
+        $error = $_GET["error"];
+        if ($error == "input") {
+            unset($_GET["error"]);
+            $error = "";
+            echo "Select a delivery timing";
+        }
     } else {
         echo "";
     }

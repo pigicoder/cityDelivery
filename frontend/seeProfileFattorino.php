@@ -24,7 +24,7 @@ $rows = $result->fetch_row();
 <body>
 		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         		<div class="container">
-                		<a class="navbar-brand" href="../index.html">Home</a>
+                		<a class="navbar-brand" href="homeFattorino.php">Home</a>
             	</div>
         </nav>
         <br>
