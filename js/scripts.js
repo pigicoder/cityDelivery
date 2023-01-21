@@ -335,11 +335,11 @@ function checkConfirm() {
             if (response[0] == "not_changed") {
                 prev_state = response[1];
             }
-            if (response[0] == "changed" && response[1] == "In consegna" && window.location.href.indexOf("homeFattorino.php") == -1) {
+            if (response[0] == "changed" && response[1] == "In consegna" && window.location.pathname.endsWith("homeFattorino.php") == true) {
                 prev_state = response[1];
                 alert("The order has been confirmed");
             }
-            if (response[0] == "changed" && response[1] == "Annullato" && window.location.href.indexOf("homeFattorino.php") == -1) {
+            if (response[0] == "changed" && response[1] == "Annullato" && window.location.pathname.endsWith("homeFattorino.php") == true) {
                 prev_state = response[1];
                 alert("The order has been aborted");
             }

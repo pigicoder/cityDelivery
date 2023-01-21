@@ -4216,6 +4216,7 @@ a.nav-link {
 a.navbar-brand {
   font-size: 2.00rem;
   z-index: 1;
+  margin-left: 1px;
 }
 
 .navbar > .container,
