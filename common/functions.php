@@ -673,8 +673,8 @@ function getNameRestaurant($cid,$email_ristorante)
 
 function getProductsByRestaurant($cid,$email_ristorante)
 { 
-$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
-return $result;
+    $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
+    return $result;
 }
 
 ?>

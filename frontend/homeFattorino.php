@@ -26,7 +26,7 @@ $orders = getPendingOrdersByZone($cid, $zona);
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="homeFattorino.php">
                 <img src="../assets/Logo_1.png" width="40%"></img>

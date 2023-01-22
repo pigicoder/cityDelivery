@@ -1,8 +1,8 @@
 /*!
-* Start Bootstrap - Bare v5.0.7 (https://startbootstrap.com/template/bare)
-* Copyright 2013-2021 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-bare/blob/master/LICENSE)
-*/
+ * Start Bootstrap - Bare v5.0.7 (https://startbootstrap.com/template/bare)
+ * Copyright 2013-2021 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-bare/blob/master/LICENSE)
+ */
 // This file is intentionally blank
 // Use this file to add JavaScript to your project
 
@@ -67,7 +67,7 @@ $(document).ready(function(){
 */
 // ---END FORM_STYLE SCRIPTS--- //
 
-// ---START CART SCRIPTS--- // 
+// ---START CART SCRIPTS--- //
 
 function showHide(id) {
     var x = document.getElementById(id)
@@ -273,8 +273,8 @@ function updatePendingOrders() {
 
             var current_time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-            // Clear the existing orders
-            $('#pending-orders').empty();
+      // Clear the existing orders
+      $("#pending-orders").empty();
 
             // Loop through the orders and add them to the page
             for (var i = 0; i < orders.length; i++) {
@@ -306,51 +306,76 @@ function updatePendingOrders() {
 }
 
 function updateConfirmedOrders() {
-    $.ajax({
-        type: 'POST',
-        url: '../backend/getConfirmedOrders.php',
-        data: {
-            // Optional data to send to the server
-        },
-        success: function (response) {   // Update the page with the response
-            // Parse the response
-            var orders = JSON.parse(response);
-            //console.log(orders);
+  $.ajax({
+    type: "POST",
+    url: "../backend/getConfirmedOrders.php",
+    data: {
+      // Optional data to send to the server
+    },
+    success: function (response) {
+      // Update the page with the response
+      // Parse the response
+      var orders = JSON.parse(response);
+      //console.log(orders);
 
-            // Clear the existing orders
-            $('#confirmed-orders').empty();
+      // Clear the existing orders
+      $("#confirmed-orders").empty();
 
-            // Loop through the orders and add them to the page
-            for (var i = 0; i < orders.length; i++) {
-                var order = orders[i];
-                $('#confirmed-orders').append(
-                    '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-success) !important;  padding:1.5rem">' +
-                    '<p class="card-text">BUYER: ' + order["acquirente"] + '</p>' +
-                    '<p class="card-text">TIME: ' + order["ora_ordine"] + '</p>' +
-                    '<p class="card-text">STATE OF ORDER: ' + order["stato"] + '</p>' +
-                    '<p class="card-text">TO DELIVER BEFORE: ' + order["tempistica_consegna"] + '</p>' +
-                    '<p class="card-text">TOTAL PRICE: €' + order["prezzo_tot"] + '</p>' +
-                    '<p class="card-text">PAYMENT METHOD: ' + order["metodo_pagamento"] + '</p>' +
-                    '<p class="card-text">RESTAURANT: ' + order["ristorante"] + '</p>' +
-                    '<p class="card-text">RESTAURANT ADDRESS: ' + order["indirizzo_ristorante"] + '</p>' +
-                    '<p class="card-text">BUYER ADDRESS: ' + order["via_acquirente"] + ', ' + order["civico_acquirente"] + '</p>' +
-                    '<p class="card-text">BUYER INTERPHONE: ' + order["citofono"] + '</p>' +
-                    '<p class="card-text">DELIVERY INSTRUCTIONS: ' + order["istruzioni_consegna"] + '</p>'
-                )
-            }
-        },
-        error: function (error) {
-            console.log(error)
-        }
-    });
+      // Loop through the orders and add them to the page
+      for (var i = 0; i < orders.length; i++) {
+        var order = orders[i];
+        $("#confirmed-orders").append(
+          '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-success) !important;  padding:1.5rem">' +
+            '<p class="card-text">BUYER: ' +
+            order["acquirente"] +
+            "</p>" +
+            '<p class="card-text">TIME: ' +
+            order["ora_ordine"] +
+            "</p>" +
+            '<p class="card-text">STATE OF ORDER: ' +
+            order["stato"] +
+            "</p>" +
+            '<p class="card-text">TO DELIVER BEFORE: ' +
+            order["tempistica_consegna"] +
+            "</p>" +
+            '<p class="card-text">TOTAL PRICE: €' +
+            order["prezzo_tot"] +
+            "</p>" +
+            '<p class="card-text">PAYMENT METHOD: ' +
+            order["metodo_pagamento"] +
+            "</p>" +
+            '<p class="card-text">RESTAURANT: ' +
+            order["ristorante"] +
+            "</p>" +
+            '<p class="card-text">RESTAURANT ADDRESS: ' +
+            order["indirizzo_ristorante"] +
+            "</p>" +
+            '<p class="card-text">BUYER ADDRESS: ' +
+            order["via_acquirente"] +
+            ", " +
+            order["civico_acquirente"] +
+            "</p>" +
+            '<p class="card-text">BUYER INTERPHONE: ' +
+            order["citofono"] +
+            "</p>" +
+            '<p class="card-text">DELIVERY INSTRUCTIONS: ' +
+            order["istruzioni_consegna"] +
+            "</p>"
+        );
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
 }
 
 var prev_state = "In attesa di conferma";
 function checkConfirm() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(xhttp.responseText);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var response = JSON.parse(xhttp.responseText);
 
             if (response[0] == "not_changed") {
                 prev_state = response[1];
@@ -371,12 +396,12 @@ function checkConfirm() {
 setInterval(checkConfirm, 2000);
 
 function updatePastOrders() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var pastOrders = JSON.parse(xhttp.responseText);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var pastOrders = JSON.parse(xhttp.responseText);
 
-            $('#past-orders').empty();
+      $("#past-orders").empty();
 
             for (var i = 0; i < pastOrders.length; i++) {
                 var pastOrder = pastOrders[i];
@@ -392,8 +417,9 @@ function updatePastOrders() {
             }
         }
     }
-    xhttp.open("GET", "../backend/getPastOrders.php", true);
-    xhttp.send();
+  
+  xhttp.open("GET", "../backend/getPastOrders.php", true);
+  xhttp.send();
 }
 setInterval(updatePastOrders, 2000);
 
