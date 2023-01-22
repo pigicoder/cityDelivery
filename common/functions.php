@@ -606,6 +606,33 @@ function getAcceptedOrders($cid, $email)
     return $orders;
 }
 
+function getDataRider($cid,$email)
+{
+    $select_stmt = $cid->prepare("SELECT * FROM Fattorino WHERE email = ? ");
+    $select_stmt->bind_param('s',$email);
+    $select_stmt->execute();
+    $result = $select_stmt->get_result();
+    return $result;
+}
+
+function getDataBuyer($cid,$email)
+{
+    $select_stmt = $cid->prepare("SELECT * FROM Acquirente WHERE email = ? ");
+    $select_stmt->bind_param('s',$email);
+    $select_stmt->execute();
+    $result = $select_stmt->get_result();
+    return $result;
+}
+
+function getDataRestaurant($cid,$email)
+{
+    $select_stmt = $cid->prepare("SELECT * FROM Ristorante WHERE email = ? ");
+    $select_stmt->bind_param('s',$email);
+    $select_stmt->execute();
+    $result = $select_stmt->get_result();
+    return $result;
+}
+
 function getNameRestaurant($cid,$email_ristorante)
 { 
     $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
