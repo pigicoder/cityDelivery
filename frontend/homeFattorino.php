@@ -60,22 +60,19 @@ $orders = getPendingOrdersByZone($cid, $zona);
         </div>
     </nav>
     <div class="background">
-        <br>Welcome back, <?= $email ?></br>
-        <div class="container" style="float:left; width:50%;">
+        <div class="container" style="float:left; width:45%; background-color: #ffc107c0; margin-top:3%;">
             <div class="col-md-6 offset-md-3" style="width:75%; margin-right: 15px;">
-                <h4>Pending orders in your zone:</h4>
+                <h3>Pending orders in your zone:</h3>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
                     onclick="updatePendingOrders()"><span class=reload>&#x21bb;</span> get orders</button><br>
-                <err style="background-color:#ffc107;">
-                    <?php checkErrorInput() ?>
-                </err>
+                    <err style="background-color:#ffc107;"><?= checkErrorInput() ?></err>
                 <div id="pending-orders" style="text-align:left">
                 </div>
             </div>
         </div>
-        <div class="container" style="float:right; width:50%;">
+        <div class="container" style="float:right; width:45%; background-color: #ffc107c0; margin-top:3%;">
             <div class="col-md-6 offset-md-3" style="width:75%; margin-left: 15px;">
-                <h4>Confirmed order:</h4>
+                <h3>Confirmed order:</h3>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
                     onclick="updateConfirmedOrders()"><span class=reload>&#x21bb;</span> get order</button>
                 <div id="confirmed-orders" style="text-align:left">

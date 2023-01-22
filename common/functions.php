@@ -633,4 +633,48 @@ function getDataRestaurant($cid,$email)
     return $result;
 }
 
+function getLastOrdersByRider($cid,$email)
+{
+    $current_time = date('H:i');
+    $result = $cid->query(
+        "SELECT DISTINCT Ordine.acquirente, Ordine.ora_ordine,
+        stato, Ristorante.r_sociale, Ordine.fattorino
+        FROM Ordine
+        JOIN RigaOrdine ON Ordine.acquirente = RigaOrdine.acquirente AND Ordine.ora_ordine = RigaOrdine.ora_ordine
+        JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome AND RigaOrdine.ristorante = Prodotto.ristorante
+        JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
+        WHERE Ordine.fattorino <> '" .$email. "'
+        AND (stato = 'Consegnato' OR stato = 'Annullato' OR stato = 'In consegna') 
+        AND ('" .$current_time. "' - Ordine.tempistica_consegna) < '02:00'
+        ORDER BY Ordine.ora_ordine DESC"
+    );
+    $lastOrders = [];
+    while($row = $result->fetch_row())
+    {
+        $lastOrder = [
+            "acquirente" => $row[0],
+            "ora_ordine" => $row[1],
+            "stato" => $row[2],
+            "ristorante" => $row[3],
+            "fattorino" => $row[4]
+        ];
+        array_push($lastOrders,$lastOrder);
+    }
+    return $lastOrders;
+}
+
+function getNameRestaurant($cid,$email_ristorante)
+{ 
+    $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
+    $rows = $result->fetch_row();
+    $r_sociale = $rows[0];
+    return $r_sociale;
+}
+
+function getProductsByRestaurant($cid,$email_ristorante)
+{ 
+$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
+return $result;
+}
+
 ?>

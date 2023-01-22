@@ -17,12 +17,39 @@ if (empty($email))
     <title>Update buyer</title>
     <link href="../css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
+            <a class="navbar-brand" href="homeAcquirente.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center"><?= $email ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="basket.php">My Payments</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="checkOrder.php">Check my Order</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="seeProfileAcquirente.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
     <br>
@@ -101,6 +128,7 @@ if (empty($email))
         </div>
         </form>
     </div>
+    <script src="../js/bundlebasket.js"></script>
 </body>
 
 </html>

@@ -105,7 +105,7 @@ function ready() {
         button.addEventListener('click', addToCartClicked)
     }
 
-    //document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+  //document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
 function purchaseClicked() {
@@ -124,47 +124,51 @@ function removeCartItem(event) {
     CallAjaxAddItemToCart()
 }
 
-function quantityChanged(event) {
+function quantityChanged(event)
+{
     var input = event.target
-    if (isNaN(input.value) || input.value <= 0) {
+    if (isNaN(input.value) || input.value <= 0)
+    {
         input.value = 1
     }
     updateCartTotal()
-    CallAjaxAddItemToCart()
+    CallAjaxAddItemToCart() 
 }
 
 function addToCartClicked(event) {
-    var button = event.target
-    var shopItem = document.getElementById(button.dataset.form)
-    var modalEl = document.getElementById(button.dataset.modal)
-    var quantityInput = shopItem.getElementsByClassName('card-quantity-input')[0]
-    var title = shopItem.getElementsByClassName('card-title-input')[0].value
-    var price = shopItem.getElementsByClassName('card-price-input')[0].value.replace('€', '')
-    var quantity = quantityInput.value
-    if (isNaN(quantity) || quantity <= 0) {
-        quantity = 1
-    }
-    console.log(quantity)
-    addItemToCart(title, price, quantity)
-    updateCartTotal()
-    CallAjaxAddItemToCart()
-    var modal = bootstrap.Modal.getOrCreateInstance(modalEl)
-    modal.hide()
+  var button = event.target;
+  var shopItem = document.getElementById(button.dataset.form);
+  var modalEl = document.getElementById(button.dataset.modal);
+  var quantityInput = shopItem.getElementsByClassName("card-quantity-input")[0];
+  var title = shopItem.getElementsByClassName("card-title-input")[0].value;
+  var price = shopItem
+    .getElementsByClassName("card-price-input")[0]
+    .value.replace("€", "");
+  var quantity = quantityInput.value;
+  if (isNaN(quantity) || quantity <= 0) {
+    quantity = 1;
+  }
+  console.log(quantity);
+  addItemToCart(title, price, quantity);
+  updateCartTotal();
+  CallAjaxAddItemToCart();
+  var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.hide();
 }
 
 function addItemToCart(title, price, quantity) {
-    var cartRow = document.createElement('div')
-    cartRow.classList.add('cart-row')
-    var cartItems = document.getElementsByClassName('cart-items')[0]
-    var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
-    var totalItems = cartItemNames.length;
-    for (var i = 0; i < cartItemNames.length; i++) {
-        if (cartItemNames[i].textContent == title) {
-            alert('This item is already added to the cart')
-            return
-        }
+  var cartRow = document.createElement("div");
+  cartRow.classList.add("cart-row");
+  var cartItems = document.getElementsByClassName("cart-items")[0];
+  var cartItemNames = cartItems.getElementsByClassName("cart-item-title");
+  var totalItems = cartItemNames.length;
+  for (var i = 0; i < cartItemNames.length; i++) {
+    if (cartItemNames[i].textContent == title) {
+      alert("This item is already added to the cart");
+      return;
     }
-    var cartRowContents = `
+  }
+  var cartRowContents = `
         <div class="cart-item cart-column">
             <span class="cart-item-title">${title}</span>
             <input type="hidden" name="riga_ordine['${title}'][title]" value="${title}">
@@ -176,59 +180,72 @@ function addItemToCart(title, price, quantity) {
         </div>
         <div class="cart-action cart-column">
             <button class="btn-remove btn btn-danger" type="button">X</button>
-        </div>`
-    cartRow.innerHTML = cartRowContents
-    cartItems.append(cartRow)
-    cartRow.getElementsByClassName('btn-remove')[0].addEventListener('click', removeCartItem)
-    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
+        </div>`;
+  cartRow.innerHTML = cartRowContents;
+  cartItems.append(cartRow);
+  cartRow
+    .getElementsByClassName("btn-remove")[0]
+    .addEventListener("click", removeCartItem);
+  cartRow
+    .getElementsByClassName("cart-quantity-input")[0]
+    .addEventListener("change", quantityChanged);
 }
 
 function updateCartTotal() {
-    var cartItemContainer = document.getElementsByClassName('cart-items')[0]
-    var cartRows = cartItemContainer.getElementsByClassName('cart-row')
-    var total = 0
-    var totalQuantity = 0;
-    for (var i = 0; i < cartRows.length; i++) {
-        var cartRow = cartRows[i]
-        var priceElement = cartRow.getElementsByClassName('cart-price-el')[0]
-        var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
-        var price = parseFloat(priceElement.textContent.replace('€', ''))
-        var quantity = quantityElement.value
-        total = total + (price * quantity)
-        totalQuantity = totalQuantity + parseFloat(quantity)
-    }
-    total = Math.round(total * 100) / 100
-    var totalBoxes = document.getElementsByClassName('cart-total-price');
+  var cartItemContainer = document.getElementsByClassName("cart-items")[0];
+  var cartRows = cartItemContainer.getElementsByClassName("cart-row");
+  var total = 0;
+  var totalQuantity = 0;
+  for (var i = 0; i < cartRows.length; i++) {
+    var cartRow = cartRows[i];
+    var priceElement = cartRow.getElementsByClassName("cart-price-el")[0];
+    var quantityElement = cartRow.getElementsByClassName(
+      "cart-quantity-input"
+    )[0];
+    var price = parseFloat(priceElement.textContent.replace("€", ""));
+    var quantity = quantityElement.value;
+    total = total + price * quantity;
+    totalQuantity = totalQuantity + parseFloat(quantity);
+  }
+  total = Math.round(total * 100) / 100;
+  var totalBoxes = document.getElementsByClassName("cart-total-price");
     for (let i = 0; i < totalBoxes.length; i++) {
-        totalBoxes[i].textContent = '€' + total
+      totalBoxes[i].textContent = "€" + total;
     }
-    let minicartTotalCountBoxes = document.getElementsByClassName('minicart-count');
+    let minicartTotalCountBoxes =
+      document.getElementsByClassName("minicart-count");
     for (let i = 0; i < minicartTotalCountBoxes.length; i++) {
-        if (totalQuantity > 0) {
-            minicartTotalCountBoxes[i].classList.remove('d-none')
-        } else {
-            minicartTotalCountBoxes[i].classList.add('d-none')
-        }
-        minicartTotalCountBoxes[i].textContent = totalQuantity
+      if (totalQuantity > 0) {
+        minicartTotalCountBoxes[i].classList.remove("d-none");
+      } else {
+        minicartTotalCountBoxes[i].classList.add("d-none");
+      }
+      minicartTotalCountBoxes[i].textContent = totalQuantity;
     }
-}
+  }
 
 function CallAjaxAddItemToCart() {
-    const form = document.querySelector(".minicart-form");
-    const formData = new FormData(form);
+  const form = document.querySelector(".minicart-form");
+  const formData = new FormData(form);
+  const button = document.querySelector(".btn-purchase");
 
-    // Send the form data to the server-side script using fetch()
-    fetch(form.action, {
-        method: "POST",
-        body: formData
+  button.setAttribute("disabled", true);
+  fetch(form.action, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result); // Log the response from the server
+      var cartRows = document.getElementsByClassName("cart-row");
+      if(cartRows && cartRows.length > 0) {
+        button.removeAttribute("disabled");
+      }    
     })
-        .then(response => response.text())
-        .then(result => {
-            console.log(result); // Log the response from the server
-        })
-        .catch(error => {
-            console.error(error); // Log any errors
-        });
+    .catch((error) => {
+      console.error(error); // Log any errors
+      button.removeAttribute("disabled");
+    });
 }
 
 // ---END CART SCRIPTS--- //
@@ -401,5 +418,31 @@ function checkAcceptedOrders() {
     xhttp.open("GET", "../backend/checkAccepted.php", true);
     xhttp.send();
 }
+
+function updateLastOrders() {
+    var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var lastOrders = JSON.parse(xhttp.responseText);
+
+            $('#last-orders').empty();
+
+            for (var i = 0; i < lastOrders.length; i++) {
+                var lastOrder = lastOrders[i];
+                $('#last-orders').append(
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-orange) !important; padding:1.5rem; width: fit-content;">' +
+                    '<p class="card-text">BUYER: ' + lastOrder["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + lastOrder["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + lastOrder["stato"] + '</p>' +
+                    '<p class="card-text">RESTAURANT: ' + lastOrder["ristorante"] + '</p>' +
+                    '<p class="card-text">RIDER: ' + lastOrder["fattorino"] + '</p>'
+                )
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/getLastOrders.php", true);
+    xhttp.send();
+}
+setInterval(updateLastOrders, 2000);
 
 // ---END RIDER SCRIPTS--- //

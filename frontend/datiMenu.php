@@ -25,9 +25,33 @@ if (empty($email))
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
-
+    <div class="container">
+            <a class="navbar-brand" href="homeRistorante.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center"><?= $email ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="calendarRestaurant.php">Schedule</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="seeProfileRistorante.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
 
@@ -35,7 +59,7 @@ if (empty($email))
         <div class="container form" style="float:left; width:50%; margin-top:5%;">
             <form method="GET" action="../backend/addMenu.php">
                 <h4>
-                    <?= htmlentities("create new menù") ?>
+                    <?= htmlentities("Create new menù") ?>
                 </h4>
                 <?php
                 $query = "SELECT nome,immagine FROM Prodotto WHERE ristorante='" . $email . "' AND tipo='Piatto' ";
@@ -69,7 +93,7 @@ if (empty($email))
             </form>
         </div>
         <div class="container menues" style="background-color: #ffc107c0; float:right; width:50%; margin-top:5%;">
-            <h4>your menues</h4>
+            <h4>Your menues</h4>
             <?php
             $query1 = "SELECT nome,immagine FROM Prodotto WHERE ristorante='" . $email . "' AND tipo='Menù' ";
             $result1 = mysqli_query($cid, $query1);
@@ -88,7 +112,7 @@ if (empty($email))
                     $result2 = mysqli_query($cid, $query2);
                     while ($row = $result2->fetch_row()) {
                         ?>
-                        <p> <?= $row[0] ?> </p>
+                        <p> <?= $row[0]?>  </p>
                         <?php
                     }
                     ?>

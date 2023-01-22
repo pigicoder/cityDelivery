@@ -6,10 +6,11 @@ $email = $_SESSION["user"];
 
 if (empty($email))
     header("Location: login.php");
-    
+
 $result = dbConnection();
 $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
-
+$validstatus=['In attesa di accettazione','In attesa di conferma','In consegna'];
+$OrderToFinish = getLineOrderByStatus($cid,$email, $validstatus);
 ?>
 <!DOCTYPE html>
 <html>
@@ -21,12 +22,39 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/payment.css">
     <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="../frontend/homeAcquirente.php">Home</a>
+            <a class="navbar-brand" href="homeAcquirente.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center"><?= $email ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="basket.php">My Payments</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="checkOrder.php">Check my Order</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="seeProfileAcquirente.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
     <div class="background">
@@ -35,11 +63,8 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
             if(empty($RestaurantOrder)) {
                 echo "There's no payment to display";
             } else {
-            foreach ($RestaurantOrder as $CurrentOrder)
+            foreach ($RestaurantOrder as $email_ristorante => $CurrentOrder)
             {
-              
-           
-         
             ?>
             <div class="card mb-3 bg-dark card-ordine position-relative">
                 <div class="row g-0">
@@ -47,7 +72,6 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
                         <div class="card-body text-start">
                             <h5 class="card-title text-center">
                                 <?=$CurrentOrder['nome']?>
-
                             </h5>
                             <div class="row">
                                 <div class="col-md-8 offset-md-2">
@@ -62,10 +86,10 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
                                             </thead>
                                             <tbody>
                                                 <?php
-                                    $prezzo_tot=$CurrentOrder['prezzo_tot'];   
-                                    foreach ($CurrentOrder['rigaordine'] as $rigaordine)
-                                    {
-                                      ?>
+                                                $prezzo_tot=$CurrentOrder['prezzo_tot'];   
+                                                foreach ($CurrentOrder['rigaordine'] as $rigaordine)
+                                                {
+                                                ?>
                                                 <tr>
                                                     <td>
                                                         <?=$rigaordine['nome_prodotto']?>
@@ -77,14 +101,13 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
                                                         <?=$rigaordine['prezzo']?>
                                                     </td>
                                                 </tr>
-                                                <?php $ora_ordine=$rigaordine['ora_ordine'];
-                                    }
-                    ?>
+                                                <?php 
+                                                    $ora_ordine=$rigaordine['ora_ordine'];
+                                                }
+                                                ?>
                                             </tbody>
                                         </table>
                                         <div class="d-flex justify-content-between">
-
-
                                             <span style="float:right;">Total price: €<?=$prezzo_tot;?></span>
                                             <br></br>
                                             <div class="text-end">
@@ -92,9 +115,7 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
                                                     class="btn btn-danger">Delete
                                                     Order</a>
                                                 </button>
-                                                <?php $email_ristorante=$rigaordine['ristorante'];
-                   
-                    ?>
+                                                <?php $email_ristorante=$rigaordine['ristorante']; ?>
                                                 <a href="../frontend/listaProdottiRistorante.php?email_ristorante=<?=$email_ristorante?>"
                                                     class="btn btn-primary">Change Order</a>
                                                 </button>
@@ -109,13 +130,24 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
                                                         <input type="hidden" name="metodo_pagamento" value=""
                                                             id="metodo_pagamento" />
                                                         <select name="metodo_pagamento" id="Payment">
-                                                            <option value="Carta di credito">Pay by credit card</option>
+                                                            <option value="Carta di credito">Pay by credit card
+                                                            </option>
                                                             <option value="Contanti">Pay in cash</option>
                                                         </select>
-                                                        <button type="submit" class="btn btn-success"
-                                                            id="submit-btn">Buy</button>
-                                                            
-
+                                                        <?php
+                                                        if(array_key_exists($email_ristorante,$OrderToFinish)) { ?>
+                                                        <span class="d-inline-block" tabindex="0" data-toggle="tooltip"
+                                                            title="Wait to end your previous order">
+                                                            <button class="btn btn-primary"
+                                                                style="pointer-events: none;" type="button"
+                                                                disabled>Buy</button>
+                                                        </span>
+                                                        </button>
+                                                        <?php } else { ?>
+                                                        <button class="btn btn-primary btn-purchase" type="submit">
+                                                            Buy
+                                                        </button>
+                                                        <?php } ?>
                                                     </form>
                                                 </div>
                                             </div>
@@ -127,17 +159,14 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In composizione']);
                     </div>
                 </div>
             </div>
-        </div>
-
-    </div>
-    <?php
+            <?php
     }
 }
 ?>
-    </div>
+        </div>
     </div>
     <!-- Bootstrap core JS-->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="../js/bundlebasket.js"></script>
 </body>
 
 </html>

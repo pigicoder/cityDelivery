@@ -24,5 +24,4 @@ for ($i = 0; $i < $_GET["num_products"]; $i++)
 }
 
 header('location: ../frontend/datiMenu.php');
-
 ?>
