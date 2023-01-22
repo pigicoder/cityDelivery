@@ -673,8 +673,24 @@ function getNameRestaurant($cid,$email_ristorante)
 
 function getProductsByRestaurant($cid,$email_ristorante)
 { 
-    $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
-    return $result;
+$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
+return $result;
+}
+
+function deliveredOrders($cid,$email,$ora_ordine)
+{
+    $update_stmt = "UPDATE Ordine SET stato='Consegnato' "
+    ."WHERE acquirente='" .$email. "' "
+    ."AND ora_ordine='" .$ora_ordine. "' ";
+    if ($cid->query($update_stmt) == TRUE)
+    {
+        echo "Order delivered successful";
+    }
+    else
+    {
+        echo "Error: " . $update_stmt . "<br>" . $cid->error;
+    }
+
 }
 
 ?>

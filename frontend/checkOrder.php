@@ -149,6 +149,16 @@ foreach ($RestaurantOrder as $CurrentOrder)
                 </div>
                 <?php
         }
+        if($CurrentOrder['stato']=='In consegna'){  ?>
+        <div class="modal-footer">
+                    <div class="text-end">
+                        <a href="../backend/orderDelivered.php?ora_ordine=<?=$ora_ordine?>" class="btn btn-primary">Confirm
+                    order delivered</a>
+                        </button>
+                    </div>
+                </div>
+                <?php
+        }
     ?>
             </div>
             <?php
