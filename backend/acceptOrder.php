@@ -13,14 +13,11 @@ $ora_ordine = $_POST["ora_ordine"];
 $tempistica_consegna = $_POST["tempistica_consegna"];
 $current_time = date('H:i');
 
-echo $email;
-echo $acquirente;
-echo $ora_ordine;
-echo $current_time;
-echo $tempistica_consegna;
-
-acceptOrder($cid,$email,$acquirente,$ora_ordine,$current_time,$tempistica_consegna);
-
-header('location: ../frontend/homeFattorino.php');
+if ($tempistica_consegna <= $current_time) {
+	header('Location: ../frontend/homeFattorino.php?error=input');
+} else {
+	acceptOrder($cid, $email, $acquirente, $ora_ordine, $current_time, $tempistica_consegna);
+	header('location: ../frontend/homeFattorino.php');
+}
 
 ?>

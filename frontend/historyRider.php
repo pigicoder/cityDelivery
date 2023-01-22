@@ -25,7 +25,7 @@ if (empty($email))
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="homeFattorino.php">
-                <img src="../assets/Logo_1.png" width="50%"></img>
+                <img src="../assets/Logo_1.png" width="40%"></img>
             </a>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">

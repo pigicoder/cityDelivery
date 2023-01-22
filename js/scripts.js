@@ -254,6 +254,9 @@ function CallAjaxAddItemToCart() {
 
 $(document).ready(function () {
     updatePendingOrders();
+    updateConfirmedOrders();
+    checkAcceptedOrders();
+    checkConfirm();
 });
 
 function updatePendingOrders() {
@@ -267,6 +270,8 @@ function updatePendingOrders() {
             checkAcceptedOrders();
             // Parse the response
             var orders = JSON.parse(response);
+
+            var current_time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
       // Clear the existing orders
       $("#pending-orders").empty();
@@ -289,7 +294,7 @@ function updatePendingOrders() {
                     '<input type="hidden" name="acquirente" value="' + order["acquirente"] + '">' +
                     '<input type="hidden" name="ora_ordine" value="' + order["ora_ordine"] + '">' +
                     '<label for="delivery_timing">Choose a time for your delivery: </label>' +
-                    '<input type="time" id="delivery_timing" name="tempistica_consegna"/>' +
+                    '<input type="time" id="delivery_timing" name="tempistica_consegna" min="' + current_time + '"/>' +
                     '<button class="btn btn-success accept" id="accept-button" name="accept-order" type="submit">ACCEPT ORDER</button>' + '</form>'
                 )
             }

@@ -29,7 +29,7 @@ $orders = getPendingOrdersByZone($cid, $zona);
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="homeFattorino.php">
-                <img src="../assets/Logo_1.png" width="50%"></img>
+                <img src="../assets/Logo_1.png" width="40%"></img>
             </a>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
@@ -63,51 +63,22 @@ $orders = getPendingOrdersByZone($cid, $zona);
         <br>Welcome back, <?= $email ?></br>
         <div class="container" style="float:left; width:50%;">
             <div class="col-md-6 offset-md-3" style="width:75%; margin-right: 15px;">
-                <h4>Pending orders in your zone (<?= $zona; ?>):</h4>
-                <label for="update-button">click to refresh</label>
+                <h4>Pending orders in your zone:</h4>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
-                    onclick="updatePendingOrders()">Get orders</button>
+                    onclick="updatePendingOrders()"><span class=reload>&#x21bb;</span> get orders</button><br>
+                <err style="background-color:#ffc107;">
+                    <?php checkErrorInput() ?>
+                </err>
                 <div id="pending-orders" style="text-align:left">
                 </div>
-                <err>
-
-                </err>
             </div>
         </div>
         <div class="container" style="float:right; width:50%;">
             <div class="col-md-6 offset-md-3" style="width:75%; margin-left: 15px;">
                 <h4>Confirmed order:</h4>
-                <label for="update-button">click to refresh</label>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
-                    onclick="updateConfirmedOrders()">Get confirmed order</button>
+                    onclick="updateConfirmedOrders()"><span class=reload>&#x21bb;</span> get order</button>
                 <div id="confirmed-orders" style="text-align:left">
-                </div>
-            </div>
-
-        </div>
-    </div>
-
-    <div class="modal" tabindex="-1" role="dialog" id="acceptModal">
-        <div class="modal-dialog" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Accept Order</h5>
-                    <button type="button" class="close" onclick="$('#acceptModal').modal('hide')">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body">
-                    <form method="POST" action="../backend/acceptOrder.php" id="acceptForm">
-                        <div class="form-group">
-                            <label for="delivery_timing">Choose a time for your delivery:</label>
-                            <input type="time" class="form-control" id="delivery_timing" name="tempistica_consegna" />
-                        </div>
-                        <input type="hidden" name="acquirente" value="">
-                        <input type="hidden" name="ora_ordine" value="">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <button type="submit" class="btn btn-primary">Accept Order</button>
                 </div>
             </div>
         </div>
@@ -118,17 +89,11 @@ $orders = getPendingOrdersByZone($cid, $zona);
 <?php
 function checkErrorInput()
 {
-    if (isset($GET["errore"])) {
-        $error = $_GET["error"];
-        if ($error == "input") {
-            unset($_GET["error"]);
-            $error = "";
-            echo "Select a delivery timing";
-        }
+    if (isset($_GET["error"]) && $_GET["error"] == "input") {
+        echo "Select a valid delivery timing";
     } else {
         echo "";
     }
-    unset($_GET["error"]);
 }
 
 ?>

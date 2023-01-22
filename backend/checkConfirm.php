@@ -12,9 +12,9 @@ $response = ["", ""];
 if (($result == "In consegna") || ($result == "Annullato")) {
     if ($prev_state == $result)
         $response = ["not_changed", $result];
-    else $response = ["changed", $result];
-}
-if ($result == "No order found") {
+    else
+        $response = ["changed", $result];
+} else if ($result == "No order found") {
     $response = ["No order found", ""];
 }
 
