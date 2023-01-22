@@ -60,8 +60,10 @@ $rows = $result->fetch_row();
         <h3>Profile</h3>
         <div class="container" style="display:flex;width:100%;">
             <form>
-                <div style="width:100%;" align="left">
-                    <h5 class="card-title">Email: <?=$rows[0]?></h5>
+            <img src="../images/perfil.png" style="width:20%">
+
+                <div style="width:100%;" align="center">
+                    <h4 class="card-title"><?=$rows[0]?></h4>
                 </div>
                 <div style="width:100%;" align="left">
                     <h5 class="card-title">Nome: <?=$rows[2]?></h5>
