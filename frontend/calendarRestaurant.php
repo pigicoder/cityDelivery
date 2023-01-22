@@ -18,15 +18,36 @@ $availability = getAvailability($cid, $email);
     <title>Restaurant's calendar</title>
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="../js/bundlebasket.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
+            <a class="navbar-brand" href="homeRistorante.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center"><?= $email ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="seeProfileRistorante.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
-        <button class="btn btn-outline-success my-2 my-sm-0" style="margin-right: 50px; " type="button"
-            onclick="window.location.href='../backend/logout.php';">Logout</button>
     </nav>
     <div class="background">
         <h1 style="margin-top:10%">Your schedule</h1>
@@ -38,18 +59,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Lunedì" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Lunedì" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Lunedì" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>
@@ -60,18 +81,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Martedì" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Martedì" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Martedì" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>
@@ -82,18 +103,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Mercoledì" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Mercoledì" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Mercoledì" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>
@@ -104,18 +125,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Giovedì" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Giovedì" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Giovedì" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>
@@ -126,18 +147,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Venerdì" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Venerdì" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Venerdì" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>
@@ -148,18 +169,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Sabato" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Sabato" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Sabato" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>
@@ -170,18 +191,18 @@ $availability = getAvailability($cid, $email);
                 foreach ($availability as $slot) {
                     if ($slot["giorno"] == "Domenica" && $slot["orario"] == "Mattina") {
                         ?>
-                        <div class="text-card">11:30 - 15:30</div>
-                    <?php
+                <div class="text-card">11:30 - 15:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Domenica" && $slot["orario"] == "Pomeriggio") {
                         ?>
-                        <div class="text-card">15:30 - 19:30</div>
-                    <?php
+                <div class="text-card">15:30 - 19:30</div>
+                <?php
                     }
                     if ($slot["giorno"] == "Domenica" && $slot["orario"] == "Sera") {
                         ?>
-                        <div class="text-card">19:30 - 23:30</div>
-                    <?php
+                <div class="text-card">19:30 - 23:30</div>
+                <?php
                     }
                 }
                 ?>

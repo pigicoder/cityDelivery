@@ -606,4 +606,17 @@ function getAcceptedOrders($cid, $email)
     return $orders;
 }
 
+function getNameRestaurant($cid,$email_ristorante)
+{ 
+    $result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
+    $rows = $result->fetch_row();
+    $r_sociale = $rows[0];
+    return $r_sociale;
+}
+
+function getProductsByRestaurant($cid,$email_ristorante)
+{ 
+$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
+return $result;
+}
 ?>

@@ -1,8 +1,8 @@
 /*!
-* Start Bootstrap - Bare v5.0.7 (https://startbootstrap.com/template/bare)
-* Copyright 2013-2021 Start Bootstrap
-* Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-bare/blob/master/LICENSE)
-*/
+ * Start Bootstrap - Bare v5.0.7 (https://startbootstrap.com/template/bare)
+ * Copyright 2013-2021 Start Bootstrap
+ * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-bare/blob/master/LICENSE)
+ */
 // This file is intentionally blank
 // Use this file to add JavaScript to your project
 
@@ -67,7 +67,7 @@ $(document).ready(function(){
 */
 // ---END FORM_STYLE SCRIPTS--- //
 
-// ---START CART SCRIPTS--- // 
+// ---START CART SCRIPTS--- //
 
 function showHide(id) {
     var x = document.getElementById(id)
@@ -105,7 +105,7 @@ function ready() {
         button.addEventListener('click', addToCartClicked)
     }
 
-    //document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
+  //document.getElementsByClassName('btn-purchase')[0].addEventListener('click', purchaseClicked)
 }
 
 function purchaseClicked() {
@@ -124,47 +124,51 @@ function removeCartItem(event) {
     CallAjaxAddItemToCart()
 }
 
-function quantityChanged(event) {
+function quantityChanged(event)
+{
     var input = event.target
-    if (isNaN(input.value) || input.value <= 0) {
+    if (isNaN(input.value) || input.value <= 0)
+    {
         input.value = 1
     }
     updateCartTotal()
-    CallAjaxAddItemToCart()
+    CallAjaxAddItemToCart() 
 }
 
 function addToCartClicked(event) {
-    var button = event.target
-    var shopItem = document.getElementById(button.dataset.form)
-    var modalEl = document.getElementById(button.dataset.modal)
-    var quantityInput = shopItem.getElementsByClassName('card-quantity-input')[0]
-    var title = shopItem.getElementsByClassName('card-title-input')[0].value
-    var price = shopItem.getElementsByClassName('card-price-input')[0].value.replace('€', '')
-    var quantity = quantityInput.value
-    if (isNaN(quantity) || quantity <= 0) {
-        quantity = 1
-    }
-    console.log(quantity)
-    addItemToCart(title, price, quantity)
-    updateCartTotal()
-    CallAjaxAddItemToCart()
-    var modal = bootstrap.Modal.getOrCreateInstance(modalEl)
-    modal.hide()
+  var button = event.target;
+  var shopItem = document.getElementById(button.dataset.form);
+  var modalEl = document.getElementById(button.dataset.modal);
+  var quantityInput = shopItem.getElementsByClassName("card-quantity-input")[0];
+  var title = shopItem.getElementsByClassName("card-title-input")[0].value;
+  var price = shopItem
+    .getElementsByClassName("card-price-input")[0]
+    .value.replace("€", "");
+  var quantity = quantityInput.value;
+  if (isNaN(quantity) || quantity <= 0) {
+    quantity = 1;
+  }
+  console.log(quantity);
+  addItemToCart(title, price, quantity);
+  updateCartTotal();
+  CallAjaxAddItemToCart();
+  var modal = bootstrap.Modal.getOrCreateInstance(modalEl);
+  modal.hide();
 }
 
 function addItemToCart(title, price, quantity) {
-    var cartRow = document.createElement('div')
-    cartRow.classList.add('cart-row')
-    var cartItems = document.getElementsByClassName('cart-items')[0]
-    var cartItemNames = cartItems.getElementsByClassName('cart-item-title')
-    var totalItems = cartItemNames.length;
-    for (var i = 0; i < cartItemNames.length; i++) {
-        if (cartItemNames[i].textContent == title) {
-            alert('This item is already added to the cart')
-            return
-        }
+  var cartRow = document.createElement("div");
+  cartRow.classList.add("cart-row");
+  var cartItems = document.getElementsByClassName("cart-items")[0];
+  var cartItemNames = cartItems.getElementsByClassName("cart-item-title");
+  var totalItems = cartItemNames.length;
+  for (var i = 0; i < cartItemNames.length; i++) {
+    if (cartItemNames[i].textContent == title) {
+      alert("This item is already added to the cart");
+      return;
     }
-    var cartRowContents = `
+  }
+  var cartRowContents = `
         <div class="cart-item cart-column">
             <span class="cart-item-title">${title}</span>
             <input type="hidden" name="riga_ordine['${title}'][title]" value="${title}">
@@ -176,59 +180,72 @@ function addItemToCart(title, price, quantity) {
         </div>
         <div class="cart-action cart-column">
             <button class="btn-remove btn btn-danger" type="button">X</button>
-        </div>`
-    cartRow.innerHTML = cartRowContents
-    cartItems.append(cartRow)
-    cartRow.getElementsByClassName('btn-remove')[0].addEventListener('click', removeCartItem)
-    cartRow.getElementsByClassName('cart-quantity-input')[0].addEventListener('change', quantityChanged)
+        </div>`;
+  cartRow.innerHTML = cartRowContents;
+  cartItems.append(cartRow);
+  cartRow
+    .getElementsByClassName("btn-remove")[0]
+    .addEventListener("click", removeCartItem);
+  cartRow
+    .getElementsByClassName("cart-quantity-input")[0]
+    .addEventListener("change", quantityChanged);
 }
 
 function updateCartTotal() {
-    var cartItemContainer = document.getElementsByClassName('cart-items')[0]
-    var cartRows = cartItemContainer.getElementsByClassName('cart-row')
-    var total = 0
-    var totalQuantity = 0;
-    for (var i = 0; i < cartRows.length; i++) {
-        var cartRow = cartRows[i]
-        var priceElement = cartRow.getElementsByClassName('cart-price-el')[0]
-        var quantityElement = cartRow.getElementsByClassName('cart-quantity-input')[0]
-        var price = parseFloat(priceElement.textContent.replace('€', ''))
-        var quantity = quantityElement.value
-        total = total + (price * quantity)
-        totalQuantity = totalQuantity + parseFloat(quantity)
-    }
-    total = Math.round(total * 100) / 100
-    var totalBoxes = document.getElementsByClassName('cart-total-price');
+  var cartItemContainer = document.getElementsByClassName("cart-items")[0];
+  var cartRows = cartItemContainer.getElementsByClassName("cart-row");
+  var total = 0;
+  var totalQuantity = 0;
+  for (var i = 0; i < cartRows.length; i++) {
+    var cartRow = cartRows[i];
+    var priceElement = cartRow.getElementsByClassName("cart-price-el")[0];
+    var quantityElement = cartRow.getElementsByClassName(
+      "cart-quantity-input"
+    )[0];
+    var price = parseFloat(priceElement.textContent.replace("€", ""));
+    var quantity = quantityElement.value;
+    total = total + price * quantity;
+    totalQuantity = totalQuantity + parseFloat(quantity);
+  }
+  total = Math.round(total * 100) / 100;
+  var totalBoxes = document.getElementsByClassName("cart-total-price");
     for (let i = 0; i < totalBoxes.length; i++) {
-        totalBoxes[i].textContent = '€' + total
+      totalBoxes[i].textContent = "€" + total;
     }
-    let minicartTotalCountBoxes = document.getElementsByClassName('minicart-count');
+    let minicartTotalCountBoxes =
+      document.getElementsByClassName("minicart-count");
     for (let i = 0; i < minicartTotalCountBoxes.length; i++) {
-        if (totalQuantity > 0) {
-            minicartTotalCountBoxes[i].classList.remove('d-none')
-        } else {
-            minicartTotalCountBoxes[i].classList.add('d-none')
-        }
-        minicartTotalCountBoxes[i].textContent = totalQuantity
+      if (totalQuantity > 0) {
+        minicartTotalCountBoxes[i].classList.remove("d-none");
+      } else {
+        minicartTotalCountBoxes[i].classList.add("d-none");
+      }
+      minicartTotalCountBoxes[i].textContent = totalQuantity;
     }
-}
+  }
 
 function CallAjaxAddItemToCart() {
-    const form = document.querySelector(".minicart-form");
-    const formData = new FormData(form);
+  const form = document.querySelector(".minicart-form");
+  const formData = new FormData(form);
+  const button = document.querySelector(".btn-purchase");
 
-    // Send the form data to the server-side script using fetch()
-    fetch(form.action, {
-        method: "POST",
-        body: formData
+  button.setAttribute("disabled", true);
+  fetch(form.action, {
+    method: "POST",
+    body: formData,
+  })
+    .then((response) => response.text())
+    .then((result) => {
+      console.log(result); // Log the response from the server
+      var cartRows = document.getElementsByClassName("cart-row");
+      if(cartRows && cartRows.length > 0) {
+        button.removeAttribute("disabled");
+      }    
     })
-        .then(response => response.text())
-        .then(result => {
-            console.log(result); // Log the response from the server
-        })
-        .catch(error => {
-            console.error(error); // Log any errors
-        });
+    .catch((error) => {
+      console.error(error); // Log any errors
+      button.removeAttribute("disabled");
+    });
 }
 
 // ---END CART SCRIPTS--- //
@@ -237,8 +254,6 @@ function CallAjaxAddItemToCart() {
 
 $(document).ready(function () {
     updatePendingOrders();
-    updateConfirmedOrders();
-    checkAcceptedOrders();
 });
 
 function updatePendingOrders() {
@@ -253,8 +268,8 @@ function updatePendingOrders() {
             // Parse the response
             var orders = JSON.parse(response);
 
-            // Clear the existing orders
-            $('#pending-orders').empty();
+      // Clear the existing orders
+      $("#pending-orders").empty();
 
             // Loop through the orders and add them to the page
             for (var i = 0; i < orders.length; i++) {
@@ -286,51 +301,76 @@ function updatePendingOrders() {
 }
 
 function updateConfirmedOrders() {
-    $.ajax({
-        type: 'POST',
-        url: '../backend/getConfirmedOrders.php',
-        data: {
-            // Optional data to send to the server
-        },
-        success: function (response) {   // Update the page with the response
-            // Parse the response
-            var orders = JSON.parse(response);
-            //console.log(orders);
+  $.ajax({
+    type: "POST",
+    url: "../backend/getConfirmedOrders.php",
+    data: {
+      // Optional data to send to the server
+    },
+    success: function (response) {
+      // Update the page with the response
+      // Parse the response
+      var orders = JSON.parse(response);
+      //console.log(orders);
 
-            // Clear the existing orders
-            $('#confirmed-orders').empty();
+      // Clear the existing orders
+      $("#confirmed-orders").empty();
 
-            // Loop through the orders and add them to the page
-            for (var i = 0; i < orders.length; i++) {
-                var order = orders[i];
-                $('#confirmed-orders').append(
-                    '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-success) !important;  padding:1.5rem">' +
-                    '<p class="card-text">BUYER: ' + order["acquirente"] + '</p>' +
-                    '<p class="card-text">TIME: ' + order["ora_ordine"] + '</p>' +
-                    '<p class="card-text">STATE OF ORDER: ' + order["stato"] + '</p>' +
-                    '<p class="card-text">TO DELIVER BEFORE: ' + order["tempistica_consegna"] + '</p>' +
-                    '<p class="card-text">TOTAL PRICE: €' + order["prezzo_tot"] + '</p>' +
-                    '<p class="card-text">PAYMENT METHOD: ' + order["metodo_pagamento"] + '</p>' +
-                    '<p class="card-text">RESTAURANT: ' + order["ristorante"] + '</p>' +
-                    '<p class="card-text">RESTAURANT ADDRESS: ' + order["indirizzo_ristorante"] + '</p>' +
-                    '<p class="card-text">BUYER ADDRESS: ' + order["via_acquirente"] + ', ' + order["civico_acquirente"] + '</p>' +
-                    '<p class="card-text">BUYER INTERPHONE: ' + order["citofono"] + '</p>' +
-                    '<p class="card-text">DELIVERY INSTRUCTIONS: ' + order["istruzioni_consegna"] + '</p>'
-                )
-            }
-        },
-        error: function (error) {
-            console.log(error)
-        }
-    });
+      // Loop through the orders and add them to the page
+      for (var i = 0; i < orders.length; i++) {
+        var order = orders[i];
+        $("#confirmed-orders").append(
+          '<div class="card mb-3 bg-dark card-order position-relative" style="background:var(--bs-success) !important;  padding:1.5rem">' +
+            '<p class="card-text">BUYER: ' +
+            order["acquirente"] +
+            "</p>" +
+            '<p class="card-text">TIME: ' +
+            order["ora_ordine"] +
+            "</p>" +
+            '<p class="card-text">STATE OF ORDER: ' +
+            order["stato"] +
+            "</p>" +
+            '<p class="card-text">TO DELIVER BEFORE: ' +
+            order["tempistica_consegna"] +
+            "</p>" +
+            '<p class="card-text">TOTAL PRICE: €' +
+            order["prezzo_tot"] +
+            "</p>" +
+            '<p class="card-text">PAYMENT METHOD: ' +
+            order["metodo_pagamento"] +
+            "</p>" +
+            '<p class="card-text">RESTAURANT: ' +
+            order["ristorante"] +
+            "</p>" +
+            '<p class="card-text">RESTAURANT ADDRESS: ' +
+            order["indirizzo_ristorante"] +
+            "</p>" +
+            '<p class="card-text">BUYER ADDRESS: ' +
+            order["via_acquirente"] +
+            ", " +
+            order["civico_acquirente"] +
+            "</p>" +
+            '<p class="card-text">BUYER INTERPHONE: ' +
+            order["citofono"] +
+            "</p>" +
+            '<p class="card-text">DELIVERY INSTRUCTIONS: ' +
+            order["istruzioni_consegna"] +
+            "</p>"
+        );
+      }
+    },
+    error: function (error) {
+      console.log(error);
+    },
+  });
 }
 
 var prev_state = "In attesa di conferma";
 function checkConfirm() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var response = JSON.parse(xhttp.responseText);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var response = JSON.parse(xhttp.responseText);
 
             if (response[0] == "not_changed") {
                 prev_state = response[1];
@@ -351,12 +391,12 @@ function checkConfirm() {
 setInterval(checkConfirm, 2000);
 
 function updatePastOrders() {
-    var xhttp = new XMLHttpRequest();
-    xhttp.onreadystatechange = function () {
-        if (this.readyState == 4 && this.status == 200) {
-            var pastOrders = JSON.parse(xhttp.responseText);
+  var xhttp = new XMLHttpRequest();
+  xhttp.onreadystatechange = function () {
+    if (this.readyState == 4 && this.status == 200) {
+      var pastOrders = JSON.parse(xhttp.responseText);
 
-            $('#past-orders').empty();
+      $("#past-orders").empty();
 
             for (var i = 0; i < pastOrders.length; i++) {
                 var pastOrder = pastOrders[i];
@@ -372,8 +412,9 @@ function updatePastOrders() {
             }
         }
     }
-    xhttp.open("GET", "../backend/getPastOrders.php", true);
-    xhttp.send();
+  
+  xhttp.open("GET", "../backend/getPastOrders.php", true);
+  xhttp.send();
 }
 setInterval(updatePastOrders, 2000);
 

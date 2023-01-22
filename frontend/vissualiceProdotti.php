@@ -30,9 +30,33 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-        <div class="container">
-            <a class="navbar-brand" href="../index.html">Home</a>
-          
+    <div class="container">
+            <a class="navbar-brand" href="homeRistorante.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center"><?= $email ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="calendarRestaurant.php">Schedule</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="seeProfileRistorante.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
 

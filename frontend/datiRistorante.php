@@ -10,6 +10,7 @@ include "../common/functions.php";
 		<title>Restaurant registration</title>
 		<link href="../css/styles.css" rel="stylesheet" />
         <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 	</head>
 	
 	<body>
@@ -72,4 +73,5 @@ include "../common/functions.php";
                 </form>
             </div>
 	</body>
+    <script src="../js/bundlebasket.js"></script>
 </html>

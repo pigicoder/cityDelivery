@@ -1,4 +1,3 @@
-<!DOCTYPE html>
 <?php
 
 require "../common/functions.php";
@@ -11,12 +10,10 @@ if (empty($email))
     header("Location: login.php");
 
 $email_acquirente = $_SESSION["user"];
-$email_ristorante=$_GET["email_ristorante"];
+$email_ristorante = $_GET["email_ristorante"];
 $cid = $result["value"];
-$result = $cid->query("SELECT r_sociale FROM Ristorante WHERE email = '".$email_ristorante."'");
-$rows = $result->fetch_row();
-$r_sociale = $rows[0];
-$result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Prodotto WHERE Prodotto.ristorante = '".$email_ristorante."'");
+$r_sociale = getNameRestaurant($cid,$email_ristorante);
+$result = getProductsByRestaurant($cid,$email_ristorante);
 $line_orders_opened = getLineOrderByStatus($cid, $email_acquirente, ['In composizione']);
 $restaurant_line_orders_opened = [];
 $tot = 0;
@@ -28,7 +25,9 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
     $qty_tot = $line_orders_opened[$email_ristorante]['quantita_tot'];
 }
 
+
 ?>
+<!DOCTYPE html>
 <html>
 
 <head>
@@ -44,17 +43,19 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
-            <a class="navbar-brand" href="../frontend/homeAcquirente.php">Home</a>
-
-            <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
-                data-bs-toggle="offcanvas" data-bs-target="#miniCartLayer">
-                <span
-                    class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger <?= count($restaurant_line_orders_opened) == 0 ? 'd-none' : ''?>">
-                    <?= $qty_tot ?>
-                </span>
-                <i class="bi bi-basket2-fill"></i>
-                <span class="cart-total-price"><?=$tot > 0 ? '€'.$tot : ''?></span>
-            </button>
+            <a class="navbar-brand" href="homeAcquirente.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
+                    data-bs-toggle="offcanvas" data-bs-target="#miniCartLayer">
+                    <span
+                        class="minicart-count position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger <?= count($restaurant_line_orders_opened) == 0 ? 'd-none' : ''?>">
+                        <?= $qty_tot ?>
+                    </span>
+                    <i class="bi bi-basket2-fill"></i>
+                    <span class="cart-total-price"><?=$tot > 0 ? '€'.$tot : ''?></span>
+                </button>
         </div>
     </nav>
     <div class="offcanvas offcanvas-end" tabindex="-1" id="miniCartLayer">
@@ -105,7 +106,7 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
                             <span class="cart-total-price">€<?=$tot ?></span>
                         </div>
                         <input type="hidden" name="ristorante" value="<?= $email_ristorante; ?>" />
-                        <button class="btn btn-primary btn-purchase" type="submit">GO TO PAYMENT</button>
+                        <button class="btn btn-primary btn-purchase" <?=$tot>0 ? '':'disabled'?>>GO TO PAYMENT</button>
                     </div>
                 </form>
             </section>
@@ -178,7 +179,7 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
     </div>
 
     <!-- Bootstrap core JS-->
-    <script src="../assets/bundlebasket.js"></script>
+    <script src="../js/bundlebasket.js"></script>
 </body>
 
 </html>

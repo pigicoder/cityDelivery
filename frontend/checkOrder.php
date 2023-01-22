@@ -22,12 +22,39 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In attesa di accettazione
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/payment.css">
     <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="../frontend/homeAcquirente.php">Home</a>
+    <div class="container">
+            <a class="navbar-brand" href="homeAcquirente.php">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+            <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false">
+                        <i class="bi bi-person-circle"></i>
+                        <span class="align-self-center"><?= $email ?></span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
+                        <li><a class="dropdown-item" href="basket.php">My Payments</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="checkOrder.php">Check my Order</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="seeProfileAcquirente.php">My Profile</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                    </ul>
+                </li>
+            </ul>
         </div>
     </nav>
     <div class="background">
@@ -38,9 +65,8 @@ $RestaurantOrder = getLineOrderByStatus($cid,$email, ['In attesa di accettazione
             } else {
              
 foreach ($RestaurantOrder as $CurrentOrder)
-	{
-        
-    ?>
+{
+?>
             <div class="card mb-3 bg-dark card-ordine position-relative">
                 <div class="row g-0">
                     <div class="col">
@@ -62,11 +88,11 @@ foreach ($RestaurantOrder as $CurrentOrder)
                                             </thead>
                                             <tbody>
                                                 <?php
-                            $prezzo_tot=$CurrentOrder['prezzo_tot'];   
-                            $tempistica_consegna=$CurrentOrder['tempistica_consegna'];                    
-                            foreach ($CurrentOrder['rigaordine'] as $rigaordine)
-                            {
-                              ?>
+                    $prezzo_tot=$CurrentOrder['prezzo_tot'];   
+                    $tempistica_consegna=$CurrentOrder['tempistica_consegna'];                    
+                    foreach ($CurrentOrder['rigaordine'] as $rigaordine)
+                    {
+                        ?>
                                                 <tr>
                                                     <td>
                                                         <?=$rigaordine['nome_prodotto']?>
@@ -79,50 +105,62 @@ foreach ($RestaurantOrder as $CurrentOrder)
                                                     </td>
                                                 </tr>
                                                 <?php
-                                                $ora_ordine=$rigaordine['ora_ordine'];
-                            }
-                            
-                            ?>
+                                        $ora_ordine=$rigaordine['ora_ordine'];
+                    }
+                    
+                    ?>
                                             </tbody>
                                         </table>
+                                        <div class="d-flex justify-content-between">
+                                            <div style="text-align:left; display:inline-block;"> Order status:
+                                                <?=($CurrentOrder['stato'])?>
+                                            </div>
+                                            <div style="text-align:center; display:inline-block;">Delivery time:
+                                                <?=(!$tempistica_consegna) ? "Searching for a delivery driver" : "$tempistica_consegna";?>
+                                            </div>
+                                            <div style="text-align:right; display:inline-block;">Total price:
+                                                <?=$prezzo_tot?>
+                                            </div>
+                                        </div>
                                     </div>
-
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-                <span style="float:left;">Delivery time:
-                    <?=(!$tempistica_consegna) ? "Searching for a delivery driver" : "$tempistica_consegna";;?></span>
-                <span style="float:right;">Total price: <?=$prezzo_tot?>;</span>
-                <span style="float:right;"><?=($CurrentOrder['stato'])?></span>
+
                 <?php
-                if(!$tempistica_consegna) { ?>
+        if(!$tempistica_consegna) { ?>
                 <label for="update-button"></label>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
                     onclick="window.location.reload(true);">click to refresh</button>
                 <?php
-                }
-                if($CurrentOrder['stato']=='In attesa di conferma'){  ?>
+        }
+        if($CurrentOrder['stato']=='In attesa di conferma'){  ?>
                 <div class="modal-footer">
                     <div class="text-end">
                         <a href="../backend/abortOrder.php?ora_ordine=<?=$ora_ordine?>" class="btn btn-danger">Abort
                             Order</a>
                         </button>
-                        <a href="../backend/confirmOrder.php?ora_ordine=<?=$ora_ordine?>" class="btn btn-primary">Confirm</a>
+                        <a href="../backend/confirmOrder.php?ora_ordine=<?=$ora_ordine?>"
+                            class="btn btn-primary">Confirm</a>
                         </button>
                     </div>
-                    <?php
-    }
-}
-
-}
-
-?>
                 </div>
+                <?php
+        }
+    ?>
             </div>
-            <!-- Bootstrap core JS-->
-            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+            <?php
+}
+?>
+        </div>
+    </div>
+    <?php
+}
+?>
+    <!-- Bootstrap core JS-->
+    <script src="../js/bundlebasket.js"></script>
 </body>
 
 </html>
