@@ -1,72 +1,3 @@
-/*!
- * Start Bootstrap - Bare v5.0.7 (https://startbootstrap.com/template/bare)
- * Copyright 2013-2021 Start Bootstrap
- * Licensed under MIT (https://github.com/StartBootstrap/startbootstrap-bare/blob/master/LICENSE)
- */
-// This file is intentionally blank
-// Use this file to add JavaScript to your project
-
-// ---FORM_STYLES SCRIPTS--- //
-/*
-$(document).ready(function(){
-
-    //-- Click on terms and conditions
-    $(".term").click(function(){
-        var ctrl = $(this).find("i");
-        if (ctrl.hasClass("fa-check-square-o")){
-            ctrl.attr("class","fa fa-square-o");
-        }else{
-            ctrl.attr("class", "fa fa-check-square-o");
-        }
-    }) 
-
-    $("input").blur(function(){
-        if ($(this).val() != ""){
-            $(this).parent().css({"color":"black"});
-            $(this).css({"border-bottom":"1px solid silver","color":"gray"});                 
-        }
-    })
-    
-    //--- CONTINUE ---
-    $("form > p > a").click(function(){
-        //-- Detect terms and conditions
-        var term = false;
-        if ($(".term > i").hasClass('fa-check-square-o')){
-            term = true;
-        }
-        
-        //-- only example
-        var user = {};
-        user.name = $("input[name='name']").val();
-        user.id = $("input[name='id']").val();
-        user.phone = $("input[name='phone']").val();
-        user.email = $("input[name='email']").val();
-        user.term = term;
-
-        //-- Validator            
-        $("input").each(function(e, valor){
-            var error = false;
-            if ($(this).val() == ""){
-                error = true;
-            }
-            if (error === true){
-                //-- with errors
-                $(this).parent().css({"color":"red"});
-                $(this).css({"border-bottom":"1px solid red"});
-            }else{
-                //-- without errors
-                $(this).parent().css({"color":"black"});
-                $(this).css({"border-bottom":"1px solid silver","color":"gray"}); 
-            }
-        })
-
-        //-- msg example
-        $("body").append(JSON.stringify(user) + "<br>");
-    })
-})
-*/
-// ---END FORM_STYLE SCRIPTS--- //
-
 // ---START CART SCRIPTS--- //
 
 function showHide(id) {
@@ -236,14 +167,14 @@ function CallAjaxAddItemToCart() {
   })
     .then((response) => response.text())
     .then((result) => {
-      console.log(result); // Log the response from the server
+      console.log(result); 
       var cartRows = document.getElementsByClassName("cart-row");
       if(cartRows && cartRows.length > 0) {
         button.removeAttribute("disabled");
       }    
     })
     .catch((error) => {
-      console.error(error); // Log any errors
+      console.error(error);
       button.removeAttribute("disabled");
     });
 }
@@ -263,20 +194,15 @@ function updatePendingOrders() {
     $.ajax({
         type: 'POST',
         url: '../backend/getPendingOrders.php',
-        data: {
-            // Optional data to send to the server
-        },
-        success: function (response) {   // Update the page with the response
+        data: {},
+        success: function (response) {
             checkAcceptedOrders();
-            // Parse the response
             var orders = JSON.parse(response);
 
             var current_time = new Date().toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
 
-      // Clear the existing orders
       $("#pending-orders").empty();
 
-            // Loop through the orders and add them to the page
             for (var i = 0; i < orders.length; i++) {
                 var order = orders[i];
                 $('#pending-orders').append(
@@ -309,19 +235,12 @@ function updateConfirmedOrders() {
   $.ajax({
     type: "POST",
     url: "../backend/getConfirmedOrders.php",
-    data: {
-      // Optional data to send to the server
-    },
+    data: {},
     success: function (response) {
-      // Update the page with the response
-      // Parse the response
       var orders = JSON.parse(response);
-      //console.log(orders);
 
-      // Clear the existing orders
       $("#confirmed-orders").empty();
 
-      // Loop through the orders and add them to the page
       for (var i = 0; i < orders.length; i++) {
         var order = orders[i];
         $("#confirmed-orders").append(
@@ -495,20 +414,22 @@ function updateInactiveOrders() {
                   addedOrders.add(inactiveOrder["acquirente"]);
                   addedOrders.add(inactiveOrder["ora_ordine"]);
                   $('#inactive-orders').append(
-                    '<div class="form" style="width:70%; float:left; background:#ffc107c0 !important; padding: 1rem;">' +
-                    '<p class="card-text">BUYER: ' + inactiveOrder["acquirente"] + '</p>' +
-                    '<p class="card-text">TIME: ' + inactiveOrder["ora_ordine"] + '</p>' +
-                    '<p class="card-text">STATE OF ORDER: ' + inactiveOrder["stato"] + '</p></div>'
+                    '<div class="card" style="width:100%;background:#ffc107c0;margin-top:1.5rem"' +
+                        '<p class="card-text">BUYER: ' + inactiveOrder["acquirente"] + '</p>' +
+                        '<p class="card-text">TIME: ' + inactiveOrder["ora_ordine"] + '</p>' +
+                        '<p class="card-text">STATE OF ORDER: ' + inactiveOrder["stato"] + '</p>' +
+                        '</div>'
                   );
-                  $('#inactive-orders').append('<ul style="width:30%;">');
+                  $('#inactive-orders').append('<ul>');
                   for (var j = 0; j < inactiveOrder["orderLines"].length; j++) {
                     var orderLine = inactiveOrder["orderLines"][j];
                     $('#inactive-orders').append(
-                      '<li>' + orderLine["quantit\u00e0"] + ' ' + orderLine["nome_prodotto"] + 
+                      '<li  style="float:right;width:30%;background:#ffc107c0;margin-bottom:1.5rem;display:flex;">' + orderLine["quantit\u00e0"] + 
+                      ' x ' + orderLine["nome_prodotto"] + 
                       '</li>'
                     );
                   }
-                  $('#inactive-orders').append('</ul>');
+                  $('#inactive-orders').append('<br><br></ul>');
                 }
             }
         }
@@ -532,20 +453,21 @@ function updateCurrentOrders() {
                   addedOrders.add(currentOrder["acquirente"]);
                   addedOrders.add(currentOrder["ora_ordine"]);
                   $('#current-orders').append(
-                    '<div class="form" style="width:70%; float:left; background:var(--bs-success) !important; padding: 1rem;">' +
+                    '<div class="card" style="width:100%; float:left; background:var(--bs-success) !important;">' +
                     '<p class="card-text">BUYER: ' + currentOrder["acquirente"] + '</p>' +
                     '<p class="card-text">TIME: ' + currentOrder["ora_ordine"] + '</p>' +
                     '<p class="card-text">STATE OF ORDER: ' + currentOrder["stato"] + '</p></div>'
                   );
-                  $('#current-orders').append('<ul style="width:30%;">');
+                  $('#current-orders').append('<ul>');
                   for (var j = 0; j < currentOrder["orderLines"].length; j++) {
                     var orderLine = currentOrder["orderLines"][j];
                     $('#current-orders').append(
-                      '<li>' + orderLine["quantit\u00e0"] + ' ' + orderLine["nome_prodotto"] + 
+                      '<li  style="float:right;width:30%;background:var(--bs-success);margin-bottom:1.5rem;display:flex;">' + orderLine["quantit\u00e0"] + 
+                      ' x ' + orderLine["nome_prodotto"] + 
                       '</li>'
                     );
                   }
-                  $('#current-orders').append('</ul>');
+                  $('#current-orders').append('<br><br></ul>');
                 }
             }
         }
@@ -569,7 +491,7 @@ function updateClosedOrders() {
                   addedOrders.add(closedOrder["acquirente"]);
                   addedOrders.add(closedOrder["ora_ordine"]);
                   $('#closed-orders').append(
-                    '<div class="form" style="width:70%; float:left; background:var(--bs-danger) !important; padding: 1rem;">' +
+                    '<div class="card" style="width:100%; float:left; background:var(--bs-danger) !important;">' +
                     '<p class="card-text">BUYER: ' + closedOrder["acquirente"] + '</p>' +
                     '<p class="card-text">TIME: ' + closedOrder["ora_ordine"] + '</p>' +
                     '<p class="card-text">STATE OF ORDER: ' + closedOrder["stato"] + '</p></div>'
@@ -578,11 +500,12 @@ function updateClosedOrders() {
                   for (var j = 0; j < closedOrder["orderLines"].length; j++) {
                     var orderLine = closedOrder["orderLines"][j];
                     $('#closed-orders').append(
-                      '<li>' + orderLine["quantit\u00e0"] + ' ' + orderLine["nome_prodotto"] + 
+                      '<li  style="float:right;width:30%;background:var(--bs-danger) !important;margin-bottom:1.5rem;display:flex;">' + orderLine["quantit\u00e0"] + 
+                      ' x ' + orderLine["nome_prodotto"] + 
                       '</li>'
                     );
                   }
-                  $('#closed-orders').append('</ul>');
+                  $('#closed-orders').append('<br><br></ul>');
                 }
             }
         }

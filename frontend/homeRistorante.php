@@ -65,7 +65,7 @@ if (empty($email))
     <div class="container" style="float:left; width:30%;">
         <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Inactive orders:</h1>
         <div class="container">
-            <div id="inactive-orders" style="text-align:left;display:flex;justify-content: space-evenly;">
+            <div id="inactive-orders" style="text-align:left;">
             </div>
         </div>
     </div>
