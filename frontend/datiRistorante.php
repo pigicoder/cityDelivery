@@ -6,19 +6,20 @@ include "../common/functions.php";
 
 <!DOCTYPE html>
 <html>
-	<head>
-		<title>Restaurant registration</title>
-		<link href="../css/styles.css" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
-        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
-	</head>
-	
-	<body>
-		<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        		<div class="container">
-                		<a class="navbar-brand" href="../index.html">Home</a>
-            	</div>
-        </nav>
+<head>
+    <title>Restaurant registration</title>
+    <link href="../css/styles.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="../assets/Logo_1mini.png" />
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+        <div class="container">
+            <a class="navbar-brand" href="../index.html"">
+                <img src="../assets/Logo_1.png" width="50%"></img>
+            </a>
+        </div>
+    </nav>
         <br>
 	    <div class="background">
 		<div class="container" style="display:flex;width:100%;">

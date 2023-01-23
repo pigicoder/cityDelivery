@@ -3,7 +3,7 @@
 require "../common/functions.php";
 
 session_start();
-$email=$_SESSION["user"] ;
+$email = $_SESSION["user"];
 
 if (empty($email))
     header("Location: login.php");
@@ -16,13 +16,13 @@ if (empty($email))
 <head>
     <title>Update runner</title>
     <link href="../css/styles.css" rel="stylesheet" />
-    <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+    <link rel="icon" type="image/x-icon" href="../assets/Logo_1mini.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-    <div class="container">
+        <div class="container">
             <a class="navbar-brand" href="homeFattorino.php">
                 <img src="../assets/Logo_1.png" width="40%"></img>
             </a>
@@ -59,7 +59,8 @@ if (empty($email))
         <div class="container" style="display:flex;width:100%;">
             <form method="POST" action="../backend/UpdateDatiFattorino.php">
                 <?php
-                if (isset($_GET["status"]) && $_GET["status"] == 'ko') echo "<err>Data contain error(s)</err>";
+                if (isset($_GET["status"]) && $_GET["status"] == 'ko')
+                    echo "<err>Data contain error(s)</err>";
                 ?>
                 <div style="width:50%;" align="left">
                     <td>Name: </td>

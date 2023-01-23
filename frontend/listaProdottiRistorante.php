@@ -44,7 +44,7 @@ if ($line_orders_opened && array_key_exists($email_ristorante, $line_orders_open
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
         <div class="container">
             <a class="navbar-brand" href="homeAcquirente.php">
-                <img src="../assets/Logo_1.png" width="50%"></img>
+                <img src="../assets/Logo_1.png" width="40%"></img>
             </a>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <button class="btn btn-outline-success my-2 my-sm-0 position-relative" role="button"
