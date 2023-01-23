@@ -490,12 +490,12 @@ function getPastOrdersByRider($cid,$email)
         stato, metodo_pagamento, prezzo_tot, Ristorante.r_sociale,
         Ristorante.ind_completo, Acquirente.via, Acquirente.civico 
         FROM Ordine
-        JOIN Acquirente ON Acquirente.email = Ordine.acquirente 
+        JOIN Acquirente ON Acquirente.email = Ordine.acquirente
         JOIN RigaOrdine ON Acquirente.email = RigaOrdine.acquirente
         JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome
         JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
-        WHERE stato = 'Consegnato' OR stato = 'Annullato' 
-        AND Ordine.fattorino = '".$email."' "
+        WHERE Ordine.fattorino = '".$email."' 
+        AND stato = 'Consegnato' OR stato = 'Annullato' "
     );
     $pastOrders = [];
     while($row = $result->fetch_row())
@@ -645,7 +645,7 @@ function getLastOrdersByRider($cid,$email)
         JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
         WHERE Ordine.fattorino <> '" .$email. "'
         AND (stato = 'Consegnato' OR stato = 'Annullato' OR stato = 'In consegna') 
-        AND ('" .$current_time. "' - Ordine.tempistica_consegna) < '02:00'
+        AND ('" .$current_time. "' - Ordine.ora_accettazione) < '2'
         ORDER BY Ordine.ora_ordine DESC"
     );
     $lastOrders = [];

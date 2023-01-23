@@ -472,3 +472,124 @@ function updateLastOrders() {
 setInterval(updateLastOrders, 2000);
 
 // ---END RIDER SCRIPTS--- //
+
+// ---START RESTAURANT SCRIPTS--- //
+
+$(document).ready(function () {
+  updateInactiveOrders();
+  updateCurrentOrders();
+  updateClosedOrders();
+});
+
+function updateInactiveOrders() {
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var inactiveOrders = JSON.parse(xhttp.responseText);
+
+            $('#inactive-orders').empty();
+            let addedOrders = new Set();
+            for (var i = 0; i < inactiveOrders.length; i++) {
+                var inactiveOrder = inactiveOrders[i];
+                if (!addedOrders.has(inactiveOrder["acquirente"]) && !addedOrders.has(inactiveOrder["ora_ordine"])) {
+                  addedOrders.add(inactiveOrder["acquirente"]);
+                  addedOrders.add(inactiveOrder["ora_ordine"]);
+                  $('#inactive-orders').append(
+                    '<div class="form" style="width:70%; float:left; background:#ffc107c0 !important; padding: 1rem;">' +
+                    '<p class="card-text">BUYER: ' + inactiveOrder["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + inactiveOrder["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + inactiveOrder["stato"] + '</p></div>'
+                  );
+                  $('#inactive-orders').append('<ul style="width:30%;">');
+                  for (var j = 0; j < inactiveOrder["orderLines"].length; j++) {
+                    var orderLine = inactiveOrder["orderLines"][j];
+                    $('#inactive-orders').append(
+                      '<li>' + orderLine["quantit\u00e0"] + ' ' + orderLine["nome_prodotto"] + 
+                      '</li>'
+                    );
+                  }
+                  $('#inactive-orders').append('</ul>');
+                }
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/getInactiveOrders.php", true);
+    xhttp.send();
+}
+setInterval(updateInactiveOrders, 2000);
+
+function updateCurrentOrders() {
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var currentOrders = JSON.parse(xhttp.responseText);
+
+            $('#current-orders').empty();
+            let addedOrders = new Set();
+            for (var i = 0; i < currentOrders.length; i++) {
+                var currentOrder = currentOrders[i];
+                if (!addedOrders.has(currentOrder["acquirente"]) && !addedOrders.has(currentOrder["ora_ordine"])) {
+                  addedOrders.add(currentOrder["acquirente"]);
+                  addedOrders.add(currentOrder["ora_ordine"]);
+                  $('#current-orders').append(
+                    '<div class="form" style="width:70%; float:left; background:var(--bs-success) !important; padding: 1rem;">' +
+                    '<p class="card-text">BUYER: ' + currentOrder["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + currentOrder["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + currentOrder["stato"] + '</p></div>'
+                  );
+                  $('#current-orders').append('<ul style="width:30%;">');
+                  for (var j = 0; j < currentOrder["orderLines"].length; j++) {
+                    var orderLine = currentOrder["orderLines"][j];
+                    $('#current-orders').append(
+                      '<li>' + orderLine["quantit\u00e0"] + ' ' + orderLine["nome_prodotto"] + 
+                      '</li>'
+                    );
+                  }
+                  $('#current-orders').append('</ul>');
+                }
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/getCurrentOrders.php", true);
+    xhttp.send();
+}
+setInterval(updateCurrentOrders, 2000);
+
+function updateClosedOrders() {
+  var xhttp = new XMLHttpRequest();
+    xhttp.onreadystatechange = function () {
+        if (this.readyState == 4 && this.status == 200) {
+            var closedOrders = JSON.parse(xhttp.responseText);
+
+            $('#closed-orders').empty();
+            let addedOrders = new Set();
+            for (var i = 0; i < closedOrders.length; i++) {
+                var closedOrder = closedOrders[i];
+                if (!addedOrders.has(closedOrder["acquirente"]) && !addedOrders.has(closedOrder["ora_ordine"])) {
+                  addedOrders.add(closedOrder["acquirente"]);
+                  addedOrders.add(closedOrder["ora_ordine"]);
+                  $('#closed-orders').append(
+                    '<div class="form" style="width:70%; float:left; background:var(--bs-danger) !important; padding: 1rem;">' +
+                    '<p class="card-text">BUYER: ' + closedOrder["acquirente"] + '</p>' +
+                    '<p class="card-text">TIME: ' + closedOrder["ora_ordine"] + '</p>' +
+                    '<p class="card-text">STATE OF ORDER: ' + closedOrder["stato"] + '</p></div>'
+                  );
+                  $('#closed-orders').append('<ul style="width:30%;">');
+                  for (var j = 0; j < closedOrder["orderLines"].length; j++) {
+                    var orderLine = closedOrder["orderLines"][j];
+                    $('#closed-orders').append(
+                      '<li>' + orderLine["quantit\u00e0"] + ' ' + orderLine["nome_prodotto"] + 
+                      '</li>'
+                    );
+                  }
+                  $('#closed-orders').append('</ul>');
+                }
+            }
+        }
+    }
+    xhttp.open("GET", "../backend/getClosedOrders.php", true);
+    xhttp.send();
+}
+setInterval(updateClosedOrders, 2000);
+
+// ---END RESTAURANT SCRIPTS--- //

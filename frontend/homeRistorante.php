@@ -1,9 +1,7 @@
 <?php
 
-require "../common/db_connection.php";
-require "../backend/db_config.php";
+require "../common/functions.php";
 
-$result = dbConnection();
 session_start();
 $email = $_SESSION["user"];
 
@@ -15,10 +13,12 @@ if (empty($email))
 <html>
 
 <head>
-    <title>Homepage restaurant</title>
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+    <link rel="icon" type="image/x-icon" href="../assets/Logo_1mini.png" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <script src="../js/scripts.js" async></script>
+    <script src="../js/bundlebasket.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 
 <body>
@@ -43,23 +43,47 @@ if (empty($email))
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="datiProdotto">Add new product</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
+                        <li><a class="dropdown-item" href="vissualiceProdotti.php">View/Delete products</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="datiMenu.php">Create menù</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
 	</nav>
-    <div class="background">
-        <h1>Restaurant's homepage</h1>
-        <a href="datiProdotto.php" class="btn btn-primary">Add new product</a>
-        <a href="vissualiceProdotti.php" class="btn btn-primary">See/Delete products</a>
-        <a href="datiMenu.php" class="btn btn-primary">Create Menu</a>
-        <br>
+    <div style="display: flex;">
+    <div class="container" style="float:left; width:30%;">
+        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Inactive orders:</h1>
+        <div class="container">
+            <div id="inactive-orders" style="text-align:left;display:flex;justify-content: space-evenly;">
+            </div>
+        </div>
+    </div>
+    <div class="container" style="width:30%;">
+        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Current orders:</h1>
+        <div class="container">
+            <div id="current-orders" style="text-align:left; display: flex;">
+            </div>
+        </div>
+    </div>
+    <div class="container" style="float:right; width:30%;">
+        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Closed orders:</h1>
+        <div class="container" style="width:100%;">
+            <div id="closed-orders" style="text-align:left; display: flex;">
+            </div>
+        </div>
+    </div>
     </div>
 </body>
-<script src="../js/bundlebasket.js"></script>
 
 </html>

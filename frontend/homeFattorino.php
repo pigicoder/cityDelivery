@@ -26,7 +26,7 @@ $orders = getPendingOrdersByZone($cid, $zona);
 </head>
 
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
         <div class="container">
             <a class="navbar-brand" href="homeFattorino.php">
                 <img src="../assets/Logo_1.png" width="40%"></img>
@@ -65,7 +65,7 @@ $orders = getPendingOrdersByZone($cid, $zona);
                 <h3>Pending orders in your zone:</h3>
                 <button class="btn btn-primary update" id="update-button" style="border-radius: 10px;"
                     onclick="updatePendingOrders()"><span class=reload>&#x21bb;</span> get orders</button><br>
-                    <err style="background-color:#ffc107;"><?= checkErrorInput() ?></err>
+                <err style="background-color:#ffc107;"><?= checkErrorInput() ?></err>
                 <div id="pending-orders" style="text-align:left">
                 </div>
             </div>

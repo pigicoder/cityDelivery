@@ -57,9 +57,11 @@ if (empty($email))
             <div id="past-orders" style="text-align:left; display: flex;">
             </div>
         </div>
-</div class="container" style="position: absolute;">
-<div class="loader"></div>
-<div class="container" style="float:right; width:45%;">
+    </div>
+    <div class="container" style="position: absolute;">
+        <div class="loader"></div>
+    </div>
+    <div class="container" style="float:right; width:45%;">
         <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Last orders:</h1>
         <div class="container" style="width:100%;">
             <div id="last-orders" style="text-align:left; display: flex;">
