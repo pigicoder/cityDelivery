@@ -635,17 +635,18 @@ function getDataRestaurant($cid,$email)
 
 function getLastOrdersByRider($cid,$email)
 {
-    $current_time = date('H:i');
+    $current_day = date("Y-m-d");
+    $current_time = date('H:i:s');
+    $current_time = strtotime($current_time);
     $result = $cid->query(
         "SELECT DISTINCT Ordine.acquirente, Ordine.ora_ordine,
-        stato, Ristorante.r_sociale, Ordine.fattorino
+        stato, Ristorante.r_sociale, Ordine.fattorino, Ordine.ora_accettazione
         FROM Ordine
         JOIN RigaOrdine ON Ordine.acquirente = RigaOrdine.acquirente AND Ordine.ora_ordine = RigaOrdine.ora_ordine
         JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome AND RigaOrdine.ristorante = Prodotto.ristorante
         JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
         WHERE Ordine.fattorino <> '" .$email. "'
-        AND (stato = 'Consegnato' OR stato = 'Annullato' OR stato = 'In consegna') 
-        AND ('" .$current_time. "' - Ordine.ora_accettazione) < '2'
+        AND (stato = 'Consegnato' OR stato = 'Annullato' OR stato = 'In consegna')
         ORDER BY Ordine.ora_ordine DESC"
     );
     $lastOrders = [];
@@ -656,9 +657,13 @@ function getLastOrdersByRider($cid,$email)
             "ora_ordine" => $row[1],
             "stato" => $row[2],
             "ristorante" => $row[3],
-            "fattorino" => $row[4]
+            "fattorino" => $row[4],
+            "ora_accettazione" => $row[5]
         ];
-        array_push($lastOrders,$lastOrder);
+        $dt = new DateTime($lastOrder["ora_ordine"]);
+        $order_day = $dt->format('Y-m-d');
+        if (($current_time - strtotime($lastOrder["ora_accettazione"]) <= 7199) && ($order_day == $current_day))
+            array_push($lastOrders,$lastOrder);
     }
     return $lastOrders;
 }
