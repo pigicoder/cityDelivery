@@ -20,11 +20,12 @@ $rows = $result->fetch_row();
     <title>Restaurant's profile</title>
     <link href="../css/styles.css" rel="stylesheet" />
     <link rel="icon" type="image/x-icon" href="assets/waiter.ico" />
+    <script src="../js/bundlebasket.js"></script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
+    <div class="container">
             <a class="navbar-brand" href="homeRistorante.php">
                 <img src="../assets/Logo_1.png" width="50%"></img>
             </a>
@@ -33,16 +34,22 @@ $rows = $result->fetch_row();
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="bi bi-person-circle"></i>
-                        <span class="align-self-center">
-                            <?= $email ?>
-                        </span>
+                        <span class="align-self-center"><?= $email ?></span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="calendarRider.php">Schedule</a></li>
+                        <li><a class="dropdown-item" href="calendarRestaurant.php">Schedule</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="historyRider.php">History</a></li>
+                        <li><a class="dropdown-item" href="datiProdotto.php">Add new product</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="vissualiceProdotti.php">View/Delete products</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="datiMenu.php">Create menù</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>

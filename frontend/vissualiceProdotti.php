@@ -20,7 +20,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 
 <head>
     <title>Products</title>
-    
+
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <link rel="icon" type="image/x-icon" href="../assets/waiter.ico" />
     <link rel="stylesheet" href="../css/styles.css">
@@ -30,7 +30,7 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
-    <div class="container">
+        <div class="container">
             <a class="navbar-brand" href="homeRistorante.php">
                 <img src="../assets/Logo_1.png" width="50%"></img>
             </a>
@@ -50,18 +50,24 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="datiProdotto.php">Add new product</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
+                        <li><a class="dropdown-item" href="datiMenu.php">Create menù</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>
         </div>
+        </div>
     </nav>
 
     <div class="background">
-    <h4>Products in restaurant	<?= $ristorante; ?>:</h4> 
+        <h4>Products in restaurant <?= $ristorante; ?>:</h4>
         <section class="row">
             <?php
 		    while($row = $result->fetch_row())
@@ -75,9 +81,10 @@ $result = $cid->query("SELECT nome, tipo, descrizione, prezzo, immagine FROM Pro
                                 <h5 class="card-title"><?=$row[0]?></h5>
                                 <p class="card-text" style="text-align: left"><?=$row[2]?></p>
                                 <p class="card-price">€<?=$row[3]?></p>
-                              <?php  $nome=$row[0];?>
-                                <a  href="../backend/deleteProdotto.php?nome=<?=$nome?>" class="btn btn-primary" >Remove</a>
-                            
+                                <?php  $nome=$row[0];?>
+                                <a href="../backend/deleteProdotto.php?nome=<?=$nome?>"
+                                    class="btn btn-primary">Remove</a>
+
                             </div>
                         </div>
                         <div class="col-md-4">

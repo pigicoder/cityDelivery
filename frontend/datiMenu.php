@@ -45,10 +45,15 @@ if (empty($email))
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="datiProdotto.php">Add new product</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
+                        <li><a class="dropdown-item" href="vissualiceProdotti.php">View/Delete products</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>

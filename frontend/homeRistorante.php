@@ -43,7 +43,7 @@ if (empty($email))
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="datiProdotto">Add new product</a></li>
+                        <li><a class="dropdown-item" href="datiProdotto.php">Add new product</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>

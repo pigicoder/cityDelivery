@@ -22,27 +22,29 @@ if (empty($email))
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
-            <a class="navbar-brand" href="homeAcquirente.php">
-                <img src="../assets/Logo_1.png" width="50%"></img>
+    <div class="container">
+            <a class="navbar-brand" href="homeFattorino.php">
+                <img src="../assets/Logo_1.png" width="40%"></img>
             </a>
             <ul class="navbar-nav ms-auto mb-2 mb-lg-0">
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
                         aria-expanded="false">
                         <i class="bi bi-person-circle"></i>
-                        <span class="align-self-center"><?= $email ?></span>
+                        <span class="align-self-center">
+                            <?= $email ?>
+                        </span>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdown">
-                        <li><a class="dropdown-item" href="basket.php">My Payments</a></li>
+                        <li><a class="dropdown-item" href="calendarRider.php">Schedule</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="checkOrder.php">Check my Order</a></li>
+                        <li><a class="dropdown-item" href="historyRider.php">History</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="seeProfileAcquirente.php">My Profile</a></li>
+                        <li><a class="dropdown-item" href="seeProfileFattorino.php">My Profile</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>

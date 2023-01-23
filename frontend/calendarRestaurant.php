@@ -24,7 +24,7 @@ $availability = getAvailability($cid, $email);
 
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container">
+    <div class="container">
             <a class="navbar-brand" href="homeRistorante.php">
                 <img src="../assets/Logo_1.png" width="50%"></img>
             </a>
@@ -40,10 +40,19 @@ $availability = getAvailability($cid, $email);
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
-                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
+                        <li><a class="dropdown-item" href="datiProdotto.php">Add new product</a></li>
                         <li>
                             <hr class="dropdown-divider" />
                         </li>
+                        <li><a class="dropdown-item" href="vissualiceProdotti.php">View/Delete products</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="datiMenu.php">Create menù</a></li>
+                        <li>
+                            <hr class="dropdown-divider" />
+                        </li>
+                        <li><a class="dropdown-item" href="../backend/logout.php">Logout</a></li>
                     </ul>
                 </li>
             </ul>

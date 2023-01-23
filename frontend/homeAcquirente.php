@@ -57,7 +57,6 @@ $restaurants = getRestaurantsByZone($cid, $zona);
     </nav>
     <div class="background">
         <h1>Buyer's homepage</h1>
-        <br>Welcome back, <?= $email ?></br>
         <h4>Restaurants in zona <?= $zona; ?>:</h4>
         <div class="container">
             <div class="row">
