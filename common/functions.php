@@ -495,7 +495,7 @@ function getPastOrdersByRider($cid,$email)
         JOIN Prodotto ON RigaOrdine.nome_prodotto = Prodotto.nome
         JOIN Ristorante ON Prodotto.ristorante = Ristorante.email
         WHERE Ordine.fattorino = '".$email."' 
-        AND stato = 'Consegnato' OR stato = 'Annullato' "
+        AND (stato = 'Consegnato' OR stato = 'Annullato') "
     );
     $pastOrders = [];
     while($row = $result->fetch_row())

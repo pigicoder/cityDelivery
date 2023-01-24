@@ -414,22 +414,20 @@ function updateInactiveOrders() {
                   addedOrders.add(inactiveOrder["acquirente"]);
                   addedOrders.add(inactiveOrder["ora_ordine"]);
                   $('#inactive-orders').append(
-                    '<div class="card" style="width:100%;background:#ffc107c0;margin-top:1.5rem"' +
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="width:100%;background:#ffc107c0;padding:1rem;border:1px solid black;"' +
                         '<p class="card-text">BUYER: ' + inactiveOrder["acquirente"] + '</p>' +
                         '<p class="card-text">TIME: ' + inactiveOrder["ora_ordine"] + '</p>' +
                         '<p class="card-text">STATE OF ORDER: ' + inactiveOrder["stato"] + '</p>' +
                         '</div>'
                   );
-                  $('#inactive-orders').append('<ul>');
                   for (var j = 0; j < inactiveOrder["orderLines"].length; j++) {
                     var orderLine = inactiveOrder["orderLines"][j];
                     $('#inactive-orders').append(
-                      '<li  style="float:right;width:30%;background:#ffc107c0;margin-bottom:1.5rem;display:flex;">' + orderLine["quantit\u00e0"] + 
-                      ' x ' + orderLine["nome_prodotto"] + 
+                      '<li  style="background:#ffc107c0;text-align:left;width:50%">' + orderLine["quantit\u00e0"] + 
+                      'x ' + orderLine["nome_prodotto"] +
                       '</li>'
                     );
                   }
-                  $('#inactive-orders').append('<br><br></ul>');
                 }
             }
         }
@@ -453,21 +451,19 @@ function updateCurrentOrders() {
                   addedOrders.add(currentOrder["acquirente"]);
                   addedOrders.add(currentOrder["ora_ordine"]);
                   $('#current-orders').append(
-                    '<div class="card" style="width:100%; float:left; background:var(--bs-success) !important;">' +
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="width:100%;background:#198754c0!important;padding:1rem;border:1px solid black;"' +
                     '<p class="card-text">BUYER: ' + currentOrder["acquirente"] + '</p>' +
                     '<p class="card-text">TIME: ' + currentOrder["ora_ordine"] + '</p>' +
                     '<p class="card-text">STATE OF ORDER: ' + currentOrder["stato"] + '</p></div>'
                   );
-                  $('#current-orders').append('<ul>');
                   for (var j = 0; j < currentOrder["orderLines"].length; j++) {
                     var orderLine = currentOrder["orderLines"][j];
                     $('#current-orders').append(
-                      '<li  style="float:right;width:30%;background:var(--bs-success);margin-bottom:1.5rem;display:flex;">' + orderLine["quantit\u00e0"] + 
-                      ' x ' + orderLine["nome_prodotto"] + 
+                      '<li  style="background:#198754c0;text-align:left;width:50%">' + orderLine["quantit\u00e0"] + 
+                      'x ' + orderLine["nome_prodotto"] +
                       '</li>'
                     );
                   }
-                  $('#current-orders').append('<br><br></ul>');
                 }
             }
         }
@@ -491,21 +487,19 @@ function updateClosedOrders() {
                   addedOrders.add(closedOrder["acquirente"]);
                   addedOrders.add(closedOrder["ora_ordine"]);
                   $('#closed-orders').append(
-                    '<div class="card" style="width:100%; float:left; background:var(--bs-danger) !important;">' +
+                    '<div class="card mb-3 bg-dark card-order position-relative" style="width:100%;background:#dc3545c0!important;padding:1rem;border:1px solid black;"' +
                     '<p class="card-text">BUYER: ' + closedOrder["acquirente"] + '</p>' +
                     '<p class="card-text">TIME: ' + closedOrder["ora_ordine"] + '</p>' +
                     '<p class="card-text">STATE OF ORDER: ' + closedOrder["stato"] + '</p></div>'
                   );
-                  $('#closed-orders').append('<ul style="width:30%;">');
                   for (var j = 0; j < closedOrder["orderLines"].length; j++) {
                     var orderLine = closedOrder["orderLines"][j];
                     $('#closed-orders').append(
-                      '<li  style="float:right;width:30%;background:var(--bs-danger) !important;margin-bottom:1.5rem;display:flex;">' + orderLine["quantit\u00e0"] + 
-                      ' x ' + orderLine["nome_prodotto"] + 
+                      '<li  style="background:#dc3545c0;text-align:left;width:50%">' + orderLine["quantit\u00e0"] + 
+                      'x ' + orderLine["nome_prodotto"] +
                       '</li>'
                     );
                   }
-                  $('#closed-orders').append('<br><br></ul>');
                 }
             }
         }

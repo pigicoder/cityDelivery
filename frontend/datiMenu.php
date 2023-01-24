@@ -9,8 +9,6 @@ $email = $_SESSION["user"];
 if (empty($email))
     header("Location: login.php");
 
-//$cid = $result["value"];
-
 ?>
 <html>
 
@@ -95,6 +93,7 @@ if (empty($email))
                         placeholder="Insert a price"></label><br>
                 <label>Insert an image <input type="file" id="image" name="image"></label>
                 <input class="btn btn-primary" type="submit" value="ADD">
+                <err><?= checkErrorInput() ?></err>
             </form>
         </div>
         <div class="container menues" style="background-color: #ffc107c0; float:right; width:50%; margin-top:5%;">
@@ -108,7 +107,7 @@ if (empty($email))
                     "img" => $row[1]
                 ];
                 ?>
-                <div class="container menu" style="background-color: #ffc107; display: flex;">
+                <div class="container menu" style="border:1px solid black; display: flex;">
                     <p><?= $menu["name"] ?></p>
                     <img src="data:image/jpg;base64,<?= base64_encode($menu["img"]) ?>" class="card-img-top"
                         style="width:100px; height:100px;" alt="..."></img>
@@ -132,3 +131,14 @@ if (empty($email))
 </body>
 
 </html>
+<?php
+function checkErrorInput()
+{
+    if (isset($_GET["error"]) && $_GET["error"] == "input") {
+        echo "Insert at least one product";
+    } else {
+        echo "";
+    }
+}
+
+?>
