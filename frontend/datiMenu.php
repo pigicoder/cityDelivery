@@ -91,13 +91,13 @@ if (empty($email))
                 <input type="text" name="menu_description" placeholder="Insert a menù description"><br>
                 <label>€<input type="number" id="menu_price" name="menu_price"
                         placeholder="Insert a price"></label><br>
-                <label>Insert an image <input type="file" id="image" name="image"></label>
+                <label>Insert an image (optional) <input type="file" id="image" name="image"></label>
                 <input class="btn btn-primary" type="submit" value="ADD">
                 <err><?= checkErrorInput() ?></err>
             </form>
         </div>
-        <div class="container menues" style="background-color: #ffc107c0; float:right; width:50%; margin-top:5%;">
-            <h4>Your menues</h4>
+        <div class="container menues" style="background-color: #ffc107c0; float:right; width:40%; margin-top:5%; margin-right: 7%;">
+            <h4>Your menus</h4>
             <?php
             $query1 = "SELECT nome,immagine FROM Prodotto WHERE ristorante='" . $email . "' AND tipo='Menù' ";
             $result1 = mysqli_query($cid, $query1);
@@ -107,19 +107,23 @@ if (empty($email))
                     "img" => $row[1]
                 ];
                 ?>
-                <div class="container menu" style="border:1px solid black; display: flex;">
-                    <p><?= $menu["name"] ?></p>
+                <div class="container menu" style="border:2px solid green; display: flex;">
+                    <h3><?= $menu["name"] ?></h3>
                     <img src="data:image/jpg;base64,<?= base64_encode($menu["img"]) ?>" class="card-img-top"
                         style="width:100px; height:100px;" alt="..."></img>
                     <?php
                     $query2 = "SELECT piatto FROM Compone WHERE piatto_ristorante='" . $email . "' AND menù_ristorante='" . $email . "' AND menù='" . $menu["name"] . "' ";
                     $result2 = mysqli_query($cid, $query2);
+                    ?>
+                    <ul>
+                    <?php
                     while ($row = $result2->fetch_row()) {
                         ?>
-                        <p> <?= $row[0]?>  </p>
+                        <li><?= $row[0] ?>  </li>
                         <?php
                     }
                     ?>
+                    </ul>
                 </div>
                 <?php
             }
@@ -135,6 +139,8 @@ if (empty($email))
 function checkErrorInput()
 {
     if (isset($_GET["error"]) && $_GET["error"] == "input") {
+        echo "Fill all the mandatory fields";
+    } else if (isset($_GET["error"]) && $_GET["error"] == "products") {
         echo "Insert at least one product";
     } else {
         echo "";
