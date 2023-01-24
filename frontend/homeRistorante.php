@@ -63,21 +63,21 @@ if (empty($email))
 	</nav>
     <div style="display: flex;">
     <div class="container" style="float:left; width:30%;">
-        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Open:</h1>
+        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Open</h1>
         <div class="container">
             <div id="inactive-orders">
             </div>
         </div>
     </div>
     <div class="container" style="width:30%;">
-        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Current:</h1>
+        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Current</h1>
         <div class="container">
             <div id="current-orders">
             </div>
         </div>
     </div>
     <div class="container" style="float:right; width:30%;">
-        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Closed:</h1>
+        <h1 style="margin-top:7.5%; background-color: #ffc107c0;">Closed</h1>
         <div class="container" style="width:100%;">
             <div id="closed-orders">
             </div>
